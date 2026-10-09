@@ -17,14 +17,15 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --font-sans: var(--font-jakarta); */
+  --font-sans: var(--font-dm-sans);
 }
 
-html, body {
+html,
+body {
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-geist-sans), Arial, sans-serif;
+  /* font-family: var(--font-sans), Arial, sans-serif; */
   /* font-family: "DM-Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; */
 }
 

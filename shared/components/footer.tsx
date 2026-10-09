@@ -13,6 +13,7 @@ export function Footer() {
     setMounted(true);
   }, []);
 
+  if (!mounted) return null;
 
   const normalizePath = (p: string) =>
     p.length > 1 ? p.replace(/\/+$/, "") : p;
@@ -24,7 +25,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="mt-auto px-6 w-full border-t border-[#e8eeff] bg-[#f6f6ee]">
+    <footer className="fixed bottom-0 px-6 w-full border-t border-[#e8eeff] bg-[#f6f6ee]">
       <nav
         aria-label="Main navigation"
         className="mx-auto flex w-full justify-between items-center pb-2 pt-3"
@@ -41,9 +42,9 @@ export function Footer() {
                 key={link.title}
                 type="button"
                 aria-label={link.title}
-                className="-mt-2 grid h-15 w-15 place-items-center justify-self-center rounded-full border-[4px] border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-[0_6px_15px_rgba(29,70,39,0.2)] transition-transform active:scale-95"
+                className="-mt-2 grid size-12 place-items-center justify-self-center rounded-2xl border-4 border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-lg shadow-[#1d4627]/20 transition-transform active:scale-95"
               >
-                {link.lightIcon && <link.lightIcon className="h-8 w-8" />}
+                {link.lightIcon && <link.lightIcon className="h-8 w-8 font-bold" />}
               </Link>
             );
           }
@@ -55,8 +56,8 @@ export function Footer() {
               type="button"
               aria-label={link.title}
               className={[
-                "relative flex flex-col items-center justify-center gap-1 rounded-none bg-transparent py-[3px] text-[rgb(135,146,135)] transition-colors",
-                active && "text-[#123d2b] before:absolute before:-top-1 before:h-[3px] before:w-[27px] before:rounded-full before:bg-[#5e8542] before:content-['']",
+                "relative flex flex-col items-center justify-center gap-1 rounded-none bg-transparent py-1 text-[#879287] transition-colors",
+                active && "text-[#123d2b] before:absolute before:-top-1 before:h-0.5 before:w-7 before:rounded-full before:bg-[#5e8542] before:content-['']",
               ].join(" ")}
             >
               <span className="sr-only">{link.title}</span>

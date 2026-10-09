@@ -18,10 +18,10 @@ export function Header() {
           aria-label="BalanceMe"
           className="flex h-12 items-center justify-center gap-2 whitespace-nowrap text-[var(--forest-dark)]"
         >
-          <span className="grid size-7 place-items-center rounded-[10px] bg-[var(--forest)] px-1 text-base font-black tracking-[-1px] text-[var(--lime)]">
-            b .
+          <span className="grid size-7 place-items-center rounded-lg bg-[var(--forest)] px-1 text-base font-black tracking-wide text-[var(--lime)]">
+            b.
           </span>
-          <span className="text-md font-black tracking-[-0.55px]">BalanceMe</span>
+          <span className="text-base font-black tracking-tight">BalanceMe</span>
         </div>
 
         <div className="flex items-center">
