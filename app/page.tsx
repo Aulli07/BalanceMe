@@ -1,9 +1,28 @@
-import Image from "next/image";
+import { Header } from "@/shared/components/header";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      This is my Balance Me project. It is a simple web application that allows users to track their expenses and income. The application is built using Next.js and Tailwind CSS. It is a work in progress and I am constantly adding new features and improving the user experience.
-    </div>
+    <main className="bg-[var(--paper)] text-[var(--ink)] px-6 pt-3">
+      <Header />
+      <Hero />
+    </main>
   );
 }
+
+
+export function Hero() {
+  return (
+    <main>
+      <h1 className="mb-[12px] mt-[13px] whitespace-nowrap text-[clamp(17px,4.9vw,20px)] font-bold leading-[1.18] tracking-[-0.55px] text-[var(--ink)]">
+        Good morning, Adaeze
+      </h1>
+      <Dashboard />
+    </main>
+  )
+}
+
+export function Dashboard() {
+  return (
+    <main>This is my dashboard</main>
+  )
+} 
