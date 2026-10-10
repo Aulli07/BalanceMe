@@ -4,10 +4,12 @@ import { useEffect, useState, type ReactNode } from "react";
 import footerLinks from "@/shared/data/footer-links";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { AddEntry } from "./add-entry";
 
 export function Footer() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [ open, setOpen ] = useState(true);
 
   useEffect(() => {
     setMounted(true);
@@ -31,24 +33,25 @@ export function Footer() {
         className="mx-auto flex w-full justify-between items-center pb-2 pt-3"
       >
         {footerLinks.map((link) => {
-          // const isActive = Boolean(item.active);
           const active = isActive(link.to);
           const isAddButton = link.title === "Add";
 
           if (isAddButton) {
             return (
-              <Link
-                href={link.to}
-                key={link.title}
-                type="button"
-                aria-label={link.title}
-                className="-mt-2 grid size-12 place-items-center justify-self-center rounded-2xl border-4 border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-lg shadow-[#1d4627]/20 transition-transform active:scale-95"
-              >
-                {link.lightIcon && <link.lightIcon className="h-8 w-8 font-bold" />}
-              </Link>
+              <div> 
+                <button
+                  onClick={() => setOpen(prev => !prev)}
+                  type="button"
+                  aria-label={link.title}
+                  className="-mt-2 grid size-12 place-items-center justify-self-center rounded-2xl border-4 border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-lg shadow-[#1d4627]/20 transition-transform active:scale-95"
+                >
+                  {link.lightIcon && <link.lightIcon className="h-8 w-8 font-bold" />}
+                </button>
+              </div>
             );
           }
-
+          {open && <AddEntry setOpen={setOpen} />}
+          
           return (
             <Link
               href={link.to}
