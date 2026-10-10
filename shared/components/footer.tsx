@@ -9,7 +9,7 @@ import { AddEntry } from "./add-entry";
 export function Footer() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [ open, setOpen ] = useState(true);
+  const [ open, setOpen ] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -39,6 +39,7 @@ export function Footer() {
           if (isAddButton) {
             return (
               <div> 
+                {open && <AddEntry setOpen={setOpen} />}
                 <button
                   onClick={() => setOpen(prev => !prev)}
                   type="button"
@@ -50,8 +51,8 @@ export function Footer() {
               </div>
             );
           }
-          {open && <AddEntry setOpen={setOpen} />}
           
+
           return (
             <Link
               href={link.to}
