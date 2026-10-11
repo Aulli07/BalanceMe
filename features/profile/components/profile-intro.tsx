@@ -11,7 +11,7 @@ export function ProfileIntro() {
           <LuBadgeCheck className="size-3 text-[#7b9a4b]" aria-hidden="true" />
           Your business profile
         </p>
-        <p className="truncate text-lg font-extrabold leading-tight tracking-tight text-[#244431]">
+        <p className="truncate text-xl font-extrabold leading-tight tracking-tight text-[#244431]">
           Adaeze Okonkwo
         </p>
         <p className="mt-1 truncate text-[13px] font-semibold text-[#5d705e]">

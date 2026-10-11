@@ -39,7 +39,7 @@ export function Footer() {
           if (isAddButton) {
             return (
               <div> 
-                {open && <AddEntry setOpen={setOpen} />}
+                <AddEntry open={open} setOpen={setOpen} />
                 <button
                   onClick={() => setOpen(prev => !prev)}
                   type="button"
