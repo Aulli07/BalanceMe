@@ -38,7 +38,7 @@ export function Footer() {
 
           if (isAddButton) {
             return (
-              <div> 
+              <div key={link.title}> 
                 <AddEntry open={open} setOpen={setOpen} />
                 <button
                   onClick={() => setOpen(prev => !prev)}

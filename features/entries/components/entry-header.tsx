@@ -3,7 +3,12 @@
 import { useRouter } from "next/navigation";
 import { LuArrowLeft } from "react-icons/lu";
 
-export function EntryHeader() {
+export function AddEntryHeader({
+  step
+}: {
+  step: 1 | 2;
+}) {
+
   const router = useRouter();
 
   return (
@@ -24,10 +29,19 @@ export function EntryHeader() {
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-2" aria-label="Step 1 of 2">
-        <span className="h-2 w-10 rounded-full bg-[var(--forest)]" />
-        <span className="h-2 w-7 rounded-full bg-[#dfe6d9]" />
-      </div>
+      {step === 1 && (
+        <div className="flex shrink-0 items-center gap-2" aria-label="Step 1 of 2">
+          <span className="h-2 w-10 rounded-full bg-[var(--forest)]" />
+          <span className="h-2 w-7 rounded-full bg-[#dfe6d9]" />
+        </div>
+      )}
+
+      {step === 2 && (
+        <div className="flex shrink-0 items-center gap-2" aria-label="Step 2 of 2">
+          <span className="h-2 w-7 rounded-full bg-[#dfe6d9]" />
+          <span className="h-2 w-10 rounded-full bg-[var(--forest)]" />
+        </div>
+      )}
     </header>
   );
 }
