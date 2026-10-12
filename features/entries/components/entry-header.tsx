@@ -1,22 +1,25 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 import { LuArrowLeft } from "react-icons/lu";
 
 export function AddEntryHeader({
-  step
+  step,
+  setStep
 }: {
-  step: 1 | 2;
+  step: 1 | 2 | 3;
+  setStep: Dispatch<SetStateAction<1|2|3>>
 }) {
-
   const router = useRouter();
+  const goBack = () => (step === 1 ? router.push("/") : setStep(1))
 
   return (
     <header className="flex items-center justify-between gap-4 px-5 pt-4">
       <div className="flex min-w-0 items-center gap-2">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={goBack}
           aria-label="Go back"
           className="grid size-8 shrink-0 place-items-center text-[var(--forest)] transition-transform active:scale-90"
         >

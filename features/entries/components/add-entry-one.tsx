@@ -2,72 +2,77 @@
 
 import { customerType } from "@/app/add-entry/page";
 import { Dispatch, SetStateAction, useState } from "react";
-import { LuChevronDown, LuCheck } from "react-icons/lu";
+import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } from "react-icons/lu";
+import { pressKey } from "../utils/pressKey";
+import { numbers } from "../data/entryKeys";
+import { createPortal } from "react-dom";
 
-type EntryCustomer = {
-  name: string;
-  initials: string;
-  avatarClassName: string;
-};
-
-const recentCustomers: EntryCustomer[] = [
-  {
-    name: "Select customer",
-    initials: "SC",
-    avatarClassName: "bg-[#e2ecd7] text-[var(--forest)]",
-  },
-  {
-    name: "Chika",
-    initials: "CO",
-    avatarClassName: "bg-[#e2ecd7] text-[var(--forest)]",
-  },
-  {
-    name: "Tunde",
-    initials: "TA",
-    avatarClassName: "bg-[#f2e3d8] text-[#805644]",
-  },
-  {
-    name: "Zainab",
-    initials: "ZB",
-    avatarClassName: "bg-[#e8eed7] text-[#64783f]",
-  },
+const entryCustomers: customerType[] = [
+  { name: "Chika Okafor", image: "CO" },
+  { name: "Tunde Adeyemi", image: "TA" },
+  { name: "Zainab Bello", image: "ZB" },
+  { name: "Mariam Yusuf", image: "MY" },
 ];
+
+// const recentCustomers: EntryCustomer[] = [
+//   {
+//     name: "Select customer",
+//     initials: "SC",
+//     avatarClassName: "bg-[#e2ecd7] text-[var(--forest)]",
+//   },
+//   {
+//     name: "Chika",
+//     initials: "CO",
+//     avatarClassName: "bg-[#e2ecd7] text-[var(--forest)]",
+//   },
+//   {
+//     name: "Tunde",
+//     initials: "TA",
+//     avatarClassName: "bg-[#f2e3d8] text-[#805644]",
+//   },
+//   {
+//     name: "Zainab",
+//     initials: "ZB",
+//     avatarClassName: "bg-[#e8eed7] text-[#64783f]",
+//   },
+// ];
 
 export function AddEntryOne({
   setCustomer,
   customer,
   setStep,
   setAmount,
+  amount,
   setEntryType,
+  entryType,
 }: {
   setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
   customer: customerType | undefined;
-  setStep: Dispatch<SetStateAction<1 | 2>>;
+  setStep: Dispatch<SetStateAction<1 | 2 | 3>>;
   setAmount: Dispatch<SetStateAction<[string, string]>>;
+  amount: [string, string];
   setEntryType: Dispatch<SetStateAction<1 | 0>>;
+  entryType: 0 | 1;
 }) {
-  const numbers = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    ".",
-    "0",
-    "back",
-  ];
 
   return (
     <main className="px-5 pt-5">
       <EntryCustomer setCustomer={setCustomer} customer={customer} />
-      <EntryAmount setAmount={setAmount} setEntryType={setEntryType} />
+      <EntryAmount setAmount={setAmount} setEntryType={setEntryType} entryType={entryType} amount={amount} />
+
+      <button
+        type="button"
+        onClick={() => setStep(2)}
+        disabled={!customer || amount[entryType] === "0"}
+        className="mt-5 flex w-full items-center justify-center gap-4 rounded-xl bg-[#c7d9ae] py-2 text-md font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
+      >
+        Continue
+        <LuArrowRight className="size-6" aria-hidden="true" />
+      </button>
     </main>
   );
 }
+
 
 export function EntryCustomer({
   setCustomer,
@@ -76,28 +81,70 @@ export function EntryCustomer({
   setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
   customer: customerType | undefined;
 }) {
+
+  const [selectedTrigger, isSelectedTrigger] = useState(false);
+
   return (
-    <section className="px-5 pt-5" aria-labelledby="entry-customer-heading">
-      <button
-        type="button"
-        className="flex w-full items-center gap-4 rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-5 py-3 text-left shadow-sm transition-colors active:bg-[#f0f4ea]"
-        aria-label={`Change customer, currently ${customer?.name ?? ""}`}
-      >
+    <section className="" aria-labelledby="entry-customer-heading">
+      <div className="flex w-full items-center gap-3 rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-5 py-3 text-left shadow-sm transition-colors focus-within:border-[var(--forest)]">
         <span
-          className={`grid size-12 shrink-0 place-items-center rounded-xl text-xl font-extrabold bg-[#e2ecd7] text-[var(--forest)]`}
+          className={`grid size-10 shrink-0 place-items-center rounded-xl text-lg font-extrabold bg-[#e2ecd7] text-[var(--forest)]`}
         >
           {(customer?.name.at(0) ?? "S") + (customer?.name.at(1) ?? "C")}
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-xl font-extrabold text-[var(--ink)]">
-            {customer?.name ?? "Select Customer"}
-          </span>
-        </span>
-        <LuChevronDown
+        <span className="text-lg font-extrabold text-[var(--ink)] flex-1">{customer?.name ?? "Select customer"}</span>
+        <div className="flex items-center justify-center size-10">
+          <LuChevronDown
           className="size-7 shrink-0 text-[#758477]"
           aria-hidden="true"
+          onClick={() => isSelectedTrigger((prev) => !prev)}
         />
-      </button>
+        </div>
+      </div>
+
+      {selectedTrigger &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-50 flex items-end bg-black/30"
+            onClick={() => isSelectedTrigger(false)}
+          >
+            <div
+              className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="text-xl font-extrabold">Select customer</h2>
+                <button
+                  type="button"
+                  onClick={() => isSelectedTrigger(false)}
+                  className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
+                >
+                  Close
+                </button>
+              </div>
+              <div className="grid gap-2">
+                {entryCustomers.map((entryCustomer) => (
+                  <button
+                    key={entryCustomer.name}
+                    type="button"
+                    onClick={() => {
+                      setCustomer(entryCustomer);
+                      isSelectedTrigger(false);
+                    }}
+                    className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
+                  >
+                    <span className="grid size-10 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
+                      {entryCustomer.image}
+                    </span>
+                    <span className="font-bold">{entryCustomer.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )}
 
       {/* <div className="mt-3 flex items-center gap-3">
         <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
@@ -129,50 +176,19 @@ export function EntryCustomer({
   );
 }
 
-export function EntryAmount() {
-  const [amount, setAmount] = useState<[string, string]>(["0", "0"]);
-  const [entryType, setEntryType] = useState<0 | 1>(0);
+export function EntryAmount({
+  setAmount,
+  setEntryType,
+  entryType,
+  amount,
+}: {
+  setAmount: Dispatch<SetStateAction<[string, string]>>;
+  setEntryType: Dispatch<SetStateAction<1 | 0>>;
+  entryType: 0 | 1;
+  amount: [string, string];
+}) {
+
   const [direction, setDirection] = useState(1);
-
-  const numbers = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    ".",
-    "0",
-    "back",
-  ];
-
-  const pressKey = (key: string) => {
-    setAmount((currentAmount) => {
-      const nextAmount = [...currentAmount] as [string, string];
-      const previous = nextAmount[entryType];
-
-      if (key === "back") {
-        nextAmount[entryType] =
-          previous.length > 1 ? previous.slice(0, -1) : "0";
-        return nextAmount;
-      }
-      if (key === ".") {
-        if (previous.includes(".")) return currentAmount;
-        nextAmount[entryType] = previous === "" ? "0." : previous + ".";
-        return nextAmount;
-      }
-      if (previous === "0") {
-        nextAmount[entryType] = key;
-        return nextAmount;
-      }
-      if (previous.replace(".", "").length >= 10) return currentAmount;
-      nextAmount[entryType] = previous + key;
-      return nextAmount;
-    });
-  };
 
   const selectEntryType = (nextType: 0 | 1) => {
     // setDirection(nextType > entryType ? 1 : -1);
@@ -185,7 +201,7 @@ export function EntryAmount() {
     (decimal !== undefined ? `.${decimal}` : "");
 
   return (
-    <section className="mt-7 px-5" aria-labelledby="entry-amount-heading">
+    <section className="mt-7" aria-labelledby="entry-amount-heading">
       <div className="flex rounded-3xl bg-[#e8eee1]">
         <button
           type="button"
@@ -193,7 +209,7 @@ export function EntryAmount() {
           aria-pressed={entryType === 0}
           className={`flex flex-1 items-center justify-center gap-3 rounded-2xl py-2 text-md font-bold ${
             entryType === 0
-              ? "bg-black-500 text-[var(--surface)] shadow-md shadow-[var(--forest)]/15"
+            ? "bg-[var(--forest)] font-bold text-[var(--surface)] shadow-md shadow-[var(--forest)]/15"
               : "text-[#758178]"
           }`}
         >
@@ -206,7 +222,7 @@ export function EntryAmount() {
           aria-pressed={entryType === 1}
           className={`flex flex-1 items-center justify-center gap-3 rounded-2xl py-2 text-md font-bold ${
             entryType === 1
-              ? "bg-[var(--forest)] text-[var(--surface)] shadow-md shadow-[var(--forest)]/15"
+              ? "bg-[var(--forest)] font-bold text-[var(--surface)] shadow-md shadow-[var(--forest)]/15"
               : "text-[#758178]"
           }`}
         >
@@ -215,16 +231,6 @@ export function EntryAmount() {
         </button>
       </div>
 
-      {/* <AnimatePresence initial={false} mode="wait" custom={direction}>
-        <motion.div
-          key={entryType}
-          custom={direction}
-          initial={{ x: direction * 80, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: direction * -80, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 360, damping: 30 }}
-          className="overflow-hidden"
-        > */}
       <div>
         <div className="mt-5 text-center">
           <p
@@ -246,7 +252,7 @@ export function EntryAmount() {
             <button
               key={number}
               type="button"
-              onClick={() => pressKey(number)}
+              onClick={() => pressKey(number, setAmount, entryType)}
               aria-label={number === "back" ? "Delete last digit" : number}
               className={`grid h-9 place-items-center rounded-lg border border-[#e1e7dc] text-2xl font-bold text-[var(--ink)] shadow-sm transition-colors active:bg-[#e8eddd] ${
                 number === "."
@@ -264,14 +270,6 @@ export function EntryAmount() {
             </button>
           ))}
         </div>
-
-        <button
-          type="button"
-          className="mt-5 flex w-full items-center justify-center gap-4 rounded-xl bg-[var(--forest)] py-2 text-xl font-bold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15"
-        >
-          Continue
-          <LuArrowRight className="size-6" aria-hidden="true" />
-        </button>
       </div>
     </section>
   );
