@@ -1,5 +1,6 @@
 "use client";
 
+import { AddEntryThree } from "@/features/entries/components/add-entry-three";
 import { AddEntryHeader } from "@/features/entries/components/entry-header";
 import { VoiceEntryOne } from "@/features/entries/components/voice-entry-one";
 import { VoiceEntryTwo } from "@/features/entries/components/voice-entry-two";
@@ -38,6 +39,8 @@ export function VoiceEntry() {
         setEntryDescription={form.setEntryDescription}
       />
     )}
+
+    {form.step === 3 && <AddEntryThree setStep={form.setStep} />}
     </main>
   )
 }

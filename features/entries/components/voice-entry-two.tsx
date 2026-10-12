@@ -1,8 +1,7 @@
 import { customerType } from "@/app/add-entry/page";
 import { entryCategories, entryDetailType } from "./add-entry-two";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { createPortal } from "react-dom";
-import { useEntryForm } from "../hooks/useEntryForm";
 import { LuChevronDown } from "react-icons/lu";
 import { getCustomer } from "../selectors/getCustomer";
 import { entryCustomers } from "./add-entry-one";
@@ -33,16 +32,21 @@ export function VoiceEntryTwo({
   setEntryDescription
 }: VoiceEntryProps) {
 
-  const form = useEntryForm();
-
   return (
     <main className="px-4 pt-3">
-      <EntryFormDetails />
+      <EntryFormDetails
+        customer={customer}
+        setCustomer={setCustomer}
+        amount={amount}
+        setAmount={setAmount}
+        entryDescription={entryDescription}
+        setEntryDescription={setEntryDescription}
+      />
       <button
         type="button"
-        onClick={() => form.setStep(3)}
+        onClick={() => onNext()}
         disabled={!entryDescription.category}
-        className="mt-3 flex w-full items-center justify-center gap-3 rounded-xl bg-[#c7d9ae] py-2 text-sm font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
+        className="mt-3 flex w-full items-center justify-center gap-3 rounded-xl text-[var(--paper)] py-2 text-sm font-bold bg-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
       >
         Complete
       </button>
@@ -59,11 +63,26 @@ function EntryConfirmMessage() {
 }
 
 
-function EntryFormDetails() {
-  const form = useEntryForm();
+function EntryFormDetails({
+  customer,
+  setCustomer,
+  amount,
+  setAmount,
+  entryDescription,
+  setEntryDescription,
+}: {
+  customer: customerType | undefined;
+  setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
+  amount: [string, string];
+  setAmount: Dispatch<SetStateAction<[string, string]>>;
+  entryDescription: entryDetailType;
+  setEntryDescription: Dispatch<SetStateAction<entryDetailType>>;
+}) {
+  const [selectedTrigger, setSelectedTrigger] = useState(false);
+  const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
 
   function pasteAmount(eventValue: string, type: 0|1) {
-    form.setAmount((currentAmount) => {
+    setAmount((currentAmount) => {
       const nextAmount = [...currentAmount] as [string, string];
       nextAmount[type] = eventValue;
       return nextAmount;
@@ -78,23 +97,23 @@ function EntryFormDetails() {
           <span
             className="grid size-8 shrink-0 place-items-center rounded-xl bg-[#e2ecd7] text-sm font-extrabold text-[var(--forest)]"
           >
-            {(form.customer?.name.at(0) ?? "S") + (form.customer?.name.at(1) ?? "C")}
+            {(customer?.name.at(0) ?? "S") + (customer?.name.at(1) ?? "C")}
           </span>
-          <span className="min-w-0 flex-1 truncate text-base font-extrabold text-[var(--ink)]">{form.customer?.name ?? "Select customer"}</span>
+          <span className="min-w-0 flex-1 truncate text-base font-extrabold text-[var(--ink)]">{customer?.name ?? "Select customer"}</span>
           <div className="flex size-7 items-center justify-center">
             <LuChevronDown
             className="size-7 shrink-0 text-[#758477]"
             aria-hidden="true"
-            onClick={() => form.isSelectedTrigger((prev) => !prev)}
+            onClick={() => setSelectedTrigger((prev) => !prev)}
           />
           </div>
         </div>
   
-        {form.selectedTrigger &&
+        {selectedTrigger &&
           createPortal(
             <div
               className="fixed inset-0 z-50 flex items-end bg-black/30"
-              onClick={() => form.isSelectedTrigger(false)}
+              onClick={() => setSelectedTrigger(false)}
             >
               <div
                 className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
@@ -105,7 +124,7 @@ function EntryFormDetails() {
                   <h2 className="text-xl font-extrabold">Select customer</h2>
                   <button
                     type="button"
-                    onClick={() => form.isSelectedTrigger(false)}
+                    onClick={() => setSelectedTrigger(false)}
                     className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
                   >
                     Close
@@ -117,8 +136,8 @@ function EntryFormDetails() {
                       key={entryCustomer.name}
                       type="button"
                       onClick={() => {
-                        form.setCustomer(entryCustomer);
-                        form.isSelectedTrigger(false);
+                        setCustomer(entryCustomer);
+                        setSelectedTrigger(false);
                       }}
                       className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
                     >
@@ -140,7 +159,7 @@ function EntryFormDetails() {
           Paid
           <input
             className="box-border min-w-0 w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-sm text-left"
-            value={form.amount[0]}
+            value={amount[0]}
             placeholder=""
             onChange={(event) => pasteAmount(event.target.value, 0)}
           />
@@ -149,9 +168,9 @@ function EntryFormDetails() {
           Owes
           <input
             className="box-border min-w-0 w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-sm text-left"
-            value={form.amount[1]}
+            value={amount[1]}
             placeholder=""
-            onChange={(event) => pasteAmount(event.target.value, 0)}
+            onChange={(event) => pasteAmount(event.target.value, 1)}
           />
         </label>
       </div>
@@ -161,22 +180,22 @@ function EntryFormDetails() {
           Category
           <button
             type="button"
-            onClick={() => form.setCategoryPickerOpen(true)}
+            onClick={() => setCategoryPickerOpen(true)}
             aria-label="Select category"
             className="flex w-full min-w-0 max-w-full items-center justify-between rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-left text-sm font-medium shadow-sm transition-colors active:bg-[#f0f4ea]"
           >
-            <span className={form.entryDescription.category ? "text-[var(--ink)]" : "text-[#829082]"}>
-              {form.entryDescription.category || "Select a category"}
+            <span className={entryDescription.category ? "text-[var(--ink)]" : "text-[#829082]"}>
+              {entryDescription.category || "Select a category"}
             </span>
             <LuChevronDown className="size-5 shrink-0 text-[#758477]" aria-hidden="true" />
           </button>
         </div>
 
-        {form.categoryPickerOpen &&
+        {categoryPickerOpen &&
           createPortal(
             <div
               className="fixed inset-0 z-50 flex items-end bg-black/30"
-              onClick={() => form.setCategoryPickerOpen(false)}
+              onClick={() => setCategoryPickerOpen(false)}
             >
               <div
                 className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
@@ -187,7 +206,7 @@ function EntryFormDetails() {
                   <h2 className="text-xl font-extrabold">Select category</h2>
                   <button
                     type="button"
-                    onClick={() => form.setCategoryPickerOpen(false)}
+                    onClick={() => setCategoryPickerOpen(false)}
                     className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
                   >
                     Close
@@ -199,11 +218,11 @@ function EntryFormDetails() {
                       key={category}
                       type="button"
                       onClick={() => {
-                        form.updateDescription("category", category);
-                        form.setCategoryPickerOpen(false);
+                        setEntryDescription((current) => ({ ...current, category }));
+                        setCategoryPickerOpen(false);
                       }}
                       className={`rounded-2xl border px-4 py-3 text-left font-bold transition-colors ${
-                        form.entryDescription.category === category
+                        entryDescription.category === category
                           ? "border-[#a8c487] bg-[#dfead2] text-[var(--forest)]"
                           : "border-[#e1e7dc] bg-[#fffef9] active:bg-[#e8eddd]"
                       }`}
@@ -223,8 +242,8 @@ function EntryFormDetails() {
             name="description"
             rows={2}
             placeholder="What was this entry for?"
-            value={form.entryDescription.description}
-            onChange={(event) => form.updateDescription("description", event.target.value)}
+            value={entryDescription.description}
+            onChange={(event) => setEntryDescription((current) => ({ ...current, description: event.target.value }))}
             className="box-border min-h-16 min-w-0 w-full max-w-full resize-none rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-sm font-medium shadow-sm outline-none placeholder:text-[#829082] focus:border-[var(--forest)]"
           />
         </label>
@@ -235,7 +254,7 @@ function EntryFormDetails() {
             name="receipt"
             type="file"
             accept="image/*"
-            onChange={(event) => form.updateDescription("receipt", event.target.files?.[0])}
+            onChange={(event) => setEntryDescription((current) => ({ ...current, receipt: event.target.files?.[0] }))}
             className="box-border block min-w-0 w-full max-w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-xs font-medium shadow-sm file:mr-2 file:rounded-lg file:border-0 file:bg-[#e8eee1] file:px-2 file:py-1.5 file:font-bold file:text-[var(--forest)]"
           />
         </label>
