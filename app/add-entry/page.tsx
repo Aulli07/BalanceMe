@@ -10,6 +10,7 @@ import {
 } from "@/features/entries/components/add-entry-two";
 import { AddEntryThree } from "@/features/entries/components/add-entry-three";
 import { useState } from "react";
+import { useEntryForm } from "@/features/entries/hooks/useEntryForm";
 
 export type customerType = {
   name: string;
@@ -17,45 +18,46 @@ export type customerType = {
 };
 
 export function AddEntryPage() {
-  const [amount, setAmount] = useState<[string, string]>(["0", "0"]);
-  const [entryType, setEntryType] = useState<0 | 1>(0);
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [customer, setCustomer] = useState<customerType>();
-  const [entryDescription, setEntryDescription] = useState<entryDetailType>({
-    category: "",
-    description: "",
-    receipt: undefined,
-  });
+  // const [amount, setAmount] = useState<[string, string]>(["0", "0"]);
+  // const [entryType, setEntryType] = useState<0 | 1>(0);
+  // const [step, setStep] = useState<1 | 2 | 3>(1);
+  // const [customer, setCustomer] = useState<customerType>();
+  // const [entryDescription, setEntryDescription] = useState<entryDetailType>({
+  //   category: "",
+  //   description: "",
+  //   receipt: undefined,
+  // });
+  const form = useEntryForm();
 
 
   return (
     <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
-      {step !== 3 && <AddEntryHeader step={step} setStep={setStep} />}
+      {form.step !== 3 && <AddEntryHeader step={form.step} setStep={form.setStep} />}
 
-      {step === 1 && (
+      {form.step === 1 && (
         <AddEntryOne
-          setCustomer={setCustomer}
-          customer={customer}
-          setStep={setStep}
-          setAmount={setAmount}
-          amount={amount}
-          setEntryType={setEntryType}
-          entryType={entryType}
+          setCustomer={form.setCustomer}
+          customer={form.customer}
+          setStep={form.setStep}
+          setAmount={form.setAmount}
+          amount={form.amount}
+          setEntryType={form.setEntryType}
+          entryType={form.entryType}
         />
       )}
 
-      {step === 2 && (
+      {form.step === 2 && (
         <AddEntryTwo
-          customer={customer}
-          amount={amount}
-          entryType={entryType}
-          entryDescription={entryDescription}
-          setEntryDescription={setEntryDescription}
-          setStep={setStep}
+          customer={form.customer}
+          amount={form.amount}
+          entryType={form.entryType}
+          entryDescription={form.entryDescription}
+          setEntryDescription={form.setEntryDescription}
+          setStep={form.setStep}
         />
       )}
 
-      {step === 3 && <AddEntryThree setStep={setStep} />}
+      {form.step === 3 && <AddEntryThree setStep={form.setStep} />}
 
     </main>
   );

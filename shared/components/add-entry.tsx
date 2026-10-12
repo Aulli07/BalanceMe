@@ -32,7 +32,7 @@ const entryOptions: EntryOption[] = [
     description: "Speak a note, then review and send",
     arrowIcon: LuArrowRight,
     iconContainerClassName: "bg-[#f0f5df] text-[var(--forest)]",
-    to: "/add-entry/voice",
+    to: "/voice-entry",
   },
   {
     icon: LuImagePlus,
@@ -40,7 +40,7 @@ const entryOptions: EntryOption[] = [
     description: "Upload a transfer receipt or invoice",
     arrowIcon: LuArrowRight,
     iconContainerClassName: "bg-[#e8f2e8] text-[#52765c]",
-    to: "/add-entry/screenshot",
+    to: "/screenshot-entry",
   },
 ];
 
