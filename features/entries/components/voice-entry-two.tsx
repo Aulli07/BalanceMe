@@ -1,0 +1,245 @@
+import { customerType } from "@/app/add-entry/page";
+import { entryCategories, entryDetailType } from "./add-entry-two";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { createPortal } from "react-dom";
+import { useEntryForm } from "../hooks/useEntryForm";
+import { LuChevronDown } from "react-icons/lu";
+import { getCustomer } from "../selectors/getCustomer";
+import { entryCustomers } from "./add-entry-one";
+
+export type VoiceEntryProps = {
+  onNext: () => void;
+  setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
+  customer: customerType | undefined;
+  setAmount: Dispatch<SetStateAction<[string, string]>>;
+  amount: [string, string];
+  setEntryType: Dispatch<SetStateAction<1 | 0>>;
+  entryType: 0|1;
+  entryDescription: entryDetailType;
+  setEntryDescription: Dispatch<SetStateAction<entryDetailType>>;
+}
+
+
+
+export function VoiceEntryTwo({
+  onNext,
+  setCustomer,
+  customer,
+  setAmount,
+  amount,
+  setEntryType,
+  entryType,
+  entryDescription,
+  setEntryDescription
+}: VoiceEntryProps) {
+
+  const form = useEntryForm();
+
+  return (
+    <main className="px-4 pt-3">
+      <EntryFormDetails />
+      <button
+        type="button"
+        onClick={() => form.setStep(3)}
+        disabled={!entryDescription.category}
+        className="mt-3 flex w-full items-center justify-center gap-3 rounded-xl bg-[#c7d9ae] py-2 text-sm font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
+      >
+        Complete
+      </button>
+    </main>
+  )
+}
+
+function EntryConfirmMessage() {
+  return (
+    <section>
+      <span>Help confirming these details</span>
+    </section>
+  )
+}
+
+
+function EntryFormDetails() {
+  const form = useEntryForm();
+
+  function pasteAmount(eventValue: string, type: 0|1) {
+    form.setAmount((currentAmount) => {
+      const nextAmount = [...currentAmount] as [string, string];
+      nextAmount[type] = eventValue;
+      return nextAmount;
+    })
+  }
+  
+  return (
+    <section aria-labelledby="entry-form-details">
+      <div className="grid min-w-0 gap-1.5 text-sm font-bold text-[var(--ink)]">
+        Customer
+        <div className="flex w-full items-center gap-2 rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-left shadow-sm transition-colors focus-within:border-[var(--forest)]">
+          <span
+            className="grid size-8 shrink-0 place-items-center rounded-xl bg-[#e2ecd7] text-sm font-extrabold text-[var(--forest)]"
+          >
+            {(form.customer?.name.at(0) ?? "S") + (form.customer?.name.at(1) ?? "C")}
+          </span>
+          <span className="min-w-0 flex-1 truncate text-base font-extrabold text-[var(--ink)]">{form.customer?.name ?? "Select customer"}</span>
+          <div className="flex size-7 items-center justify-center">
+            <LuChevronDown
+            className="size-7 shrink-0 text-[#758477]"
+            aria-hidden="true"
+            onClick={() => form.isSelectedTrigger((prev) => !prev)}
+          />
+          </div>
+        </div>
+  
+        {form.selectedTrigger &&
+          createPortal(
+            <div
+              className="fixed inset-0 z-50 flex items-end bg-black/30"
+              onClick={() => form.isSelectedTrigger(false)}
+            >
+              <div
+                className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-extrabold">Select customer</h2>
+                  <button
+                    type="button"
+                    onClick={() => form.isSelectedTrigger(false)}
+                    className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
+                  >
+                    Close
+                  </button>
+                </div>
+                <div className="grid gap-2">
+                  {entryCustomers.map((entryCustomer) => (
+                    <button
+                      key={entryCustomer.name}
+                      type="button"
+                      onClick={() => {
+                        form.setCustomer(entryCustomer);
+                        form.isSelectedTrigger(false);
+                      }}
+                      className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
+                    >
+                      <span className="grid size-10 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
+                        {entryCustomer.image}
+                      </span>
+                      <span className="font-bold">{entryCustomer.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )}
+      </div>
+
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <label className="grid min-w-0 gap-1.5 text-sm font-bold text-[var(--ink)]">
+          Paid
+          <input
+            className="box-border min-w-0 w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-sm text-left"
+            value={form.amount[0]}
+            placeholder=""
+            onChange={(event) => pasteAmount(event.target.value, 0)}
+          />
+        </label>
+        <label className="grid min-w-0 gap-1.5 text-sm font-bold text-[var(--ink)]">
+          Owes
+          <input
+            className="box-border min-w-0 w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-sm text-left"
+            value={form.amount[1]}
+            placeholder=""
+            onChange={(event) => pasteAmount(event.target.value, 0)}
+          />
+        </label>
+      </div>
+
+      <div className="mt-3 grid min-w-0 gap-2.5">
+        <div className="grid w-full min-w-0 gap-1.5 text-sm font-bold text-[var(--ink)]">
+          Category
+          <button
+            type="button"
+            onClick={() => form.setCategoryPickerOpen(true)}
+            aria-label="Select category"
+            className="flex w-full min-w-0 max-w-full items-center justify-between rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-left text-sm font-medium shadow-sm transition-colors active:bg-[#f0f4ea]"
+          >
+            <span className={form.entryDescription.category ? "text-[var(--ink)]" : "text-[#829082]"}>
+              {form.entryDescription.category || "Select a category"}
+            </span>
+            <LuChevronDown className="size-5 shrink-0 text-[#758477]" aria-hidden="true" />
+          </button>
+        </div>
+
+        {form.categoryPickerOpen &&
+          createPortal(
+            <div
+              className="fixed inset-0 z-50 flex items-end bg-black/30"
+              onClick={() => form.setCategoryPickerOpen(false)}
+            >
+              <div
+                className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-xl font-extrabold">Select category</h2>
+                  <button
+                    type="button"
+                    onClick={() => form.setCategoryPickerOpen(false)}
+                    className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
+                  >
+                    Close
+                  </button>
+                </div>
+                <div className="grid gap-2">
+                  {entryCategories.map((category) => (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => {
+                        form.updateDescription("category", category);
+                        form.setCategoryPickerOpen(false);
+                      }}
+                      className={`rounded-2xl border px-4 py-3 text-left font-bold transition-colors ${
+                        form.entryDescription.category === category
+                          ? "border-[#a8c487] bg-[#dfead2] text-[var(--forest)]"
+                          : "border-[#e1e7dc] bg-[#fffef9] active:bg-[#e8eddd]"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )}
+
+        <label className="grid min-w-0 gap-1.5 text-sm font-bold text-[var(--ink)]">
+          Description
+          <textarea
+            name="description"
+            rows={2}
+            placeholder="What was this entry for?"
+            value={form.entryDescription.description}
+            onChange={(event) => form.updateDescription("description", event.target.value)}
+            className="box-border min-h-16 min-w-0 w-full max-w-full resize-none rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-sm font-medium shadow-sm outline-none placeholder:text-[#829082] focus:border-[var(--forest)]"
+          />
+        </label>
+
+        <label className="grid min-w-0 gap-1.5 text-sm font-bold text-[var(--ink)]">
+          Receipt
+          <input
+            name="receipt"
+            type="file"
+            accept="image/*"
+            onChange={(event) => form.updateDescription("receipt", event.target.files?.[0])}
+            className="box-border block min-w-0 w-full max-w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-xs font-medium shadow-sm file:mr-2 file:rounded-lg file:border-0 file:bg-[#e8eee1] file:px-2 file:py-1.5 file:font-bold file:text-[var(--forest)]"
+          />
+        </label>
+      </div>
+    </section>
+  )
+}

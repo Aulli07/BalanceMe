@@ -1,18 +1,35 @@
 "use client";
 
-import { LuArrowRight, LuCircleCheck, LuMic, LuSparkles } from "react-icons/lu";
+import { LuArrowRight, LuMic, LuPause, LuSquare } from "react-icons/lu";
+import { useTimer } from "../hooks/useTimer";
+import { Dispatch, SetStateAction } from "react";
 
 type VoiceEntryOneProps = {
-  setTranscript: React.Dispatch<React.SetStateAction<string>>;
+  setTranscript: Dispatch<SetStateAction<string>>;
   transcript: string;
+  listening: boolean;
   onStart: () => void;
   onStop: () => void;
   onNext: () => void;
 };
 
 export function VoiceEntryOne({
+  setTranscript,
   onStart,
+  listening,
+  onStop,
+  onNext,
+  transcript
 }: VoiceEntryOneProps) {
+
+  const seconds = useTimer(listening);
+  const formatTimer = (value: number) => {
+    const minutes = Math.floor(value / 60).toString().padStart(2, "0");
+    const remainingSeconds = (value % 60).toString().padStart(2, "0");
+
+    return `${minutes}:${remainingSeconds}`;
+  };
+
   return (
     <main className="flex min-h-[calc(100vh-4.5rem)] flex-col px-5 pb-10 text-[var(--ink)]">
       <section className="pt-6" aria-labelledby="voice-entry-title">
@@ -121,17 +138,42 @@ export function VoiceEntryOne({
           </p>
         </div>
       </section> */}
+      <textarea className="mt-4" value={transcript} onChange={(e) => setTranscript(e.target.value)} readOnly={listening} placeholder="Start speaking..." />
 
       <div className="mt-auto pt-12">
-        <button
-          type="button"
-          onClick={onStart}
-          className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[var(--forest)] py-3.5 text-base font-extrabold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-colors active:bg-[#36563f]"
-        >
-          <LuMic className="size-5" aria-hidden="true" />
-          Start recording
-          <LuArrowRight className="size-5" aria-hidden="true" />
-        </button>
+        {!listening ? (
+          <button
+            type="button"
+            onClick={onStart}
+            className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[var(--forest)] py-3.5 text-base font-extrabold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-colors active:bg-[#36563f]"
+          >
+            <LuMic className="size-5" aria-hidden="true" />
+            Start recording
+            <LuArrowRight className="size-5" aria-hidden="true" />
+          </button>
+        ) : (
+          <div className="grid grid-cols-[0.85fr_1.7fr] gap-3">
+            <button
+              type="button"
+              onClick={onStop}
+              className="flex items-center justify-center gap-2 rounded-2xl border border-[#e8b9ae] bg-[#f9e4df] py-3.5 text-sm font-extrabold text-[#a34f42] transition-colors active:bg-[#f3d4ce]"
+            >
+              <LuPause className="size-4" aria-hidden="true" />
+              <span>{formatTimer(seconds)}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onStop();
+                onNext();
+              }}
+              className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--forest)] py-3.5 text-sm font-extrabold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-colors active:bg-[#36563f]"
+            >
+              <LuSquare className="size-4 fill-current" aria-hidden="true" />
+              Complete entry
+            </button>
+          </div>
+        )}
       </div>
     </main>
   );

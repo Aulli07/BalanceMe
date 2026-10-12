@@ -2,6 +2,7 @@
 
 import { AddEntryHeader } from "@/features/entries/components/entry-header";
 import { VoiceEntryOne } from "@/features/entries/components/voice-entry-one";
+import { VoiceEntryTwo } from "@/features/entries/components/voice-entry-two";
 import { useEntryForm, useSpeechInputForm } from "@/features/entries/hooks/useEntryForm";
 import { useState } from "react";
 
@@ -16,12 +17,27 @@ export function VoiceEntry() {
     {form.step === 1 && (
       <VoiceEntryOne
         setTranscript={voicedInput.setTranscript}
-        transcript={voicedInput.transcipt}
+        transcript={voicedInput.transcript}
+        listening={voicedInput.listening}
         onStart={voicedInput.onStart}
         onStop={voicedInput.onStop}
         onNext={() => form.setStep(2)}
       />
-    ) }
+    )}
+
+    {form.step === 2 && (
+      <VoiceEntryTwo 
+        onNext={() => form.setStep(3)}
+        setCustomer={form.setCustomer}
+        customer={form.customer}
+        setAmount={form.setAmount}
+        amount={form.amount}
+        setEntryType={form.setEntryType}
+        entryType={form.entryType}
+        entryDescription={form.entryDescription}
+        setEntryDescription={form.setEntryDescription}
+      />
+    )}
     </main>
   )
 }

@@ -6,8 +6,9 @@ import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } fro
 import { pressKey } from "../utils/pressKey";
 import { numbers } from "../data/entryKeys";
 import { createPortal } from "react-dom";
+import { useEntryForm } from "../hooks/useEntryForm";
 
-const entryCustomers: customerType[] = [
+export const entryCustomers: customerType[] = [
   { name: "Chika Okafor", image: "CO" },
   { name: "Tunde Adeyemi", image: "TA" },
   { name: "Zainab Bello", image: "ZB" },
@@ -82,7 +83,8 @@ export function EntryCustomer({
   customer: customerType | undefined;
 }) {
 
-  const [selectedTrigger, isSelectedTrigger] = useState(false);
+  const {selectedTrigger, isSelectedTrigger} = useEntryForm();
+  // const [selectedTrigger, isSelectedTrigger] = useState(false);
 
   return (
     <section className="" aria-labelledby="entry-customer-heading">

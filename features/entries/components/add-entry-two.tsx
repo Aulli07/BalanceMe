@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { Dispatch, SetStateAction, useState } from "react";
 import { LuAArrowDown, LuChevronDown, LuClock3 } from "react-icons/lu";
 import { customerType } from "@/app/add-entry/page";
+import { useEntryForm } from "../hooks/useEntryForm";
 
 
 export type entryDetailType = {
@@ -12,7 +13,7 @@ export type entryDetailType = {
   receipt?: File;
 }
 
-const entryCategories = ["Feed", "Foodstuffs", "Livestock Sale", "Electronics"];
+export const entryCategories = ["Feed", "Foodstuffs", "Livestock Sale", "Electronics"];
 
 
 export function AddEntryTwo({
@@ -95,19 +96,21 @@ export function EntryConfirmedDetails({
 
 function EntryDescription({
   entryDescription,
-  setEntryDescription
+  setEntryDescription,
 }: {
   entryDescription: entryDetailType;
   setEntryDescription: Dispatch<SetStateAction<entryDetailType>>;
 }) {
-  const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
 
-  const updateDescription = (field: keyof entryDetailType, value: string | File | undefined) => {
-    setEntryDescription((current) => ({
-      ...current,
-      [field]: value,
-    }));
-  };
+  const {categoryPickerOpen, setCategoryPickerOpen, updateDescription} = useEntryForm(); 
+  // const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
+
+  // const updateDescription = (field: keyof entryDetailType, value: string | File | undefined) => {
+  //   setEntryDescription((current) => ({
+  //     ...current,
+  //     [field]: value,
+  //   }));
+  // };
 
   return (
     <section className="mt-5 px-5" aria-labelledby="entry-description-heading">
