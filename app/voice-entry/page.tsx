@@ -20,8 +20,8 @@ export function VoiceEntry() {
         setTranscript={voicedInput.setTranscript}
         transcript={voicedInput.transcript}
         listening={voicedInput.listening}
-        onStart={voicedInput.onStart}
-        onStop={voicedInput.onStop}
+        start={voicedInput.start}
+        stop={voicedInput.stop}
         onNext={() => form.setStep(2)}
       />
     )}

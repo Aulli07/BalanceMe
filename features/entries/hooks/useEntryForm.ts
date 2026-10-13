@@ -1,6 +1,10 @@
+"use client";
+
+
 import { customerType } from "@/app/add-entry/page";
 import { useEffect, useRef, useState } from "react";
 import type { entryDetailType } from "../components/add-entry-two";
+
 
 type SpeechRecognitionResultEvent = {
   results: ArrayLike<{
@@ -17,7 +21,7 @@ type SpeechRecognitionInstance = {
   lang: string;
   onstart: (() => void) | null;
   onend: (() => void) | null;
-  onerror: (() => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
   onresult: ((event: SpeechRecognitionResultEvent) => void) | null;
   onaudiostart: (() => void) | null;
   onspeechstart: (() => void) | null;
@@ -82,90 +86,85 @@ export function useEntryForm() {
 export function useSpeechInputForm() {
   const [transcript, setTranscript] = useState<string>("");
   const [listening, setListening] = useState<boolean>(false);
-  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null);
-  const isRecognitionActive = useRef(false);
+  const [transcribing, setTranscribing] = useState(false);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const speechWindow = window as SpeechRecognitionWindow;
-    const SR = speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition;
-    if (!SR) {
-      console.error("SpeechRecognition is not supported in this browser.");
-      return;
-    }
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const streamRef = useRef<MediaStream | null>(null);
 
-    const recognition = new SR();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = "en-US";
-    recognitionRef.current = recognition;
-
-    recognition.onstart = () => {
-      isRecognitionActive.current = true;
-      setListening(true);
-    };
-    recognition.onend = () => {
-      isRecognitionActive.current = false;
-      setListening(false);
-    };
-    recognition.onerror = () => {
-      isRecognitionActive.current = false;
-      setListening(false);
-    };
-    recognition.onaudiostart = () => console.log("Audio started");
-    recognition.onspeechstart = () => console.log("Speech detected");
-    
-    recognition.onresult = (event: SpeechRecognitionResultEvent) => {
-      // const text = Array.from(event.results)
-      //   .map((result) => result[0].transcript)
-      //   .join("");
-      // setTranscript(text);
-      let finalText = "";
-      let interimText = "";
-
-      for (let i = 0; i < event.results.length; i++) {
-        if (event.results[i].isFinal) {
-          finalText += event.results[i][0].transcript;
-        } else {
-          interimText += event.results[i][0].transcript;
-        }
-      }
-
-      setTranscript(finalText + interimText);
-    }
-
-    recognitionRef.current = recognition;
-    return () => {
-      isRecognitionActive.current = false;
-      recognition.abort();
-    };
-  }, []);
-
-  const onStart = () => {
-    if (!recognitionRef.current || isRecognitionActive.current) return;
-
+  const start = async () => {
+    setError("");
     setTranscript("");
-    isRecognitionActive.current = true;
-    setListening(true);
 
     try {
-      recognitionRef.current.start();
-    } catch (error) {
-      isRecognitionActive.current = false;
-      setListening(false);
-      console.error("Unable to start speech recognition.", error);
+      const stream = await navigator.mediaDevices.getUserMedia(
+        {audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+          channelCount: 1,
+        }}
+      );
+      streamRef.current = stream;
+
+      const recorder = new MediaRecorder(stream);
+      chunksRef.current = [];
+
+      recorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          chunksRef.current.push(event.data);
+        }
+      };
+
+      recorder.onstop = async () => {
+        streamRef.current?.getTracks().forEach((track) => track.stop());
+
+        const blob = new Blob(chunksRef.current, { type: recorder.mimeType });
+        setTranscribing(true);  
+
+        console.log("Blob size:", blob.size, "bytes");
+        console.log("Chunks", chunksRef.current.length);
+
+        const url = URL.createObjectURL(blob);
+        new Audio(url).play();
+
+
+        try {
+          const res = await fetch("/api/transcribe", {
+            method: "POST",
+            headers: { "Content-Type": blob.type },
+            body: blob,
+          });
+          const { text } = await res.json();
+          setTranscript(text);
+        } catch (error) {
+          setError("Failed to transcribe audio");
+        } finally {
+          setTranscribing(false);
+        }
+      };
+
+      recorder.start();
+      recorderRef.current = recorder;
+      setListening(true);
+    } catch (err) {
+      setError("Microphone access denied or not available");
     }
   }
 
-  const onStop = () => {
-    if (!recognitionRef.current || !isRecognitionActive.current) return;
-    recognitionRef.current.stop();
-  }
+  const stop = () => {
+    recorderRef.current?.stop();
+    setListening(false);
+  };
 
   return {
     transcript,
     setTranscript,
     listening,
-    onStart,
-    onStop
+    transcribing,
+    error,
+    start,
+    stop,
   };
 }

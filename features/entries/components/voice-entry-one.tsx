@@ -8,16 +8,16 @@ type VoiceEntryOneProps = {
   setTranscript: Dispatch<SetStateAction<string>>;
   transcript: string;
   listening: boolean;
-  onStart: () => void;
-  onStop: () => void;
+  start: () => void;
+  stop: () => void;
   onNext: () => void;
 };
 
 export function VoiceEntryOne({
   setTranscript,
-  onStart,
+  start,
   listening,
-  onStop,
+  stop,
   onNext,
   transcript
 }: VoiceEntryOneProps) {
@@ -144,7 +144,7 @@ export function VoiceEntryOne({
         {!listening ? (
           <button
             type="button"
-            onClick={onStart}
+            onClick={start}
             className="flex w-full items-center justify-center gap-3 rounded-2xl bg-[var(--forest)] py-3.5 text-base font-extrabold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-colors active:bg-[#36563f]"
           >
             <LuMic className="size-5" aria-hidden="true" />
@@ -155,7 +155,7 @@ export function VoiceEntryOne({
           <div className="grid grid-cols-[0.85fr_1.7fr] gap-3">
             <button
               type="button"
-              onClick={onStop}
+              onClick={stop}
               className="flex items-center justify-center gap-2 rounded-2xl border border-[#e8b9ae] bg-[#f9e4df] py-3.5 text-sm font-extrabold text-[#a34f42] transition-colors active:bg-[#f3d4ce]"
             >
               <LuPause className="size-4" aria-hidden="true" />
@@ -164,8 +164,8 @@ export function VoiceEntryOne({
             <button
               type="button"
               onClick={() => {
-                onStop();
-                onNext();
+                stop();
+                // onNext();
               }}
               className="flex items-center justify-center gap-2 rounded-2xl bg-[var(--forest)] py-3.5 text-sm font-extrabold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-colors active:bg-[#36563f]"
             >
