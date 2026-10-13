@@ -1,10 +1,10 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import { LuAArrowDown, LuChevronDown, LuClock3 } from "react-icons/lu";
+import { LuChevronDown, LuClock3 } from "react-icons/lu";
 import { useEntryForm } from "../hooks/useEntryForm";
 
-import { EntryProps, VoiceEntryProps } from "../types/entry-type";
+import { EntryProps } from "../types/entry-type";
 import { entryCategories } from "../data/entry-data"
 
 

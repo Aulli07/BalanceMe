@@ -3,14 +3,14 @@
 import { useState } from "react";
 import {
   LuChevronLeft,
-  LuChevronRight,
-  LuChartNoAxesCombined,
-  LuChevronDown,
-  LuCircleDollarSign,
-  LuArrowDown,
+  LuChevronRight
 } from "react-icons/lu";
 
 const months = ["October 2026", "September 2026", "August 2026"];
+
+
+
+
 
 export function TransactionSummary() {
   const [monthIndex, setMonthIndex] = useState(0);

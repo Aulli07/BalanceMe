@@ -1,12 +1,12 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } from "react-icons/lu";
 import { pressKey } from "../utils/pressKey";
 import { entryCustomers, numbers } from "../data/entry-data";
 import { createPortal } from "react-dom";
 import { useEntryForm } from "../hooks/useEntryForm";
-import { EntryProps, VoiceEntryProps } from "../types/entry-type";
+import { EntryProps } from "../types/entry-type";
 
 
 

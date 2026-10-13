@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { LuChevronDown } from "react-icons/lu";
-import { VoiceEntryProps } from "../types/entry-type";
 import { entryCategories, entryCustomers } from "../data/entry-data";
 
 import { EntryProps } from "../types/entry-type";

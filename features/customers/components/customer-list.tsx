@@ -1,6 +1,8 @@
 import { LuArrowUpDown, LuChevronRight } from "react-icons/lu";
 import { customers } from "@/features/customers/data/customers";
 
+
+
 export function CustomerList() {
   return (
     <section aria-label="Customer list">

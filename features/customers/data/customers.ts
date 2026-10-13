@@ -41,3 +41,10 @@ export const customers: Customer[] = [
     avatarColor: "bg-[#e9e2ec] text-[#665372]",
   },
 ];
+
+export const customerInitials = [
+  { initials: "AM", className: "bg-green-100 text-green-900" },
+  { initials: "KO", className: "bg-orange-100 text-orange-900" },
+  { initials: "NC", className: "bg-blue-100 text-blue-900" },
+  { initials: "EO", className: "bg-amber-100 text-amber-900" },
+];

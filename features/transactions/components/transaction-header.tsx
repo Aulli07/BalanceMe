@@ -1,4 +1,7 @@
-import { LuArrowUpRight, LuChartNoAxesColumnIncreasing, LuDownload, LuReceiptText } from "react-icons/lu";
+import { LuChartNoAxesColumnIncreasing, LuDownload, LuReceiptText } from "react-icons/lu";
+
+
+
 
 export function TransactionHeader() {
   return (

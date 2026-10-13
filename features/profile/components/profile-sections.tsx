@@ -3,29 +3,13 @@ import {
   LuBuilding2,
   LuChevronRight,
   LuCircleHelp,
-  LuLockKeyhole,
   LuMessageCircle,
   LuMoon,
   LuShieldCheck,
 } from "react-icons/lu";
 
-function SettingRow({ icon: Icon, title, subtitle, value, message = false }: { icon: typeof LuBuilding2; title: string; subtitle: string; value?: string; message?: boolean }) {
-  return (
-    <button type="button" className="flex min-h-16 w-full items-center gap-2.5 px-3 py-2 text-left active:bg-[#e8eddd]/60">
-      <span className={`grid size-7 shrink-0 place-items-center rounded-[11px] ${message ? "bg-[#f7ebe5] text-[#855145]" : "bg-[#eef3e5] text-[#496a48]"}`}>
-        <Icon className="size-5" aria-hidden="true" />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-[14px] font-bold leading-tight text-[#294735]">{title}</span>
-        <span className="mt-1 block truncate text-[10px] font-medium leading-tight text-[#879185]">{subtitle}</span>
-      </span>
-      <span className="flex shrink-0 items-center gap-1.5 text-[#96a091]">
-        {value && <span className="text-[10px] font-semibold text-[#7a8776]">{value}</span>}
-        <LuChevronRight className="size-5" aria-hidden="true" />
-      </span>
-    </button>
-  );
-}
+
+
 
 export function ProfileSections() {
   return (
@@ -76,5 +60,24 @@ export function ProfileSections() {
         </div>
       </section>
     </>
+  );
+}
+
+
+function SettingRow({ icon: Icon, title, subtitle, value, message = false }: { icon: typeof LuBuilding2; title: string; subtitle: string; value?: string; message?: boolean }) {
+  return (
+    <button type="button" className="flex min-h-16 w-full items-center gap-2.5 px-3 py-2 text-left active:bg-[#e8eddd]/60">
+      <span className={`grid size-7 shrink-0 place-items-center rounded-[11px] ${message ? "bg-[#f7ebe5] text-[#855145]" : "bg-[#eef3e5] text-[#496a48]"}`}>
+        <Icon className="size-5" aria-hidden="true" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[14px] font-bold leading-tight text-[#294735]">{title}</span>
+        <span className="mt-1 block truncate text-[10px] font-medium leading-tight text-[#879185]">{subtitle}</span>
+      </span>
+      <span className="flex shrink-0 items-center gap-1.5 text-[#96a091]">
+        {value && <span className="text-[10px] font-semibold text-[#7a8776]">{value}</span>}
+        <LuChevronRight className="size-5" aria-hidden="true" />
+      </span>
+    </button>
   );
 }

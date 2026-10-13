@@ -1,4 +1,4 @@
-import { LuArrowDownLeft, LuClock3 } from "react-icons/lu";
+import { LuClock3 } from "react-icons/lu";
 
 type Transaction = {
   initials: string;

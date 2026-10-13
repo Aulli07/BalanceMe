@@ -1,5 +1,7 @@
 import { LuArrowDownRight, LuArrowUpRight, LuReceiptText, LuUsersRound } from "react-icons/lu";
 
+
+
 export function CustomerSummary() {
   return (
     <section className="grid grid-cols-2 gap-2.5" aria-label="Customer summary for this week">

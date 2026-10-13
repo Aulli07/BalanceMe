@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   LuChartNoAxesCombined,
   LuCircleDollarSign,
@@ -11,10 +11,8 @@ import type {
   PulseData,
   PulseIconName,
 } from "@/features/analytics/data/business-pulses";
+import { slideShow } from "../utils/slideshow";
 
-type BusinessPulseProps = {
-  data: PulseData[];
-};
 
 const pulseIcons = {
   chart: LuChartNoAxesCombined,
@@ -23,22 +21,13 @@ const pulseIcons = {
   overdue: LuCircleDollarSign,
 } satisfies Record<PulseIconName, typeof LuChartNoAxesCombined>;
 
-export function BusinessPulse({ data }: BusinessPulseProps) {
+export function BusinessPulse({ data }: { data: PulseData[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const activePulse = data[activeIndex];
 
-  useEffect(() => {
-    if (data.length < 2) return;
+  slideShow(data, setActiveIndex);
 
-    const interval = window.setInterval(() => {
-      setActiveIndex((currentIndex) => (currentIndex + 1) % data.length);
-    }, 5000);
-
-    return () => window.clearInterval(interval);
-  }, [data.length]);
-
-  if (!activePulse) return null;
-
+  if (!activePulse) return null
   const Icon = pulseIcons[activePulse.icon];
 
   return (
@@ -48,7 +37,7 @@ export function BusinessPulse({ data }: BusinessPulseProps) {
       </h2>
 
       <article
-        className={`relative min-h-40 flex justify-between overflow-hidden rounded-[1.35rem] border ${activePulse.borderColor} px-4 py-4 shadow-sm shadow-[var(--forest)]/5 transition-colors duration-500 ${activePulse.bgColor}`}
+        className={`relative min-h-40 flex justify-between overflow-hidden rounded-xl border ${activePulse.borderColor} px-4 py-4 shadow-sm shadow-[var(--forest)]/5 transition-colors duration-500 bg-[var(--surface)]`}
         aria-live="polite"
       >
         {/* <div className="pointer-events-none absolute -bottom-20 -right-8 -z-10 size-44 rounded-full border border-white/60" />

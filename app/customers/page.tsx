@@ -2,6 +2,8 @@ import { CustomerHeader } from "@/features/customers/components/customer-header"
 import { CustomerList } from "@/features/customers/components/customer-list";
 import { CustomerSummary } from "@/features/customers/components/customer-summary";
 
+
+
 export default function CustomersPage() {
   return (
     <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">

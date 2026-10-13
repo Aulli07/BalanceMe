@@ -1,5 +1,7 @@
 import { LuSearch } from "react-icons/lu";
 
+
+
 export function CustomerHeader() {
   return (
     <header className="flex min-h-16 items-center justify-between px-5 pt-2">

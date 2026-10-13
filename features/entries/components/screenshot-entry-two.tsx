@@ -1,4 +1,4 @@
-import { EntryProps, VoiceEntryProps } from "../types/entry-type";
+import { EntryProps } from "../types/entry-type";
 import { VoiceEntryTwo } from "./voice-entry-two";
 
 
