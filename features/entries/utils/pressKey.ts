@@ -1,9 +1,9 @@
 export function pressKey(
   key: string, 
-  setAmount: React.Dispatch<React.SetStateAction<[string, string]>>, 
+  setAmount: React.Dispatch<React.SetStateAction<[string, string]>> | undefined, 
   entryType: 0 | 1
 ) {
-  setAmount((currentAmount) => {
+  setAmount?.((currentAmount) => {
     const nextAmount = [...currentAmount] as [string, string];
     const previous = nextAmount[entryType];
 

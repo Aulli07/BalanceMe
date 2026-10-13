@@ -1,42 +1,14 @@
 "use client";
 
-import { customerType } from "@/app/add-entry/page";
 import { Dispatch, SetStateAction, useState } from "react";
 import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } from "react-icons/lu";
 import { pressKey } from "../utils/pressKey";
-import { numbers } from "../data/entryKeys";
+import { entryCustomers, numbers } from "../data/entry-data";
 import { createPortal } from "react-dom";
 import { useEntryForm } from "../hooks/useEntryForm";
+import { EntryProps, VoiceEntryProps } from "../types/entry-type";
 
-export const entryCustomers: customerType[] = [
-  { name: "Chika Okafor", image: "CO" },
-  { name: "Tunde Adeyemi", image: "TA" },
-  { name: "Zainab Bello", image: "ZB" },
-  { name: "Mariam Yusuf", image: "MY" },
-];
 
-// const recentCustomers: EntryCustomer[] = [
-//   {
-//     name: "Select customer",
-//     initials: "SC",
-//     avatarClassName: "bg-[#e2ecd7] text-[var(--forest)]",
-//   },
-//   {
-//     name: "Chika",
-//     initials: "CO",
-//     avatarClassName: "bg-[#e2ecd7] text-[var(--forest)]",
-//   },
-//   {
-//     name: "Tunde",
-//     initials: "TA",
-//     avatarClassName: "bg-[#f2e3d8] text-[#805644]",
-//   },
-//   {
-//     name: "Zainab",
-//     initials: "ZB",
-//     avatarClassName: "bg-[#e8eed7] text-[#64783f]",
-//   },
-// ];
 
 export function AddEntryOne({
   setCustomer,
@@ -46,15 +18,11 @@ export function AddEntryOne({
   amount,
   setEntryType,
   entryType,
-}: {
-  setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
-  customer: customerType | undefined;
-  setStep: Dispatch<SetStateAction<1 | 2 | 3>>;
-  setAmount: Dispatch<SetStateAction<[string, string]>>;
-  amount: [string, string];
-  setEntryType: Dispatch<SetStateAction<1 | 0>>;
-  entryType: 0 | 1;
-}) {
+}: EntryProps) {
+
+  if (entryType === undefined || amount === undefined) {
+    return null;
+  }
 
   return (
     <main className="px-5 pt-5">
@@ -63,7 +31,7 @@ export function AddEntryOne({
 
       <button
         type="button"
-        onClick={() => setStep(2)}
+        onClick={() => setStep?.(2)}
         disabled={!customer || amount[entryType] === "0"}
         className="mt-5 flex w-full items-center justify-center gap-4 rounded-xl bg-[#c7d9ae] py-2 text-md font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
       >
@@ -78,10 +46,7 @@ export function AddEntryOne({
 export function EntryCustomer({
   setCustomer,
   customer,
-}: {
-  setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
-  customer: customerType | undefined;
-}) {
+}: EntryProps) {
 
   const {selectedTrigger, isSelectedTrigger} = useEntryForm();
   // const [selectedTrigger, isSelectedTrigger] = useState(false);
@@ -131,7 +96,7 @@ export function EntryCustomer({
                     key={entryCustomer.name}
                     type="button"
                     onClick={() => {
-                      setCustomer(entryCustomer);
+                      setCustomer?.(entryCustomer);
                       isSelectedTrigger(false);
                     }}
                     className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
@@ -146,34 +111,8 @@ export function EntryCustomer({
             </div>
           </div>,
           document.body,
-        )}
-
-      {/* <div className="mt-3 flex items-center gap-3">
-        <div className="flex min-w-0 gap-2 overflow-x-auto pb-1">
-          {recentCustomers.slice(1).map((customer) => {
-            const isSelected = customer.initials === selectedCustomer.initials;
-
-            return (
-              <button
-                key={customer.initials}
-                type="button"
-                onClick={() => setSelectedCustomer(customer)}
-                className={`flex shrink-0 items-center gap-2 rounded-full border px-3 py-2 text-sm font-bold transition-colors ${
-                  isSelected
-                    ? "border-[#a8c487] bg-[#eef5df] text-[var(--forest)]"
-                    : "border-[#e1e7dc] bg-[var(--surface)] text-[#627267]"
-                }`}
-                aria-pressed={isSelected}
-              >
-                <span className={`grid size-7 place-items-center rounded-full text-[10px] font-extrabold ${customer.avatarClassName}`}>
-                  {isSelected ? <LuCheck className="size-3.5" aria-hidden="true" /> : customer.initials}
-                </span>
-                {customer.name}
-              </button>
-            );
-          })}
-        </div>
-      </div> */}
+        )
+      }
     </section>
   );
 }
@@ -183,21 +122,20 @@ export function EntryAmount({
   setEntryType,
   entryType,
   amount,
-}: {
-  setAmount: Dispatch<SetStateAction<[string, string]>>;
-  setEntryType: Dispatch<SetStateAction<1 | 0>>;
-  entryType: 0 | 1;
-  amount: [string, string];
-}) {
+}: EntryProps) {
 
   const [direction, setDirection] = useState(1);
 
   const selectEntryType = (nextType: 0 | 1) => {
     // setDirection(nextType > entryType ? 1 : -1);
-    setEntryType(nextType);
+    setEntryType?.(nextType);
   };
 
-  const [whole, decimal] = amount[entryType].split(".");
+  if (entryType === undefined || amount === undefined) {
+    return null;
+  }
+
+  const [whole, decimal] = amount?.[entryType].split(".");
   const display =
     (whole ? Number(whole).toLocaleString("en-NG") : "0") +
     (decimal !== undefined ? `.${decimal}` : "");

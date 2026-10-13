@@ -7,8 +7,10 @@ import { LuCheck } from "react-icons/lu";
 export function AddEntryThree({
   setStep,
 }: {
-  setStep: Dispatch<SetStateAction<1 | 2 | 3>>;
+  setStep: Dispatch<SetStateAction<1 | 2 | 3>> | undefined;
 }) {
+  
+  if (setStep === undefined) return null;
   const router = useRouter();
 
   return (

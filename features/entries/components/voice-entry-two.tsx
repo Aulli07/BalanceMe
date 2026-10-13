@@ -1,22 +1,10 @@
-import { customerType } from "@/app/add-entry/page";
-import { entryCategories, entryDetailType } from "./add-entry-two";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import { LuChevronDown } from "react-icons/lu";
-import { getCustomer } from "../selectors/getCustomer";
-import { entryCustomers } from "./add-entry-one";
+import { VoiceEntryProps } from "../types/entry-type";
+import { entryCategories, entryCustomers } from "../data/entry-data";
 
-export type VoiceEntryProps = {
-  onNext: () => void;
-  setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
-  customer: customerType | undefined;
-  setAmount: Dispatch<SetStateAction<[string, string]>>;
-  amount: [string, string];
-  setEntryType: Dispatch<SetStateAction<1 | 0>>;
-  entryType: 0|1;
-  entryDescription: entryDetailType;
-  setEntryDescription: Dispatch<SetStateAction<entryDetailType>>;
-}
+import { EntryProps } from "../types/entry-type";
 
 
 
@@ -26,11 +14,9 @@ export function VoiceEntryTwo({
   customer,
   setAmount,
   amount,
-  setEntryType,
-  entryType,
   entryDescription,
   setEntryDescription
-}: VoiceEntryProps) {
+}: EntryProps) {
 
   return (
     <main className="px-4 pt-3">
@@ -44,21 +30,13 @@ export function VoiceEntryTwo({
       />
       <button
         type="button"
-        onClick={() => onNext()}
-        disabled={!entryDescription.category}
+        onClick={() => onNext?.()}
+        disabled={!entryDescription?.category}
         className="mt-3 flex w-full items-center justify-center gap-3 rounded-xl text-[var(--paper)] py-2 text-sm font-bold bg-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
       >
         Complete
       </button>
     </main>
-  )
-}
-
-function EntryConfirmMessage() {
-  return (
-    <section>
-      <span>Help confirming these details</span>
-    </section>
   )
 }
 
@@ -70,19 +48,12 @@ function EntryFormDetails({
   setAmount,
   entryDescription,
   setEntryDescription,
-}: {
-  customer: customerType | undefined;
-  setCustomer: Dispatch<SetStateAction<customerType | undefined>>;
-  amount: [string, string];
-  setAmount: Dispatch<SetStateAction<[string, string]>>;
-  entryDescription: entryDetailType;
-  setEntryDescription: Dispatch<SetStateAction<entryDetailType>>;
-}) {
+}: EntryProps) {
   const [selectedTrigger, setSelectedTrigger] = useState(false);
   const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
 
   function pasteAmount(eventValue: string, type: 0|1) {
-    setAmount((currentAmount) => {
+    setAmount?.((currentAmount) => {
       const nextAmount = [...currentAmount] as [string, string];
       nextAmount[type] = eventValue;
       return nextAmount;
@@ -136,7 +107,7 @@ function EntryFormDetails({
                       key={entryCustomer.name}
                       type="button"
                       onClick={() => {
-                        setCustomer(entryCustomer);
+                        setCustomer?.(entryCustomer);
                         setSelectedTrigger(false);
                       }}
                       className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
@@ -159,7 +130,7 @@ function EntryFormDetails({
           Paid
           <input
             className="box-border min-w-0 w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-sm text-left"
-            value={amount[0]}
+            value={amount?.[0] || ""}
             placeholder=""
             onChange={(event) => pasteAmount(event.target.value, 0)}
           />
@@ -168,7 +139,7 @@ function EntryFormDetails({
           Owes
           <input
             className="box-border min-w-0 w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-sm text-left"
-            value={amount[1]}
+            value={amount?.[1] || ""}
             placeholder=""
             onChange={(event) => pasteAmount(event.target.value, 1)}
           />
@@ -184,8 +155,8 @@ function EntryFormDetails({
             aria-label="Select category"
             className="flex w-full min-w-0 max-w-full items-center justify-between rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-left text-sm font-medium shadow-sm transition-colors active:bg-[#f0f4ea]"
           >
-            <span className={entryDescription.category ? "text-[var(--ink)]" : "text-[#829082]"}>
-              {entryDescription.category || "Select a category"}
+            <span className={entryDescription?.category ? "text-[var(--ink)]" : "text-[#829082]"}>
+              {entryDescription?.category || "Select a category"}
             </span>
             <LuChevronDown className="size-5 shrink-0 text-[#758477]" aria-hidden="true" />
           </button>
@@ -218,11 +189,11 @@ function EntryFormDetails({
                       key={category}
                       type="button"
                       onClick={() => {
-                        setEntryDescription((current) => ({ ...current, category }));
+                        setEntryDescription?.((current) => ({ ...current, category }));
                         setCategoryPickerOpen(false);
                       }}
                       className={`rounded-2xl border px-4 py-3 text-left font-bold transition-colors ${
-                        entryDescription.category === category
+                        entryDescription?.category === category
                           ? "border-[#a8c487] bg-[#dfead2] text-[var(--forest)]"
                           : "border-[#e1e7dc] bg-[#fffef9] active:bg-[#e8eddd]"
                       }`}
@@ -242,8 +213,9 @@ function EntryFormDetails({
             name="description"
             rows={2}
             placeholder="What was this entry for?"
-            value={entryDescription.description}
-            onChange={(event) => setEntryDescription((current) => ({ ...current, description: event.target.value }))}
+            value={entryDescription?.description || ""}
+            onChange={(event) => setEntryDescription?.((current) => ({ ...current, description: event.target.value }))}
+
             className="box-border min-h-16 min-w-0 w-full max-w-full resize-none rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-sm font-medium shadow-sm outline-none placeholder:text-[#829082] focus:border-[var(--forest)]"
           />
         </label>
@@ -254,7 +226,8 @@ function EntryFormDetails({
             name="receipt"
             type="file"
             accept="image/*"
-            onChange={(event) => setEntryDescription((current) => ({ ...current, receipt: event.target.files?.[0] }))}
+            onChange={(event) => setEntryDescription?.((current) => ({ ...current, receipt: event.target.files?.[0] }))}
+
             className="box-border block min-w-0 w-full max-w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-1.5 text-xs font-medium shadow-sm file:mr-2 file:rounded-lg file:border-0 file:bg-[#e8eee1] file:px-2 file:py-1.5 file:font-bold file:text-[var(--forest)]"
           />
         </label>

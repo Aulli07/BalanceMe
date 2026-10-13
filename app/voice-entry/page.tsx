@@ -4,8 +4,11 @@ import { AddEntryThree } from "@/features/entries/components/add-entry-three";
 import { AddEntryHeader } from "@/features/entries/components/entry-header";
 import { VoiceEntryOne } from "@/features/entries/components/voice-entry-one";
 import { VoiceEntryTwo } from "@/features/entries/components/voice-entry-two";
-import { useEntryForm, useSpeechInputForm } from "@/features/entries/hooks/useEntryForm";
-import { useState } from "react";
+
+import { useEntryForm } from "@/features/entries/hooks/useEntryForm";
+import { useSpeechInputForm } from "@/features/entries/hooks/useSpeechInput";
+
+
 
 export function VoiceEntry() {
   const form = useEntryForm();

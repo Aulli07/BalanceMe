@@ -3,15 +3,8 @@
 import { LuArrowRight, LuMic, LuPause, LuSquare } from "react-icons/lu";
 import { useTimer } from "../hooks/useTimer";
 import { Dispatch, SetStateAction } from "react";
+import { VoiceEntryProps } from "../types/entry-type";
 
-type VoiceEntryOneProps = {
-  setTranscript: Dispatch<SetStateAction<string>>;
-  transcript: string;
-  listening: boolean;
-  start: () => void;
-  stop: () => void;
-  onNext: () => void;
-};
 
 export function VoiceEntryOne({
   setTranscript,
@@ -20,7 +13,7 @@ export function VoiceEntryOne({
   stop,
   onNext,
   transcript
-}: VoiceEntryOneProps) {
+}: VoiceEntryProps) {
 
   const seconds = useTimer(listening);
   const formatTimer = (value: number) => {

@@ -1,19 +1,12 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import { Dispatch, SetStateAction, useState } from "react";
 import { LuAArrowDown, LuChevronDown, LuClock3 } from "react-icons/lu";
-import { customerType } from "@/app/add-entry/page";
 import { useEntryForm } from "../hooks/useEntryForm";
 
+import { EntryProps, VoiceEntryProps } from "../types/entry-type";
+import { entryCategories } from "../data/entry-data"
 
-export type entryDetailType = {
-  category: string;
-  description: string;
-  receipt?: File;
-}
-
-export const entryCategories = ["Feed", "Foodstuffs", "Livestock Sale", "Electronics"];
 
 
 export function AddEntryTwo({
@@ -23,14 +16,7 @@ export function AddEntryTwo({
   entryDescription,
   setEntryDescription,
   setStep
-}: {
-  customer: customerType | undefined;
-  amount: [string, string];
-  entryType: 0|1;
-  entryDescription: entryDetailType;
-  setEntryDescription: Dispatch<SetStateAction<entryDetailType>>;
-  setStep: Dispatch<SetStateAction<1|2|3>>;
-}) {
+}: EntryProps) {
 
   return (
     <main>
@@ -41,8 +27,8 @@ export function AddEntryTwo({
       />
       <button
         type="button"
-        onClick={() => setStep(3)}
-        disabled={!entryDescription.category}
+        onClick={() => setStep?.(3)}
+        disabled={!entryDescription?.category}
         className="mt-5 flex w-full items-center justify-center gap-4 rounded-xl bg-[#c7d9ae] py-2 text-md font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
       >
         Complete
@@ -58,11 +44,7 @@ export function EntryConfirmedDetails({
   customer,
   amount,
   entryType
-}: {
-  customer: customerType | undefined;
-  amount: [string, string];
-  entryType: 0|1;
-}) {
+}: EntryProps) {
 
   return (
     <section className="mx-5 mt-5 overflow-hidden rounded-3xl border border-[#dce7d2] bg-[#f7faf2] shadow-sm" aria-label="Confirmed entry details">
@@ -77,15 +59,15 @@ export function EntryConfirmedDetails({
         </div>
         <div className="text-right">
           <p className="text-xl font-extrabold tracking-tight text-[var(--forest)]">
-            ₦{Number(amount[0] || 0).toLocaleString("en-NG")}
+            ₦{Number(amount?.[0] || 0).toLocaleString("en-NG")}
           </p>
           <span className={`mt-1 inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-bold ${
-            amount[1]
+            amount?.[1]
               ? "bg-[#f5e8d8] text-[#855126]"
               : "bg-[#dfeeda] text-[#568044]"
           }`}>
-            {amount[1] && <LuClock3 className="size-2.5" aria-hidden="true" />}
-            {amount[1] && "Due"} + {Number(amount[1] || 0).toLocaleString("en-NG")}
+            {amount?.[1] && <LuClock3 className="size-2.5" aria-hidden="true" />}
+            {amount?.[1] && "Due"} + {Number(amount?.[1] || 0).toLocaleString("en-NG")}
           </span>
         </div>
       </div>
@@ -97,10 +79,7 @@ export function EntryConfirmedDetails({
 function EntryDescription({
   entryDescription,
   setEntryDescription,
-}: {
-  entryDescription: entryDetailType;
-  setEntryDescription: Dispatch<SetStateAction<entryDetailType>>;
-}) {
+}: EntryProps) {
 
   const {categoryPickerOpen, setCategoryPickerOpen, updateDescription} = useEntryForm(); 
   // const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
@@ -123,8 +102,8 @@ function EntryDescription({
             aria-label="Select category"
             className="flex items-center w-full max-w-full min-w-0 justify-between rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 text-left font-medium shadow-sm transition-colors active:bg-[#f0f4ea]"
           >
-            <span className={entryDescription.category ? "text-[var(--ink)]" : "text-[#829082]"}>
-              {entryDescription.category || "Select a category"}
+            <span className={entryDescription?.category ? "text-[var(--ink)]" : "text-[#829082]"}>
+              {entryDescription?.category || "Select a category"}
             </span>
             <LuChevronDown className="size-5 shrink-0 text-[#758477]" aria-hidden="true" />
           </button>
@@ -161,7 +140,7 @@ function EntryDescription({
                         setCategoryPickerOpen(false);
                       }}
                       className={`rounded-2xl border px-4 py-3 text-left font-bold transition-colors ${
-                        entryDescription.category === category
+                        entryDescription?.category === category
                           ? "border-[#a8c487] bg-[#dfead2] text-[var(--forest)]"
                           : "border-[#e1e7dc] bg-[#fffef9] active:bg-[#e8eddd]"
                       }`}
@@ -181,7 +160,7 @@ function EntryDescription({
             name="description"
             rows={3}
             placeholder="What was this entry for?"
-            value={entryDescription.description}
+            value={entryDescription?.description}
             onChange={(event) => updateDescription("description", event.target.value)}
             className="box-border min-w-0 w-full max-w-full resize-none rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 font-medium shadow-sm outline-none placeholder:text-[#829082] focus:border-[var(--forest)]"
           />
