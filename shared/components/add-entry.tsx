@@ -1,53 +1,15 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { LiaMicrophoneSolid } from "react-icons/lia";
-import { LuArrowRight, LuImagePlus, LuPencilLine, LuX } from "react-icons/lu";
-import type { IconType } from "react-icons";
+import { AddEntryProps } from "../types/entry-option-type";
+import { entryOptions } from "../data/entry-options";
+import { LuX } from "react-icons/lu";
 
-type EntryOption = {
-  icon: IconType;
-  title: string;
-  description: string;
-  arrowIcon: IconType;
-  iconContainerClassName: string;
-  to: string;
-};
 
-const entryOptions: EntryOption[] = [
-  {
-    icon: LuPencilLine,
-    title: "Written",
-    description: "Type purchases or customer credit",
-    arrowIcon: LuArrowRight,
-    iconContainerClassName: "bg-[#edf3df] text-[var(--forest)]",
-    to: "/add-entry",
-  },
-  {
-    icon: LiaMicrophoneSolid,
-    title: "Voice",
-    description: "Speak a note, then review and send",
-    arrowIcon: LuArrowRight,
-    iconContainerClassName: "bg-[#f0f5df] text-[var(--forest)]",
-    to: "/voice-entry",
-  },
-  {
-    icon: LuImagePlus,
-    title: "Screenshot",
-    description: "Upload a transfer receipt or invoice",
-    arrowIcon: LuArrowRight,
-    iconContainerClassName: "bg-[#e8f2e8] text-[#52765c]",
-    to: "/screenshot-entry",
-  },
-];
 
-type AddEntryProps = {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-};
 
 export function AddEntry({ open, setOpen }: AddEntryProps) {
   useEffect(() => {

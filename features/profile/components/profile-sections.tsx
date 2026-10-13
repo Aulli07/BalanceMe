@@ -14,7 +14,7 @@ import {
 export function ProfileSections() {
   return (
     <>
-      <section className="mt-[19px]" aria-label="BalanceMe membership">
+      <section className="mt-5" aria-label="BalanceMe membership">
         <button type="button" className="flex min-h-16 w-full items-center gap-2.5 rounded-2xl bg-[var(--forest)] px-3 text-left text-[var(--surface)] shadow-md shadow-[var(--forest)]/10 active:scale-[.985]">
           <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-[var(--lime)] text-[var(--forest)]">
             <LuBadgeCheck className="size-5" aria-hidden="true" />

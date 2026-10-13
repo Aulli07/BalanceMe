@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import footerLinks from "@/shared/data/footer-links";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { AddEntry } from "./add-entry";
+import { normalizePath } from "../utils/normalize-path";
+
+
 
 export function Footer() {
   const pathname = usePathname();
@@ -17,8 +20,7 @@ export function Footer() {
 
   if (!mounted) return null;
 
-  const normalizePath = (p: string) =>
-    p.length > 1 ? p.replace(/\/+$/, "") : p;
+
   const current = normalizePath(pathname);
   const isActive = (to: string) => {
     const target = normalizePath(to);

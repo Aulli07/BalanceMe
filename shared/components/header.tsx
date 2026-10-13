@@ -1,5 +1,7 @@
 import { LuBot, LuBell } from "react-icons/lu"
 
+
+
 export function Header() {
   return (
     <header className="w-full bg-[var(--paper)]">
