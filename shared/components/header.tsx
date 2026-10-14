@@ -1,4 +1,5 @@
 import { LuBot, LuBell } from "react-icons/lu"
+import Link from "next/link"
 
 
 
@@ -27,14 +28,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center">
-          <button
+          <Link
+            href="/notifications"
             type="button"
             aria-label="Notifications"
             className="relative grid h-12 place-items-center rounded-full bg-transparent text-[var(--forest-dark)] transition-transform duration-150 active:scale-95"
           >
             <LuBell className="h-6 w-6" strokeWidth={1.8} />
             <span className="absolute right-0 top-3 h-2 w-2 rounded-full border border-[var(--paper)] bg-[#acd953]" />
-          </button>
+          </Link>
         </div>
       </div>
     </header>
