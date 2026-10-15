@@ -1,5 +1,4 @@
-import { filters } from "@/app/customers/page";
-import { Customer, customers } from "../data/customers";
+import { customers, filters } from "../data/customers";
 
 
 export function filterCustomers(activeFilter: (typeof filters)[number]) {

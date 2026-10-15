@@ -3,15 +3,13 @@
 import { useState } from "react";
 import { LuChevronRight, LuSearch } from "react-icons/lu";
 
-import { Customer, customers } from "@/features/customers/data/customers";
+import { Customer, customers, filters } from "@/features/customers/data/customers";
 import { filterCustomers } from "@/features/customers/selectors/filter-customers";
-
-export const filters = ["All", "Date", "Paid", "Owed", "Highest", "Lowest"] as const;
+import Link from "next/link";
 
 
 
 export default function CustomersPage() {
-  // const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<(typeof filters[number])>("All");
   const [visibleCustomers, setVisibleCustomers] = useState<Customer[]>(customers);
 
@@ -34,7 +32,6 @@ export default function CustomersPage() {
           <span className="sr-only">Search Customers</span>
           <input
             type="search"
-            // value={(event: ) => event?.target.value}
             onChange={(event) => handleChange(event.target.value)}
             placeholder="Search customers"
             className="min-w-0 flex-1 bg-transparent text-sm font-medium text-[var(--ink)] outline-none placeholder:text-[var(--muted)]"
@@ -71,7 +68,8 @@ export default function CustomersPage() {
 
       <div className="border-t border-[#e8ebdf] mt-5">
         {visibleCustomers.map((customer) => (
-          <button
+          <Link
+            href={`/customers/${customer.id}`}
             key={customer.name}
             type="button"
             className="flex min-h-17 w-full items-center gap-2.5 border-b border-[#e8ebdf] px-0.5 py-2 text-left transition-colors active:bg-[#e8eddd]/50"
@@ -96,7 +94,7 @@ export default function CustomersPage() {
               )}
               <LuChevronRight className="size-5 text-[#9aa695] opacity-60" aria-hidden="true" />
             </span>
-          </button>
+          </Link>
         ))}
       </div>
     </main>

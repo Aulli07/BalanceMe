@@ -7,6 +7,8 @@ export type Customer = {
   avatarColor: string;
 };
 
+export const filters = ["All", "Date", "Paid", "Owed", "Highest", "Lowest"] as const;
+
 export const customers: Customer[] = [
   {
     id: "12449",
