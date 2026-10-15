@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { customerType, entryDetailType } from "../types/entry-type";
+import { entryDetailType } from "../types/entry-type";
+import { Customer } from "@/features/customers/data/customers";
 
 
 export function useEntryForm() {
   const [amount, setAmount] = useState<[string, string]>(["0", "0"]);
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [customer, setCustomer] = useState<customerType | undefined>(undefined);
+  const [customer, setCustomer] = useState<Customer | undefined>(undefined);
   const [entryType, setEntryType] = useState<0 | 1>(0);
   const [entryDescription, setEntryDescription] = useState<entryDetailType>({ category: "", description: "", });
   
