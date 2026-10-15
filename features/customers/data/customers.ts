@@ -1,43 +1,51 @@
 export type Customer = {
+  id: string;
   name: string;
   initials: string;
   transactions: number;
-  owing?: string;
+  owing: boolean;
   avatarColor: string;
 };
 
 export const customers: Customer[] = [
   {
+    id: "12449",
     name: "Mariam Bello",
     initials: "MB",
     transactions: 18,
-    owing: "₦12,500",
+    owing: true,
     avatarColor: "bg-[#e2ecd7] text-[var(--forest)]",
   },
   {
+    id: "1234",
     name: "Chika Okafor",
     initials: "CO",
     transactions: 12,
+    owing: false,
     avatarColor: "bg-[#f2e3d8] text-[#805644]",
   },
   {
+    id: "30029",
     name: "Tunde Adeyemi",
     initials: "TA",
     transactions: 9,
-    owing: "₦35,000",
+    owing: true,
     avatarColor: "bg-[#e0e9ed] text-[#456076]",
   },
   {
+    id: "12090",
     name: "Amina Yusuf",
     initials: "AY",
     transactions: 21,
+    owing: false,
     avatarColor: "bg-[#f2eccf] text-[#79652e]",
   },
   {
+    id: "33212",
     name: "Emeka Nwosu",
     initials: "EN",
     transactions: 7,
-    owing: "₦4,800",
+    owing: true,
     avatarColor: "bg-[#e9e2ec] text-[#665372]",
   },
 ];
