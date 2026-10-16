@@ -36,7 +36,6 @@ export interface Customer {
   avatarUrl?: string;
   createdAt: ISODateTime;
   updatedAt: ISODateTime;
-  archivedAt?: ISODateTime;
 }
 
 export interface Category {
@@ -44,7 +43,6 @@ export interface Category {
   businessId: EntityId;
   name: string;
   createdAt: ISODateTime;
-  archivedAt?: ISODateTime;
 }
 
 export interface ReceiptAttachment {
@@ -60,8 +58,6 @@ interface TransactionBase {
   id: EntityId;
   businessId: EntityId;
   customerId: EntityId;
-  sourceEntryId?: EntityId;
-  occurredAt: ISODateTime;
   createdAt: ISODateTime;
 }
 
@@ -71,7 +67,7 @@ export interface SaleTransaction extends TransactionBase {
   description: string;
   totalKobo: NairaKobo;
   initialPaidKobo: NairaKobo;
-  receipts: ReceiptAttachment[];
+  receiptId?: EntityId;
 }
 
 export interface PaymentAllocation {
