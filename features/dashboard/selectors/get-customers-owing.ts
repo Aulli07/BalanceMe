@@ -59,5 +59,9 @@ export function getLargestCustomerOwe(businessId: string) {
   const customers = mockCustomers.filter(cust => cust.businessId === businessId);
 
   const totalAmounts = customers.map(cust => getTotalAmountOwedForCustomer(businessId, cust.id));
-  return totalAmounts.sort((a, b) => b - a)[0]
+  const maxAmount = Math.max(...totalAmounts);
+  const index = totalAmounts.indexOf(maxAmount);
+  const customerOwed = customers[index];
+
+  return { customerOwed, maxAmount };
 }
