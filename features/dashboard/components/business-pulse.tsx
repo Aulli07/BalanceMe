@@ -1,16 +1,16 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   LuChartNoAxesCombined,
   LuCircleDollarSign,
   LuReceiptText,
   LuUserRoundSearch,
 } from "react-icons/lu";
-import type {
-  PulseData,
-  PulseIconName,
-} from "@/features/analytics/data/business-pulses";
+import { pulseData } from "@/features/dashboard/data/pulse-data";
+import { getPulseDisplayData } from "@/features/dashboard/engine/pulse-data-engine";
+import type { PulseIcon } from "@/features/dashboard/types/pulse-entry";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
 import { slideShow } from "../utils/slideshow";
 
 
@@ -19,9 +19,10 @@ const pulseIcons = {
   receipt: LuReceiptText,
   customer: LuUserRoundSearch,
   overdue: LuCircleDollarSign,
-} satisfies Record<PulseIconName, typeof LuChartNoAxesCombined>;
+} satisfies Record<PulseIcon, typeof LuChartNoAxesCombined>;
 
-export function BusinessPulse({ data }: { data: PulseData[] }) {
+export function BusinessPulse() {
+  const data = getPulseDisplayData(pulseData, ACTIVE_BUSINESS_ID);
   const [activeIndex, setActiveIndex] = useState(0);
   const activePulse = data[activeIndex];
 

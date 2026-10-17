@@ -1,7 +1,6 @@
 import { Header } from "@/shared/components/header";
 
 import { BusinessPulse } from "@/features/dashboard/components/business-pulse";
-import { businessPulses } from "@/features/analytics/data/business-pulses";
 
 import { CashRecorded } from "@/features/dashboard/components/cash-recorded";
 import { CustomersOwing } from "@/features/dashboard/components/customer-owe";
@@ -25,7 +24,7 @@ export function Dashboard() {
       <Greeting />
       <CashRecorded />
       <CustomersOwing />
-      <BusinessPulse data={businessPulses} />
+      <BusinessPulse />
     </section>
   );
 }
