@@ -1,14 +1,22 @@
+"use client";
+
 import { useState } from "react";
 import {
   LuCalendarDays,
   LuChevronDown,
   LuTrendingUp,
 } from "react-icons/lu";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
+import {
+  type CashRecordedPeriod,
+  getCashRecordedAmount,
+} from "@/features/dashboard/selectors/get-cash-recorded";
+import { getTrend } from "../selectors/get-trend";
 
 
 
 export function CashRecorded() {
-  const [value, setValue] = useState("today");
+  const [value, setValue] = useState<CashRecordedPeriod>("today");
 
   const periodOptions = [
     { value: "today", label: "Today" },
@@ -32,7 +40,7 @@ export function CashRecorded() {
             id="cash-recording-period" 
             name="cash-recording-period" 
             className="rounded-full bg-[var(--forest)] px-2 py-1 text-xs font-bold text-[var(--surface)]" 
-            onChange={(e) => setValue(e.target.value)} 
+            onChange={(e) => setValue(e.target.value as CashRecordedPeriod)}
             value={value}
           >
             {periodOptions.map((option) => (
@@ -49,12 +57,12 @@ export function CashRecorded() {
         </div>
       </div>
       <p className="mt-5 text-4xl font-bold tracking-tight text-[var(--lime)]">
-        ₦286,450
+        {getCashRecordedAmount(ACTIVE_BUSINESS_ID, value)}
       </p>
       <div className="mt-5 flex items-center gap-2 text-xs font-semibold text-green-100">
         <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-[var(--lime)]">
           <LuTrendingUp className="size-3.5" aria-hidden="true" />
-          2.4% up yesterday
+          {getTrend(ACTIVE_BUSINESS_ID, "today", "yesterday")}
         </span>
       </div>
     </article>
