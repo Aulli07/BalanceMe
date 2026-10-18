@@ -5,6 +5,7 @@ import { BusinessPulse } from "@/features/dashboard/components/business-pulse";
 import { CashRecorded } from "@/features/dashboard/components/cash-recorded";
 import { CustomersOwing } from "@/features/dashboard/components/customer-owe";
 import { Greeting } from "@/features/dashboard/components/greeting";
+import { PinnedCustomers } from "@/features/dashboard/components/pinned-customers";
 
 
 
@@ -24,6 +25,7 @@ export function Dashboard() {
       <Greeting />
       <CashRecorded />
       <CustomersOwing />
+      <PinnedCustomers />
       <BusinessPulse />
     </section>
   );

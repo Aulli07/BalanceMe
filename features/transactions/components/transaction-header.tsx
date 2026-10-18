@@ -33,7 +33,7 @@ export function TransactionHeader() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
+      {/* <div className="grid grid-cols-2 gap-2.5">
         <article className="relative isolate h-28 min-w-0 overflow-hidden rounded-2xl bg-[var(--forest)] p-3 text-[var(--surface)] shadow-md shadow-[var(--forest)]/10 after:absolute after:-bottom-20 after:-right-8 after:-z-10 after:size-36 after:rounded-full after:border after:border-[var(--lime)]/20 after:shadow-[0_0_0_12px_rgba(203,243,106,0.04),0_0_0_27px_rgba(203,243,106,0.03)] after:content-['']">
           <div className="relative z-10 flex h-full flex-col gap-2.5">
             <p className="flex items-center gap-1 text-xs font-bold leading-tight text-green-100">
@@ -62,7 +62,7 @@ export function TransactionHeader() {
             </p>
           </div>
         </article>
-      </div>
+      </div> */}
     </section>
   );
 }

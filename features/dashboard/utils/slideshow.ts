@@ -1,7 +1,8 @@
-import { PulseData } from "@/features/analytics/data/business-pulses";
-import { Dispatch, SetStateAction, useEffect } from "react";
 
-export function slideShow(data: PulseData[], setActiveIndex: Dispatch<SetStateAction<number>>) {
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { PulseDisplayData } from "../types/pulse-entry";
+
+export function slideShow(data: PulseDisplayData[], setActiveIndex: Dispatch<SetStateAction<number>>) {
   useEffect(() => {
     if (data.length < 2) return;
 

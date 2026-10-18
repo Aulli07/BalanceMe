@@ -31,6 +31,7 @@ export interface Customer {
   id: EntityId;
   businessId: EntityId;
   name: string;
+  pinned: boolean;
   phone?: string;
   email?: string;
   avatarUrl?: string;
