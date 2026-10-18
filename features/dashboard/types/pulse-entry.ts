@@ -38,3 +38,20 @@ export type PulseEntry = {
   messageTemplate: string;
   icon: PulseIcon;
 };
+
+
+export type PulseDisplayData = {
+  id: string;
+  priority: PulsePriority;
+  tone: PulseTone;
+  title: string;
+  amount: string;
+  detail: string;
+  trend?: string;
+  bgColor: string;
+  elementColor: string;
+  borderColor: string;
+  icon: PulseIcon;
+};
+
+export type PulseValues = Record<string, string | number>;

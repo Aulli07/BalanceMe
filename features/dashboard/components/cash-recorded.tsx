@@ -17,6 +17,7 @@ import { getTrend } from "../selectors/get-trend";
 
 export function CashRecorded() {
   const [value, setValue] = useState<CashRecordedPeriod>("today");
+  const [isPeriodMenuOpen, setIsPeriodMenuOpen] = useState(false);
 
   const periodOptions = [
     { value: "today", label: "Today" },
@@ -24,6 +25,7 @@ export function CashRecorded() {
     { value: "last-7-days", label: "Last 7 days" },
     { value: "last-30-days", label: "Last 30 days" },
   ];
+  const selectedPeriod = periodOptions.find((option) => option.value === value);
 
   return (
     <article className="relative overflow-hidden rounded-3xl bg-[var(--forest)] p-5 text-[var(--surface)] shadow-lg shadow-[var(--forest)]/10">
@@ -36,24 +38,40 @@ export function CashRecorded() {
           Cash recorded
         </h2>
         <div className="relative">
-          <select 
-            id="cash-recording-period" 
-            name="cash-recording-period" 
-            className="rounded-full bg-[var(--forest)] px-2 py-1 text-xs font-bold text-[var(--surface)]" 
-            onChange={(e) => setValue(e.target.value as CashRecordedPeriod)}
-            value={value}
+          <button
+            type="button"
+            onClick={() => setIsPeriodMenuOpen((isOpen) => !isOpen)}
+            aria-expanded={isPeriodMenuOpen}
+            aria-controls="cash-recording-period-menu"
+            className="flex items-center gap-1 rounded-full bg-[var(--forest)] px-2 py-1 text-xs font-bold text-[var(--surface)]"
           >
-            {periodOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            {selectedPeriod?.label}
+            <LuChevronDown
+              className={`size-3 transition-transform ${isPeriodMenuOpen ? "rotate-180" : ""}`}
+              aria-hidden="true"
+            />
+          </button>
 
-          <LuChevronDown 
-            className="pointer-events-none absolute right-2 top-1/2 size-3 -translate-y-1/2 text-[var(--surface)]" 
-            aria-hidden="true" 
-          />
+          {isPeriodMenuOpen && (
+            <div
+              id="cash-recording-period-menu"
+              className="absolute right-0 top-full z-30 mt-1 min-w-30 rounded-lg bg-[var(--surface)] p-1 text-[var(--ink)] shadow-lg"
+            >
+              {periodOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    setValue(option.value as CashRecordedPeriod);
+                    setIsPeriodMenuOpen(false);
+                  }}
+                  className="block w-full rounded-md px-2 py-1.5 text-left text-xs font-semibold hover:bg-[var(--paper)]"
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <p className="mt-5 text-4xl font-bold tracking-tight text-[var(--lime)]">

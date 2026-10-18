@@ -1,25 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import {
-  LuChartNoAxesCombined,
-  LuCircleDollarSign,
-  LuReceiptText,
-  LuUserRoundSearch,
-} from "react-icons/lu";
+
 import { pulseData } from "@/features/dashboard/data/pulse-data";
 import { getPulseDisplayData } from "@/features/dashboard/engine/pulse-data-engine";
-import type { PulseIcon } from "@/features/dashboard/types/pulse-entry";
+import { pulseIcons } from "../data/pulse-icon-style";
+
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
 import { slideShow } from "../utils/slideshow";
 
 
-const pulseIcons = {
-  chart: LuChartNoAxesCombined,
-  receipt: LuReceiptText,
-  customer: LuUserRoundSearch,
-  overdue: LuCircleDollarSign,
-} satisfies Record<PulseIcon, typeof LuChartNoAxesCombined>;
+
+
 
 export function BusinessPulse() {
   const data = getPulseDisplayData(pulseData, ACTIVE_BUSINESS_ID);

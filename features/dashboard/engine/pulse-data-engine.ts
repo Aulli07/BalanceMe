@@ -11,52 +11,15 @@ import { getNoSalesToday } from "@/features/dashboard/selectors/get-no-sales-tod
 import { getRecordingStreak } from "@/features/dashboard/selectors/get-recording-streak";
 import { getSalesTrend } from "@/features/dashboard/selectors/get-sales-trend";
 import { getStrongestSellingCategory } from "@/features/dashboard/selectors/get-selling-category";
-import type {
-  PulseEntry,
-  PulseIcon,
-  PulsePriority,
-  PulseTone,
-} from "@/features/dashboard/types/pulse-entry";
+
+
+import type { PulseDisplayData, PulseEntry, PulsePriority, PulseValues } from "@/features/dashboard/types/pulse-entry";
 import { formatNaira, parseNairaToKobo } from "@/shared/utils/format-naira";
+import { pulseStyles } from "../data/pulse-icon-style";
 
-export type PulseDisplayData = {
-  id: string;
-  priority: PulsePriority;
-  tone: PulseTone;
-  title: string;
-  amount: string;
-  detail: string;
-  trend?: string;
-  bgColor: string;
-  elementColor: string;
-  borderColor: string;
-  icon: PulseIcon;
-};
 
-type PulseValues = Record<string, string | number>;
 
-const pulseStyles = {
-  success: {
-    bgColor: "bg-[#eef5df]",
-    elementColor: "text-[#568044]",
-    borderColor: "border-[#dce8c4]",
-  },
-  warning: {
-    bgColor: "bg-[#fff4df]",
-    elementColor: "text-[#a86c1f]",
-    borderColor: "border-[#f2ddb7]",
-  },
-  danger: {
-    bgColor: "bg-[#fcebe6]",
-    elementColor: "text-[#b4614f]",
-    borderColor: "border-[#f0cfc7]",
-  },
-  neutral: {
-    bgColor: "bg-[#e9edfa]",
-    elementColor: "text-[#526ba8]",
-    borderColor: "border-[#cbd5f0]",
-  },
-};
+
 
 export function getPulseDisplayData(
   pulseEntries: PulseEntry[],
@@ -193,7 +156,7 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
     });
   }
 
-  
+
   if (entry.condition === "recording-streak-achieved") {
     const dayCount = getRecordingStreak(businessId);
     if (dayCount < 2) return null;
@@ -230,3 +193,4 @@ function fillTemplate(template: string, values: PulseValues) {
 function getPriorityRank(priority: PulsePriority) {
   return { high: 3, medium: 2, low: 1 }[priority];
 }
+
