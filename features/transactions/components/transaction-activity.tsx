@@ -8,63 +8,16 @@ import {
   mockTransactions,
 } from "@/shared/data/domain-mock-data";
 import { formatNaira } from "@/shared/utils/format-naira";
+import { getTransactionActivity } from "../selectors/get-transactions";
+import { formatTransactionTime } from "../utils/format-time";
+import { getInitials } from "../utils/get-name-initials";
+
+
+
+
 
 export function TransactionActivity() {
-  const transactions = mockTransactions
-    .filter((transaction) => transaction.businessId === ACTIVE_BUSINESS_ID)
-    .sort(
-      (first, second) =>
-        new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime(),
-    )
-    .map((transaction) => {
-      const customer = mockCustomers.find(
-        (item) => item.id === transaction.customerId,
-      );
-
-      if (transaction.type === "payment") {
-        return {
-          ...transaction,
-          customer,
-          category: "Payment",
-          description: transaction.note ?? "Payment received",
-          amount: transaction.receivedKobo,
-          status: "Paid",
-          statusColor: "bg-[#e9f1df] text-[#568044]",
-        };
-      }
-
-      const category = mockCategories.find(
-        (item) => item.id === transaction.categoryId,
-      );
-      const allocatedKobo = mockPaymentTransactions
-        .flatMap((payment) => payment.allocations)
-        .filter((allocation) => allocation.saleTransactionId === transaction.id)
-        .reduce((total, allocation) => total + allocation.amountKobo, 0);
-      const owedKobo = transaction.totalKobo - transaction.initialPaidKobo - allocatedKobo;
-      const isPaid = owedKobo <= 0;
-
-      return {
-        ...transaction,
-        customer,
-        category: category?.name ?? "Uncategorised",
-        description: transaction.description,
-        amount: transaction.totalKobo,
-        status: isPaid ? "Paid" : `Owes ${formatNaira(owedKobo)}`,
-        statusColor: isPaid
-          ? "bg-[#e9f1df] text-[#568044]"
-          : "bg-[#f8ead5] text-[#855126]",
-      };
-    });
-
-  const transactionsByDay = transactions.reduce<Record<string, typeof transactions>>(
-    (groups, transaction) => {
-      const day = getDayLabel(transaction.createdAt);
-      groups[day] ??= [];
-      groups[day].push(transaction);
-      return groups;
-    },
-    {},
-  );
+  const transactions = getTransactionActivity(ACTIVE_BUSINESS_ID);
 
   return (
     <section className="flex flex-col gap-4 px-5 pt-5" aria-labelledby="activity-heading">
@@ -72,7 +25,7 @@ export function TransactionActivity() {
         Transaction activity
       </h2>
 
-      {Object.entries(transactionsByDay).map(([day, dayTransactions]) => (
+      {Object.entries(transactions).map(([day, dayTransactions]) => (
         <div key={day}>
           <h3 className="mb-0.5 px-0.5 text-sm font-bold tracking-tight text-[var(--muted)]">
             {day}
@@ -135,39 +88,4 @@ export function TransactionActivity() {
       ))}
     </section>
   );
-}
-
-function getDayLabel(createdAt: string) {
-  const transactionDate = new Date(createdAt);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-
-  if (transactionDate >= today) return "Today";
-  if (transactionDate >= yesterday) return "Yesterday";
-
-  const day = transactionDate.getDate();
-  return `${day}${getOrdinal(day)} ${transactionDate.toLocaleDateString("en-GB", {
-    month: "long",
-  })}`;
-}
-
-function formatTransactionTime(createdAt: string) {
-  return new Intl.DateTimeFormat("en-NG", {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(new Date(createdAt));
-}
-
-function getInitials(name: string) {
-  return name
-    .split(" ")
-    .map((part) => part[0])
-    .join("");
-}
-
-function getOrdinal(day: number) {
-  if (day % 100 >= 11 && day % 100 <= 13) return "th";
-  return ({ 1: "st", 2: "nd", 3: "rd" }[day % 10] ?? "th");
 }
