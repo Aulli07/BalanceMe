@@ -1,4 +1,4 @@
-import { LuChartNoAxesColumnIncreasing, LuDownload, LuReceiptText } from "react-icons/lu";
+import { LuChartNoAxesCombined, LuDownload } from "react-icons/lu";
 
 
 
@@ -21,7 +21,7 @@ export function TransactionHeader() {
             className="grid size-9 place-items-center text-[var(--forest)]"
             aria-label="View transaction insights"
           >
-            <LuChartNoAxesColumnIncreasing className="size-5" aria-hidden="true" />
+            <LuChartNoAxesCombined className="size-5" aria-hidden="true" />
           </button>
           <button
             type="button"
