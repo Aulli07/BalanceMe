@@ -12,6 +12,7 @@ import {
   getCashRecordedAmount,
 } from "@/features/dashboard/selectors/get-cash-recorded";
 import { getTrend } from "../selectors/get-trend";
+import { periodOptions } from "../data/period-options";
 
 
 
@@ -19,12 +20,6 @@ export function CashRecorded() {
   const [value, setValue] = useState<CashRecordedPeriod>("today");
   const [isPeriodMenuOpen, setIsPeriodMenuOpen] = useState(false);
 
-  const periodOptions = [
-    { value: "today", label: "Today" },
-    { value: "yesterday", label: "Yesterday" },
-    { value: "last-7-days", label: "Last 7 days" },
-    { value: "last-30-days", label: "Last 30 days" },
-  ];
   const selectedPeriod = periodOptions.find((option) => option.value === value);
 
   return (

@@ -1,4 +1,4 @@
-function getDayLabel(createdAt: string) {
+export function getDayLabel(createdAt: string) {
   const transactionDate = new Date(createdAt);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
