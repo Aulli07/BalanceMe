@@ -3,13 +3,22 @@
 import { useState } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
-const months = ["October 2026", "September 2026", "August 2026"];
 const filters = ["All", "Paid", "Owed"];
 
-export function TransactionSummary() {
-  const [monthIndex, setMonthIndex] = useState(0);
+type TransactionSummaryProps = {
+  month: string;
+  monthIndex: number;
+  monthCount: number;
+  onMonthChange: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export function TransactionSummary({
+  month,
+  monthIndex,
+  monthCount,
+  onMonthChange,
+}: TransactionSummaryProps) {
   const [activeFilter, setActiveFilter] = useState("All");
-  const month = months[monthIndex];
 
   return (
     <section className="mt-4 px-5" aria-labelledby="monthly-summary-heading">
@@ -19,8 +28,9 @@ export function TransactionSummary() {
             type="button"
             className="grid size-8 place-items-center rounded-full text-[var(--forest)] active:bg-[var(--paper)]"
             aria-label="Previous month"
+            disabled={monthIndex === monthCount - 1}
             onClick={() =>
-              setMonthIndex((index) => Math.min(index + 1, months.length - 1))
+              onMonthChange((index) => Math.min(index + 1, monthCount - 1))
             }
           >
             <LuChevronLeft className="size-4" aria-hidden="true" />
@@ -35,7 +45,8 @@ export function TransactionSummary() {
             type="button"
             className="grid size-8 place-items-center rounded-full text-[var(--forest)] active:bg-[var(--paper)]"
             aria-label="Next month"
-            onClick={() => setMonthIndex((index) => Math.max(index - 1, 0))}
+            disabled={monthIndex === 0}
+            onClick={() => onMonthChange((index) => Math.max(index - 1, 0))}
           >
             <LuChevronRight className="size-4" aria-hidden="true" />
           </button>

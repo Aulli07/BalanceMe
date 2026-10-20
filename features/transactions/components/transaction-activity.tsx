@@ -1,24 +1,16 @@
 import Image from "next/image";
 import { LuClock3 } from "react-icons/lu";
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
-import {
-  mockCategories,
-  mockCustomers,
-  mockPaymentTransactions,
-  mockTransactions,
-} from "@/shared/data/domain-mock-data";
 import { formatNaira } from "@/shared/utils/format-naira";
-import { getTransactionActivity } from "../selectors/get-transactions";
 import { formatTransactionTime } from "../utils/format-time";
 import { getInitials } from "../utils/get-name-initials";
 
+type TransactionActivityProps = {
+  transactions: ReturnType<
+    typeof import("../selectors/get-transactions").getTransactionActivity
+  >;
+};
 
-
-
-
-export function TransactionActivity() {
-  const transactions = getTransactionActivity(ACTIVE_BUSINESS_ID);
-
+export function TransactionActivity({ transactions }: TransactionActivityProps) {
   return (
     <section className="flex flex-col gap-4 px-5 pt-5" aria-labelledby="activity-heading">
       <h2 id="activity-heading" className="sr-only">
