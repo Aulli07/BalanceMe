@@ -16,11 +16,11 @@ export function PinnedCustomers() {
     <section aria-labelledby="pinned-customers-heading">
       <h2
         id="pinned-customers-heading"
-        className="mb-3 mt-3 whitespace-nowrap text-xl font-bold leading-tight tracking-tight text-[var(--ink)]"
+        className="mb-3 mt-3 text-xl font-bold leading-tight tracking-tight text-[var(--ink)]"
       >
         Pinned customers
       </h2>
-      <div className="flex gap-3 overflow-x-auto pb-2" aria-label="Pinned customers">
+      <div className="grid grid-cols-2 gap-3" aria-label="Pinned customers">
         {pinnedCustomers.map((customer) => {
           const amountOwed = getTotalAmountOwedForCustomer(
             ACTIVE_BUSINESS_ID,
@@ -31,7 +31,7 @@ export function PinnedCustomers() {
           return (
             <article
               key={customer.id}
-              className="flex min-h-32 w-52 shrink-0 flex-col justify-between rounded-3xl border border-[var(--line)] bg-[var(--surface)] p-4 shadow-sm shadow-[var(--forest)]/5"
+              className="flex min-h-32 min-w-0 w-full flex-col justify-between overflow-hidden rounded-3xl border border-[var(--line)] bg-[var(--surface)] p-4 shadow-sm shadow-[var(--forest)]/5"
             >
               <div className="flex items-center gap-2.5">
                 {customer.avatarUrl ? (
