@@ -50,7 +50,7 @@ export function EntryConfirmedDetails({
     <section className="mx-5 mt-5 overflow-hidden rounded-3xl border border-[#dce7d2] bg-[#f7faf2] shadow-sm" aria-label="Confirmed entry details">
       <div className="flex items-center gap-3 px-4 py-4">
         <div className="grid size-12 shrink-0 place-items-center rounded-2xl bg-[#d9e8c5] text-lg font-extrabold text-[var(--forest)]">
-          {customer?.image ?? "SC"}
+          {customer?.name.slice(0, 2).toUpperCase() ?? "SC"}
         </div>
         <div className="min-w-0 flex-1">
           <p className="truncate text-lg font-extrabold text-[var(--ink)]">

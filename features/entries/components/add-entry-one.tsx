@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } from "react-icons/lu";
 import { pressKey } from "../utils/pressKey";
-import { entryCustomers, numbers } from "../data/entry-data";
+import { numbers } from "../data/entry-data";
 import { createPortal } from "react-dom";
 import { useEntryForm } from "../hooks/useEntryForm";
 import { EntryProps } from "../types/entry-type";
+import { mockCustomers } from "@/shared/data/domain-mock-data";
 
 
 
@@ -91,20 +92,20 @@ export function EntryCustomer({
                 </button>
               </div>
               <div className="grid gap-2">
-                {entryCustomers.map((entryCustomer) => (
+                {mockCustomers.map((customer) => (
                   <button
-                    key={entryCustomer.name}
+                    key={customer.id}
                     type="button"
                     onClick={() => {
-                      setCustomer?.(entryCustomer);
+                      setCustomer?.(customer);
                       isSelectedTrigger(false);
                     }}
                     className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
                   >
                     <span className="grid size-10 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
-                      {entryCustomer.image}
+                      {customer.name.slice(0, 2).toUpperCase()}
                     </span>
-                    <span className="font-bold">{entryCustomer.name}</span>
+                    <span className="font-bold">{customer.name}</span>
                   </button>
                 ))}
               </div>

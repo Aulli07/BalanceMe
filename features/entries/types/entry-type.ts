@@ -1,11 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
+import type { Customer } from "@/shared/types/domain";
 
 
 
 export type EntryProps = {
   onNext?: () => void;
-  setCustomer?: Dispatch<SetStateAction<customerEntryType | undefined>>;
-  customer?: customerEntryType | undefined;
+  setCustomer?: Dispatch<SetStateAction<Customer | undefined>>;
+  customer?: Customer;
   setAmount?: Dispatch<SetStateAction<[string, string]>>;
   amount?: [string, string];
   setEntryType?: Dispatch<SetStateAction<1 | 0>>;
@@ -30,8 +31,4 @@ export type entryDetailType = {
   receipt?: File;
 }
 
-export type customerEntryType = {
-  name: string;
-  image: string;
-};
 

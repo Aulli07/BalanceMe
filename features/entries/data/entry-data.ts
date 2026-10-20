@@ -1,5 +1,3 @@
-import { customerType } from "../types/entry-type";
-
 export const numbers = [
   "1",
   "2",
@@ -17,10 +15,3 @@ export const numbers = [
 
 
 export const entryCategories = ["Feed", "Foodstuffs", "Livestock Sale", "Electronics"];
-
-export const entryCustomers: customerType[] = [
-{ name: "Chika Okafor", image: "CO" },
-{ name: "Tunde Adeyemi", image: "TA" },
-{ name: "Zainab Bello", image: "ZB" },
-{ name: "Mariam Yusuf", image: "MY" },
-];
