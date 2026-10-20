@@ -10,12 +10,12 @@ export function useEntryForm() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [customer, setCustomer] = useState<Customer | undefined>(undefined);
   const [entryType, setEntryType] = useState<0 | 1>(0);
-  const [entryDescription, setEntryDescription] = useState<entryDetailType>({ category: "", description: "", });
+  const [entryDescription, setEntryDescription] = useState<entryDetailType>({ description: "" });
   
   const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
   const [selectedTrigger, isSelectedTrigger] = useState(false);
 
-  const updateDescription = (field: keyof entryDetailType, value: string | File | undefined) => {
+  const updateDescription = <Field extends keyof entryDetailType>(field: Field, value: entryDetailType[Field]) => {
     setEntryDescription((current: entryDetailType) => ({
       ...current,
       [field]: value,

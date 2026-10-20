@@ -5,7 +5,7 @@ import { LuChevronDown, LuClock3 } from "react-icons/lu";
 import { useEntryForm } from "../hooks/useEntryForm";
 
 import { EntryProps } from "../types/entry-type";
-import { entryCategories } from "../data/entry-data"
+import { mockCategories } from "@/shared/data/domain-mock-data";
 
 
 
@@ -103,7 +103,7 @@ function EntryDescription({
             className="flex items-center w-full max-w-full min-w-0 justify-between rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 text-left font-medium shadow-sm transition-colors active:bg-[#f0f4ea]"
           >
             <span className={entryDescription?.category ? "text-[var(--ink)]" : "text-[#829082]"}>
-              {entryDescription?.category || "Select a category"}
+              {entryDescription?.category?.name ?? "Select a category"}
             </span>
             <LuChevronDown className="size-5 shrink-0 text-[#758477]" aria-hidden="true" />
           </button>
@@ -131,21 +131,21 @@ function EntryDescription({
                   </button>
                 </div>
                 <div className="grid gap-2">
-                  {entryCategories.map((category) => (
+                  {mockCategories.map((category) => (
                     <button
-                      key={category}
+                      key={category.id}
                       type="button"
                       onClick={() => {
                         updateDescription("category", category);
                         setCategoryPickerOpen(false);
                       }}
                       className={`rounded-2xl border px-4 py-3 text-left font-bold transition-colors ${
-                        entryDescription?.category === category
+                        entryDescription?.category?.id === category.id
                           ? "border-[#a8c487] bg-[#dfead2] text-[var(--forest)]"
                           : "border-[#e1e7dc] bg-[#fffef9] active:bg-[#e8eddd]"
                       }`}
                     >
-                      {category}
+                      {category.name}
                     </button>
                   ))}
                 </div>

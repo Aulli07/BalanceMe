@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { LuChevronDown } from "react-icons/lu";
-import { entryCategories } from "../data/entry-data";
-import { mockCustomers } from "@/shared/data/domain-mock-data";
+import { mockCategories, mockCustomers } from "@/shared/data/domain-mock-data";
 
 import { EntryProps } from "../types/entry-type";
 
@@ -156,7 +155,7 @@ function EntryFormDetails({
             className="flex w-full min-w-0 max-w-full items-center justify-between rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-3 py-2 text-left text-sm font-medium shadow-sm transition-colors active:bg-[#f0f4ea]"
           >
             <span className={entryDescription?.category ? "text-[var(--ink)]" : "text-[#829082]"}>
-              {entryDescription?.category || "Select a category"}
+              {entryDescription?.category?.name ?? "Select a category"}
             </span>
             <LuChevronDown className="size-5 shrink-0 text-[#758477]" aria-hidden="true" />
           </button>
@@ -184,21 +183,21 @@ function EntryFormDetails({
                   </button>
                 </div>
                 <div className="grid gap-2">
-                  {entryCategories.map((category) => (
+                  {mockCategories.map((category) => (
                     <button
-                      key={category}
+                      key={category.id}
                       type="button"
                       onClick={() => {
                         setEntryDescription?.((current) => ({ ...current, category }));
                         setCategoryPickerOpen(false);
                       }}
                       className={`rounded-2xl border px-4 py-3 text-left font-bold transition-colors ${
-                        entryDescription?.category === category
+                        entryDescription?.category?.id === category.id
                           ? "border-[#a8c487] bg-[#dfead2] text-[var(--forest)]"
                           : "border-[#e1e7dc] bg-[#fffef9] active:bg-[#e8eddd]"
                       }`}
                     >
-                      {category}
+                      {category.name}
                     </button>
                   ))}
                 </div>

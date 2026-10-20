@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import type { Customer } from "@/shared/types/domain";
+import type { Category, Customer } from "@/shared/types/domain";
 
 
 
@@ -26,7 +26,7 @@ export type VoiceEntryProps = {
 };
 
 export type entryDetailType = {
-  category: string;
+  category?: Category;
   description: string;
   receipt?: File;
 }

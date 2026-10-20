@@ -12,6 +12,3 @@ export const numbers = [
   "0",
   "back",
 ];
-
-
-export const entryCategories = ["Feed", "Foodstuffs", "Livestock Sale", "Electronics"];
