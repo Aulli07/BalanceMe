@@ -4,9 +4,9 @@ import { ProfileSections } from "@/features/profile/components/profile-sections"
 
 export default function ProfilePage() {
   return (
-    <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
+    <main className="min-h-screen pb-18 bg-[var(--paper)] text-[var(--ink)]">
       <ProfileHeader />
-      <div className="px-5 pb-8 pt-2">
+      <div className="px-5 ">
         <ProfileIntro />
         <ProfileSections />
       </div>

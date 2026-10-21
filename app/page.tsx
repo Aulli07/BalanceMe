@@ -12,7 +12,7 @@ import { PinnedCustomers } from "@/features/dashboard/components/pinned-customer
 
 export default function Home() {
   return (
-    <main className="bg-[var(--paper)] px-6 pt-3 text-[var(--ink)]">
+    <main className="bg-[var(--paper)] px-6 pb-18 pt-3 text-[var(--ink)]">
       <Header />
       <Dashboard />
     </main>

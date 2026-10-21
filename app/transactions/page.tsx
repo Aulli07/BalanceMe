@@ -22,7 +22,7 @@ export default function TransactionsPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
+    <main className="min-h-screen pb-18 bg-[var(--paper)] text-[var(--ink)]">
       <TransactionHeader />
       <TransactionSummary
         month={months[monthIndex]}
