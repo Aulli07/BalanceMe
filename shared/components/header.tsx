@@ -8,13 +8,14 @@ export function Header() {
     <header className="w-full bg-[var(--paper)]">
       <div className="flex justify-between items-center gap-4">
         <div className="flex items-center">
-          <button
+          <Link
+            href="/ai-chat"
             type="button"
             aria-label="Open BalanceMe AI chat"
             className="relative grid h-12 place-items-center rounded-full bg-transparent text-[var(--forest-dark)] transition-transform duration-150 active:scale-95"
           >
             <LuBot className="h-6 w-6" strokeWidth={1.8} />
-          </button>
+          </Link>
         </div>
 
         <div
