@@ -2,53 +2,21 @@
 
 import { useMemo, useState } from "react";
 import { LuArrowUpRight, LuClock3, LuSearch } from "react-icons/lu";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
+import { mockNotifications } from "@/shared/data/domain-mock-data";
 
 const filters = ["All", "Paid", "Owed", "Analytics"] as const;
 
-const notifications = [
-  {
-    title: "Payment received",
-    detail: "Chika Okafor paid ₦18,500 for groceries.",
-    time: "9:42 am",
-    category: "Paid",
-    unread: true,
-  },
-  {
-    title: "Balance reminder",
-    detail: "Tunde Adebayo still owes ₦12,000 for stock.",
-    time: "8:15 am",
-    category: "Owed",
-    unread: true,
-  },
-  {
-    title: "A stronger week so far",
-    detail: "You brought in ₦286,450 this week, 12.4% more than last.",
-    time: "Yesterday",
-    category: "Analytics",
-    unread: false,
-  },
-  {
-    title: "Payment received",
-    detail: "Mariam Yusuf settled ₦32,000 of her balance.",
-    time: "Yesterday",
-    category: "Paid",
-    unread: false,
-  },
-  {
-    title: "Balance reminder",
-    detail: "Ifeanyi Okoro has a ₦9,500 balance due today.",
-    time: "Tue",
-    category: "Owed",
-    unread: false,
-  },
-  {
-    title: "Monthly summary is ready",
-    detail: "See how your business performed this month.",
-    time: "Mon",
-    category: "Analytics",
-    unread: false,
-  },
-];
+const notifications = mockNotifications.filter(
+  (notification) => notification.businessId === ACTIVE_BUSINESS_ID,
+);
+
+function formatNotificationTime(createdAt: string) {
+  return new Intl.DateTimeFormat("en-NG", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(new Date(createdAt));
+}
 
 export default function NotificationsPage() {
   const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
@@ -115,7 +83,7 @@ export default function NotificationsPage() {
       <section className="space-y-3 px-5 pb-6" aria-live="polite">
         {visibleNotifications.map((notification) => (
           <article
-            key={`${notification.title}-${notification.time}`}
+            key={notification.id}
             className="rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-3 shadow-sm shadow-[var(--forest)]/5"
           >
             <div className="flex items-start gap-2.5">
@@ -141,7 +109,7 @@ export default function NotificationsPage() {
             <div className="ml-10 mt-2.5 flex items-center justify-between">
               <span className="flex items-center gap-1 text-xs font-semibold text-[var(--muted)]">
                 <LuClock3 className="size-3" aria-hidden="true" />
-                {notification.time}
+                {formatNotificationTime(notification.createdAt)}
               </span>
               <button
                 type="button"

@@ -46,6 +46,18 @@ export interface Category {
   createdAt: ISODateTime;
 }
 
+export type NotificationCategory = "Paid" | "Owed" | "Analytics";
+
+export interface Notification {
+  id: EntityId;
+  businessId: EntityId;
+  title: string;
+  detail: string;
+  category: NotificationCategory;
+  unread: boolean;
+  createdAt: ISODateTime;
+}
+
 export interface ReceiptAttachment {
   id: EntityId;
   fileName: string;
