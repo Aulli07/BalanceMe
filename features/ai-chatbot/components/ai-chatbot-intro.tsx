@@ -1,16 +1,10 @@
-const suggestions = [
-  "How much did I sell today?",
-  "Who still owes me?",
-  "How did this month go?",
-  "Give me a hot take for the week ahead",
-  "Who should I follow up with first?",
-];
+import { AiChatbotIntroProps } from "../types/ai-chat-type";
+import { sendMessage } from "../utils/handle-ai-submit";
+import { SUGGESTIONS } from "../data/suggestions";
 
-type AiChatbotIntroProps = {
-  onSuggestionSelect: (suggestion: string) => void;
-};
 
-export function AiChatbotIntro({ onSuggestionSelect }: AiChatbotIntroProps) {
+
+export function AiChatIntro({ setMessages, setDraft }: AiChatbotIntroProps) {
   return (
     <section
       className="flex min-h-[calc(100vh-4.25rem)] items-center justify-center px-5 pb-24"
@@ -34,11 +28,11 @@ export function AiChatbotIntro({ onSuggestionSelect }: AiChatbotIntroProps) {
         </p>
 
         <div className="mt-6 flex flex-wrap justify-center gap-2" aria-label="Suggested questions">
-          {suggestions.map((suggestion, index) => (
+          {SUGGESTIONS.map((suggestion, index) => (
             <button
               key={suggestion}
               type="button"
-              onClick={() => onSuggestionSelect(suggestion)}
+              onClick={() => sendMessage(suggestion, setMessages, setDraft)}
               className={`rounded-full border px-3.5 py-2.5 text-[11px] font-bold leading-none shadow-sm transition duration-200 ease-out hover:-translate-y-1 hover:shadow-md active:translate-x-0.5 active:translate-y-0.5 active:shadow-none ${
                 index === 0
                   ? "border-[#d9e8c6] bg-[#eaf4df] text-[var(--forest)]"
