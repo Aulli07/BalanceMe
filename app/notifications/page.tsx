@@ -13,9 +13,13 @@ const notifications = mockNotifications.filter(
   (notification) => notification.businessId === ACTIVE_BUSINESS_ID,
 );
 
+
+
+
 export default function NotificationsPage() {
   const [activeFilter, setActiveFilter] = useState<NotificationFilter>("All");
   const [query, setQuery] = useState("");
+
   const visibleNotifications = useMemo(
     () => getVisibleNotifications(notifications, activeFilter, query),
     [activeFilter, query],

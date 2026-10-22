@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { formatNaira } from "@/shared/utils/format-naira";
+import type { NairaKobo } from "@/shared/types/domain";
 
 const filters = ["All", "Paid", "Owed"];
 
@@ -10,6 +12,8 @@ type TransactionSummaryProps = {
   monthIndex: number;
   monthCount: number;
   onMonthChange: React.Dispatch<React.SetStateAction<number>>;
+  paidKobo: NairaKobo;
+  owedKobo: NairaKobo;
 };
 
 export function TransactionSummary({
@@ -17,6 +21,8 @@ export function TransactionSummary({
   monthIndex,
   monthCount,
   onMonthChange,
+  paidKobo,
+  owedKobo,
 }: TransactionSummaryProps) {
   const [activeFilter, setActiveFilter] = useState("All");
 
@@ -65,13 +71,13 @@ export function TransactionSummary({
         <article className="rounded-3xl border border-[#cce2d2] bg-[#e4f1e8] px-4 py-2">
           <p className="text-sm font-semibold text-[#377052] leading-tight">Paid</p>
           <p className="mt-2 text-xl font-bold tracking-tight leading-tight text-[var(--forest)]">
-            ₦286,450
+            {formatNaira(paidKobo)}
           </p>
         </article>
         <article className="rounded-3xl border border-[#f1dfbd] bg-[#fff0d5] px-4 py-2">
           <p className="text-sm font-semibold text-[#8a631d] leading-tight">Owed</p>
           <p className="mt-2 text-xl font-bold tracking-tight text-[#714e15]">
-            ₦74,500
+            {formatNaira(owedKobo)}
           </p>
         </article>
       </div>
