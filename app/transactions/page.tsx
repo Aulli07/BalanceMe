@@ -7,7 +7,7 @@ import { TransactionActivity } from "@/features/transactions/components/transact
 import { getTransactionsForMonth } from "@/features/transactions/selectors/get-transactions-for-month";
 import { getTransactionActivity } from "@/features/transactions/selectors/get-transactions";
 import { getTransactionSummary } from "@/features/transactions/selectors/get-transaction-summary";
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 
 const months = ["October 2026", "September 2026", "August 2026"];
 
