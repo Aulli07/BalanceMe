@@ -6,19 +6,16 @@ import { NotificationList } from "@/features/notifications/components/notificati
 import { NotificationsHeader } from "@/features/notifications/components/notifications-header";
 import { type NotificationFilter } from "@/features/notifications/constants";
 import { getVisibleNotifications } from "@/features/notifications/selectors/get-visible-notifs";
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { mockNotifications } from "@/shared/data/domain-mock-data";
-
-const notifications = mockNotifications.filter(
-  (notification) => notification.businessId === ACTIVE_BUSINESS_ID,
-);
-
-
+import { getNotifications } from "@/shared/selectors/getters";
 
 
 export default function NotificationsPage() {
   const [activeFilter, setActiveFilter] = useState<NotificationFilter>("All");
   const [query, setQuery] = useState("");
+
+  const notifications = getNotifications(ACTIVE_BUSINESS_ID);
 
   const visibleNotifications = useMemo(
     () => getVisibleNotifications(notifications, activeFilter, query),

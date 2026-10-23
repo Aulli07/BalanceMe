@@ -1,41 +1,52 @@
-import { LuArrowDownRight, LuArrowUpRight, LuReceiptText, LuUsersRound } from "react-icons/lu";
+import Link from "next/link";
+import { LuChevronRight } from "react-icons/lu";
+import { Customer } from "@/shared/types/domain";
+
+import { getCustomerSaleTransactionCount } from "../selectors/get-customer-txn-count";
 
 
 
-export function CustomerSummary() {
+export function CustomerSummary({
+  visibleCustomers
+}: {
+  visibleCustomers: Customer[]
+}) {
+
   return (
-    <section className="grid grid-cols-2 gap-2.5" aria-label="Customer summary for this week">
-      {/* <article className="relative isolate flex h-28 min-w-0 flex-col justify-between overflow-hidden rounded-2xl bg-[var(--forest)] p-3 text-[var(--surface)] shadow-md shadow-[var(--forest)]/10 after:absolute after:-bottom-20 after:-right-8 after:-z-10 after:size-36 after:rounded-full after:border after:border-[var(--lime)]/20 after:shadow-[0_0_0_12px_rgba(203,243,106,0.04),0_0_0_27px_rgba(203,243,106,0.03)] after:content-['']">
-        <div className="relative z-10">
-          <p className="flex items-center gap-1 text-[10px] font-bold leading-tight text-green-100">
-            <LuUsersRound className="size-3.5" aria-hidden="true" />
-            Total customers
-          </p>
-          <strong className="mt-1 block text-3xl font-extrabold leading-none tracking-tight text-[var(--lime)]">
-            128
-          </strong>
-        </div>
-        <p className="relative z-10 flex items-center gap-1 text-[9px] font-medium text-green-100">
-          <LuArrowUpRight className="size-3" aria-hidden="true" />
-          Up 6 this week
-        </p>
-      </article> */}
-
-      <article className="flex h-28 min-w-0 flex-col justify-between rounded-2xl border border-[#efddd5] bg-[#fff0eb] p-3 text-[var(--ink)]">
-        <div>
-          <p className="flex items-center gap-1 text-[10px] font-bold leading-tight text-[#8c645c]">
-            <LuReceiptText className="size-3.5" aria-hidden="true" />
-            Currently owing
-          </p>
-          <strong className="mt-1 block text-3xl font-extrabold leading-none tracking-tight text-[#70433d]">
-            18
-          </strong>
-        </div>
-        <p className="flex items-center gap-1 text-[9px] font-medium text-[#89564e]">
-          <LuArrowDownRight className="size-3" aria-hidden="true" />
-          Down 2 this week
-        </p>
-      </article>
-    </section>
-  );
+    <div className="border-t border-[#e8ebdf] mt-5">
+      {visibleCustomers.map((customer) => (
+        <Link
+          href={`/customers/${customer.id}`}
+          key={customer.id}
+          type="button"
+          className="flex min-h-17 w-full items-center gap-2.5 border-b border-[#e8ebdf] px-0.5 py-2 text-left transition-colors active:bg-[#e8eddd]/50"
+          aria-label={`Preview ${customer.name}`}
+        >
+          <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-[#e2ecd7] text-sm font-extrabold text-[var(--forest)]">
+            {customer.name.slice(0, 2).toUpperCase()}
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-[14px] font-bold leading-tight text-[#294735]">
+              {customer.name}
+            </span>
+            <span className="mt-1 block truncate text-xs font-medium leading-tight text-[#778477]">
+              {getCustomerSaleTransactionCount(customer.id)} recorded
+              transactions
+            </span>
+          </span>
+          <span className="flex shrink-0 items-center gap-1">
+            {customer.pinned && (
+              <span className="inline-flex min-h-6 items-center rounded-[7px] bg-[#e2ecd7] px-1.5 text-[10px] font-bold leading-none text-[var(--forest)]">
+                Pinned
+              </span>
+            )}
+            <LuChevronRight
+              className="size-5 text-[#9aa695] opacity-60"
+              aria-hidden="true"
+            />
+          </span>
+        </Link>
+      ))}
+    </div>
+  )
 }

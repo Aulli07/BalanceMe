@@ -19,6 +19,9 @@ import type {
 const createdAt = "2026-10-01T09:00:00.000Z";
 const updatedAt = "2026-10-15T14:30:00.000Z";
 
+
+export const ACTIVE_BUSINESS_ID = "business-farm-001";
+
 export const mockUsers: User[] = [
   {
     id: "user-ade-001",
