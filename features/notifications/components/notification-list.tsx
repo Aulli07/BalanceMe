@@ -2,11 +2,9 @@ import { LuArrowUpRight, LuClock3 } from "react-icons/lu";
 import type { Notification } from "@/shared/types/domain";
 import { formatNotificationTime } from "../selectors/format-notif-time";
 
-type NotificationListProps = {
-  notifications: Notification[];
-};
 
-export function NotificationList({ notifications }: NotificationListProps) {
+
+export function NotificationList({ notifications }: {notifications: Notification[]}) {
   return (
     <section className="space-y-3 px-5 pb-6" aria-live="polite">
       {notifications.map((notification) => (

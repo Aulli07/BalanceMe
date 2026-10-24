@@ -1,28 +1,34 @@
 import type { Transaction } from "@/shared/types/domain";
-import {
-  getPaymentDetails,
-  getSaleDetails,
-} from "../selectors/get-sale-details";
+import { getPaymentDetails, getSaleDetails } from "../selectors/get-sale-details";
+
 import { PaymentTransactionUi } from "../ui/payment-transaction-ui";
 import { SaleTransactionUi } from "../ui/sale-transaction-ui";
 
-type TransactionDetailsOverviewProps = {
-  transaction: Transaction;
-};
+
 
 export function TransactionDetailsOverview({
   transaction,
-}: TransactionDetailsOverviewProps) {
+}: {transaction: Transaction}) {
   if (transaction.type === "payment") {
+    const { amountPaidKobo, allocations } = getPaymentDetails(transaction);
+
     return (
       <PaymentTransactionUi
         transaction={transaction}
-        details={getPaymentDetails(transaction)}
+        amountPaid={amountPaidKobo}
+        allocations={allocations}
       />
     );
   }
 
-  return <SaleTransactionUi 
-    transaction={transaction} 
-    details={getSaleDetails(transaction)} />;
+  const { productPriceKobo, amountPaidKobo, balanceKobo } = getSaleDetails(transaction);
+
+  return (
+    <SaleTransactionUi 
+      transaction={transaction} 
+      productPrice={productPriceKobo}
+      amountPaid={amountPaidKobo}
+      balance={balanceKobo}
+   />
+  )
 }

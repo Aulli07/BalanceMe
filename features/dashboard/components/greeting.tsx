@@ -1,9 +1,9 @@
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
+
 import { getUser } from "@/shared/selectors/getters";
 import { getTimePeriod } from "@/shared/utils/get-time-period";
 
-export function Greeting() {
-  const user = getUser(ACTIVE_BUSINESS_ID);
+export function Greeting({businessId}: {businessId: string}) {
+  const user = getUser(businessId);
   if (!user) return <h1>Hi there</h1>
 
   const firstName = user.fullName.split(" ")[0];

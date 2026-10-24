@@ -3,14 +3,17 @@ import { TransactionDetailsOverview } from "@/features/transactions/components/t
 import { mockTransactions } from "@/shared/data/domain-mock-data";
 import { notFound } from "next/navigation";
 
-type TransactionPageProps = {
-  params: Promise<{ transaction: string }>;
-};
 
-export default async function TransactionPage({ params }: TransactionPageProps) {
+
+
+export default async function TransactionPage({
+  params 
+}: {
+  params: Promise<{ transaction: string }>;
+}) {
+
   const { transaction: transactionId } = await params;
   const transaction = mockTransactions.find((item) => item.id === transactionId);
-
   if (!transaction) notFound();
 
   return (

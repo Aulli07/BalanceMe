@@ -3,11 +3,10 @@ import { ACTIVE_BUSINESS_ID, mockCustomers } from "@/shared/data/domain-mock-dat
 import { formatNaira } from "@/shared/utils/format-naira";
 import { getTotalAmountOwedForCustomer } from "../selectors/get-customers-owing";
 
-export function PinnedCustomers() {
-  const pinnedCustomers = mockCustomers.filter(
-    (customer) =>
-      customer.businessId === ACTIVE_BUSINESS_ID && customer.pinned,
-  );
+
+
+export function PinnedCustomers({businessId}: {businessId: string}) {
+  const pinnedCustomers = mockCustomers.filter((customer) => customer.businessId === businessId && customer.pinned);
 
   if (pinnedCustomers.length === 0) return null;
 

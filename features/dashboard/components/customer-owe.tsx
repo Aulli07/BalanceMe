@@ -1,14 +1,14 @@
 import { LuUsersRound } from "react-icons/lu";
 import { getTotalAmountOwed, getTotalCustomersOwing } from "../selectors/get-customers-owing";
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { formatNaira } from "@/shared/utils/format-naira";
 import Image from "next/image";
 
 
 
-export function CustomersOwing() {
-  const { count, customersOwing } = getTotalCustomersOwing(ACTIVE_BUSINESS_ID);
-  const totalAmountOwed = getTotalAmountOwed(ACTIVE_BUSINESS_ID);
+export function CustomersOwing({businessId}: {businessId: string}) {
+  const { count, customersOwing } = getTotalCustomersOwing(businessId);
+  const totalAmountOwed = getTotalAmountOwed(businessId);
+  
   return (
     <article className="rounded-3xl border border-red-300 bg-red-50 py-3 px-4 text-[var(--ink)]">
       <div className="flex items-center justify-between gap-2">

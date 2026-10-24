@@ -2,20 +2,18 @@ import {
   mockCustomers,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { PaymentTransaction } from "@/shared/types/domain";
 import { formatNaira } from "@/shared/utils/format-naira";
-import { getPaymentDetails } from "../selectors/get-sale-details";
 import { getDateString } from "../utils/get-date-string";
 import { getCustomer } from "@/shared/selectors/getters";
+import { DetailRow } from "./detail-row";
+import { PaymentTransactionUiProps } from "../types/transaction-props";
 
-type PaymentTransactionUiProps = {
-  transaction: PaymentTransaction;
-  details: ReturnType<typeof getPaymentDetails>;
-};
+
 
 export function PaymentTransactionUi({
   transaction,
-  details,
+  amountPaid,
+  allocations
 }: PaymentTransactionUiProps) {
   const customer = getCustomer(transaction.customerId);
 
@@ -24,11 +22,11 @@ export function PaymentTransactionUi({
       <div>
         <p className="text-sm font-bold text-[var(--forest-soft)]">Payment received</p>
         <p className="mt-2 text-3xl font-extrabold leading-none tracking-tight text-[var(--forest)]">
-          {formatNaira(details.amountPaidKobo)}
+          {formatNaira(amountPaid)}
         </p>
 
         <dl className="mt-10 divide-y divide-[var(--line)] border-y border-[var(--line)]">
-          <DetailRow label="Amount paid by customer" value={formatNaira(details.amountPaidKobo)} />
+          <DetailRow label="Amount paid by customer" value={formatNaira(amountPaid)} />
           <DetailRow label="Customer" value={customer?.name ?? "Unknown customer"} />
           {transaction.note && <DetailRow label="Note" value={transaction.note} />}
         </dl>
@@ -36,7 +34,7 @@ export function PaymentTransactionUi({
         <div className="mt-6">
           <p className="text-sm font-bold text-[var(--forest-soft)]">Allocated to sales</p>
           <ul className="mt-3 divide-y divide-[var(--line)] rounded-2xl border border-[var(--line)] bg-white px-4">
-            {details.allocations.map((allocation) => {
+            {allocations.map((allocation) => {
               const sale = mockSaleTransactions.find(
                 (item) => item.id === allocation.saleTransactionId,
               );
@@ -66,14 +64,5 @@ export function PaymentTransactionUi({
         {getDateString(transaction.createdAt)}
       </time>
     </section>
-  );
-}
-
-function DetailRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-start justify-between gap-5 py-4">
-      <dt className="text-sm font-medium text-[var(--muted)]">{label}</dt>
-      <dd className="text-right text-base font-bold text-[var(--ink)]">{value}</dd>
-    </div>
   );
 }

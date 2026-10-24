@@ -7,6 +7,8 @@ import { CustomersOwing } from "@/features/dashboard/components/customer-owe";
 import { Greeting } from "@/features/dashboard/components/greeting";
 import { PinnedCustomers } from "@/features/dashboard/components/pinned-customers";
 
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
+
 
 
 
@@ -22,11 +24,11 @@ export default function Home() {
 export function Dashboard() {
   return (
     <section className="grid gap-3 pb-6">
-      <Greeting />
-      <CashRecorded />
-      <CustomersOwing />
-      <PinnedCustomers />
-      <BusinessPulse />
+      <Greeting businessId={ACTIVE_BUSINESS_ID} />
+      <CashRecorded businessId={ACTIVE_BUSINESS_ID}/>
+      <CustomersOwing businessId={ACTIVE_BUSINESS_ID}/>
+      <PinnedCustomers businessId={ACTIVE_BUSINESS_ID}/>
+      <BusinessPulse businessId={ACTIVE_BUSINESS_ID} />
     </section>
   );
 }

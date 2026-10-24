@@ -6,6 +6,8 @@ import { ScreenshotEntryOne } from "@/features/entries/components/screenshot-ent
 import { ScreenshotEntryTwo } from "@/features/entries/components/screenshot-entry-two";
 import { useEntryForm } from "@/features/entries/hooks/useEntryForm";
 
+
+
 export function ScreenshotEntry() {
   const form = useEntryForm();
 

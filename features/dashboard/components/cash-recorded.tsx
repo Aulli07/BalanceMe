@@ -13,11 +13,11 @@ import {
 import { getTrend } from "../selectors/get-trend";
 import { periodOptions } from "../data/period-options";
 
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 
 
 
-export function CashRecorded() {
+
+export function CashRecorded({businessId}: {businessId: string}) {
   const [value, setValue] = useState<CashRecordedPeriod>("today");
   const [isPeriodMenuOpen, setIsPeriodMenuOpen] = useState(false);
 
@@ -71,12 +71,12 @@ export function CashRecorded() {
         </div>
       </div>
       <p className="mt-5 text-4xl font-bold tracking-tight text-[var(--lime)]">
-        {getCashRecordedAmount(ACTIVE_BUSINESS_ID, value)}
+        {getCashRecordedAmount(businessId, value)}
       </p>
       <div className="mt-5 flex items-center gap-2 text-xs font-semibold text-green-100">
         <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-[var(--lime)]">
           <LuTrendingUp className="size-3.5" aria-hidden="true" />
-          {getTrend(ACTIVE_BUSINESS_ID, "today", "yesterday")}
+          {getTrend(businessId, "today", "yesterday")}
         </span>
       </div>
     </article>

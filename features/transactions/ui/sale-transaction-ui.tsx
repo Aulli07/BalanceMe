@@ -1,23 +1,15 @@
-import {
-  mockCategories,
-  mockCustomers,
-  mockReceiptAttachments,
-} from "@/shared/data/domain-mock-data";
-import type { SaleTransaction } from "@/shared/types/domain";
 import { formatNaira } from "@/shared/utils/format-naira";
 import { LuFileText } from "react-icons/lu";
-import { getSaleDetails } from "../selectors/get-sale-details";
 import { getDateString } from "../utils/get-date-string";
 import { getCategory, getCustomer, getReceiptAttachment } from "@/shared/selectors/getters";
+import { SaleTransactionUiProps } from "../types/transaction-props";
 
-type SaleTransactionUiProps = {
-  transaction: SaleTransaction;
-  details: ReturnType<typeof getSaleDetails>;
-};
 
 export function SaleTransactionUi({
   transaction,
-  details,
+  productPrice,
+  amountPaid,
+  balance
 }: SaleTransactionUiProps) {
   const customer = getCustomer(transaction.customerId);
   const category = getCategory(transaction.categoryId);
@@ -28,12 +20,12 @@ export function SaleTransactionUi({
       <div>
         <p className="text-sm font-bold text-[var(--forest-soft)]">Product price</p>
         <p className="mt-2 text-5xl font-extrabold leading-none tracking-tight text-[var(--forest)]">
-          {formatNaira(details.productPriceKobo)}
+          {formatNaira(productPrice)}
         </p>
 
         <dl className="mt-10 divide-y divide-[var(--line)] border-y border-[var(--line)]">
-          <DetailRow label="Amount paid by customer" value={formatNaira(details.amountPaidKobo)} />
-          <DetailRow label="Balance" value={formatNaira(details.balanceKobo)} valueClassName="text-[var(--forest)]" />
+          <DetailRow label="Amount paid by customer" value={formatNaira(amountPaid)} />
+          <DetailRow label="Balance" value={formatNaira(balance)} valueClassName="text-[var(--forest)]" />
           <DetailRow label="Customer" value={customer?.name ?? "Unknown customer"} />
           <DetailRow label="Category" value={category?.name ?? "Uncategorised"} />
           <DetailRow label="Description" value={transaction.description} />

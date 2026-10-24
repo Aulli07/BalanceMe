@@ -13,8 +13,8 @@ import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 
 
 
-export function BusinessPulse() {
-  const data = getPulseDisplayData(pulseData, ACTIVE_BUSINESS_ID);
+export function BusinessPulse({businessId}: {businessId: string}) {
+  const data = getPulseDisplayData(pulseData, businessId);
   const [activeIndex, setActiveIndex] = useState(0);
   const activePulse = data[activeIndex];
 
@@ -33,9 +33,6 @@ export function BusinessPulse() {
         className={`relative min-h-40 flex justify-between overflow-hidden rounded-xl border ${activePulse.borderColor} px-4 py-4 shadow-sm shadow-[var(--forest)]/5 transition-colors duration-500 bg-[var(--surface)]`}
         aria-live="polite"
       >
-        {/* <div className="pointer-events-none absolute -bottom-20 -right-8 -z-10 size-44 rounded-full border border-white/60" />
-        <div className="pointer-events-none absolute -bottom-10 right-5 -z-10 size-24 rounded-full border border-white/50" /> */}
-
         <div className="relative z-20">
           <div className="flex items-center gap-2">
             <span

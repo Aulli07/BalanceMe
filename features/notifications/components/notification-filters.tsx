@@ -1,11 +1,14 @@
 import { notificationFilters, type NotificationFilter } from "../constants";
 
-type NotificationFiltersProps = {
+
+
+export function NotificationFilters({ 
+  activeFilter, 
+  onFilterChange 
+}: {
   activeFilter: NotificationFilter;
   onFilterChange: (filter: NotificationFilter) => void;
-};
-
-export function NotificationFilters({ activeFilter, onFilterChange }: NotificationFiltersProps) {
+}) {
   return (
     <div className="grid grid-cols-4 gap-1.5 px-5 py-4" role="group" aria-label="Filter notifications">
       {notificationFilters.map((filter) => {
