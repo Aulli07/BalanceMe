@@ -6,13 +6,14 @@ import {
   LuChevronDown,
   LuTrendingUp,
 } from "react-icons/lu";
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
 import {
   type CashRecordedPeriod,
   getCashRecordedAmount,
 } from "@/features/dashboard/selectors/get-cash-recorded";
 import { getTrend } from "../selectors/get-trend";
 import { periodOptions } from "../data/period-options";
+
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 
 
 

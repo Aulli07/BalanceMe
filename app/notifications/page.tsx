@@ -6,8 +6,8 @@ import { NotificationList } from "@/features/notifications/components/notificati
 import { NotificationsHeader } from "@/features/notifications/components/notifications-header";
 import { type NotificationFilter } from "@/features/notifications/constants";
 import { getVisibleNotifications } from "@/features/notifications/selectors/get-visible-notifs";
+
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
-import { mockNotifications } from "@/shared/data/domain-mock-data";
 import { getNotifications } from "@/shared/selectors/getters";
 
 

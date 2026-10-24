@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
-import { mockCustomers } from "@/shared/data/domain-mock-data";
+import { ACTIVE_BUSINESS_ID, mockCustomers } from "@/shared/data/domain-mock-data";
 import { formatNaira } from "@/shared/utils/format-naira";
 import { getTotalAmountOwedForCustomer } from "../selectors/get-customers-owing";
 

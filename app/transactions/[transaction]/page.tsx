@@ -11,23 +11,12 @@ export default async function TransactionPage({ params }: TransactionPageProps) 
   const { transaction: transactionId } = await params;
   const transaction = mockTransactions.find((item) => item.id === transactionId);
 
-  if (!transaction) {
-    notFound();
-  }
-
-  const amount =
-    transaction.type === "payment"
-      ? transaction.receivedKobo
-      : transaction.totalKobo;
+  if (!transaction) notFound();
 
   return (
     <main className="min-h-screen bg-[var(--paper)] text-[var(--ink)]">
       <TransactionDetailsHeader />
-      <TransactionDetailsOverview
-        amount={amount}
-        type={transaction.type}
-        createdAt={transaction.createdAt}
-      />
+      <TransactionDetailsOverview transaction={transaction} />
     </main>
   );
 }

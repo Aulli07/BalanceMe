@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } from "react-icons/lu";
+
 import { pressKey } from "../utils/pressKey";
 import { numbers } from "../data/entry-data";
 import { createPortal } from "react-dom";
@@ -20,10 +21,7 @@ export function AddEntryOne({
   setEntryType,
   entryType,
 }: EntryProps) {
-
-  if (entryType === undefined || amount === undefined) {
-    return null;
-  }
+  if (entryType === undefined || amount === undefined) return null;
 
   return (
     <main className="px-5 pt-5">
@@ -48,9 +46,7 @@ export function EntryCustomer({
   setCustomer,
   customer,
 }: EntryProps) {
-
   const {selectedTrigger, isSelectedTrigger} = useEntryForm();
-  // const [selectedTrigger, isSelectedTrigger] = useState(false);
 
   return (
     <section className="" aria-labelledby="entry-customer-heading">

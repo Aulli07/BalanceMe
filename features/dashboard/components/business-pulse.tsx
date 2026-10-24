@@ -6,8 +6,8 @@ import { pulseData } from "@/features/dashboard/data/pulse-data";
 import { getPulseDisplayData } from "@/features/dashboard/engine/pulse-data-engine";
 import { pulseIcons } from "../data/pulse-icon-style";
 
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
 import { slideShow } from "../utils/slideshow";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 
 
 

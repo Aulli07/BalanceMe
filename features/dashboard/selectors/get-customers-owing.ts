@@ -1,6 +1,8 @@
 import { mockCustomers, mockPaymentTransactions, mockSaleTransactions } from "@/shared/data/domain-mock-data";
 import { SaleTransaction } from "@/shared/types/domain";
 
+
+
 export function getTotalCustomersOwing(businessId: string) {
   const customers = mockCustomers.filter(cust => cust.businessId === businessId);
   let count = 0;

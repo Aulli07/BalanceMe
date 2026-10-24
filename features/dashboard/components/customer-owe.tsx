@@ -1,6 +1,6 @@
 import { LuUsersRound } from "react-icons/lu";
 import { getTotalAmountOwed, getTotalCustomersOwing } from "../selectors/get-customers-owing";
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { formatNaira } from "@/shared/utils/format-naira";
 import Image from "next/image";
 

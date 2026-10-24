@@ -1,8 +1,12 @@
-import { CURRENT_USER } from "@/shared/data/current-context";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
+import { getUser } from "@/shared/selectors/getters";
 import { getTimePeriod } from "@/shared/utils/get-time-period";
 
 export function Greeting() {
-  const firstName = CURRENT_USER.fullName.split(" ")[0];
+  const user = getUser(ACTIVE_BUSINESS_ID);
+  if (!user) return <h1>Hi there</h1>
+
+  const firstName = user.fullName.split(" ")[0];
   const timeOfDay = getTimePeriod(new Date());
   
   return (

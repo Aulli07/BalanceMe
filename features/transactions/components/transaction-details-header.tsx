@@ -7,11 +7,11 @@ export function TransactionDetailsHeader() {
       <Link
         href="/transactions"
         aria-label="Back to transactions"
-        className="grid size-9 place-items-center rounded-full text-[var(--forest)]"
+        className="grid place-items-center rounded-full text-[var(--forest)]"
       >
         <LuArrowLeft className="size-5" aria-hidden="true" />
       </Link>
-      <h1 className="text-2xl font-bold tracking-tight text-[var(--ink)]">
+      <h1 className="text-xl font-bold tracking-tight text-[var(--ink)]">
         Transaction details
       </h1>
     </header>

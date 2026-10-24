@@ -7,6 +7,8 @@ export type CashRecordedPeriod =
   | "last-7-days"
   | "last-30-days";
 
+
+  
 export function getCashRecordedAmount(
   businessId: string,
   timePeriod: CashRecordedPeriod,
