@@ -12,7 +12,7 @@ export function CustomerFilter({
 
   return (
     <div
-      className="flex items-center overflow-x-auto gap-2"
+      className="mt-3 flex items-center overflow-x-auto gap-2"
       role="group"
       aria-label="Filter notifications"
     >
@@ -29,7 +29,7 @@ export function CustomerFilter({
               const filtered = filterCustomers(filter);
               setVisibleCustomers(filtered);
             }}
-            className={`px-4 py-1.5 rounded-xl text-[13px] font-bold transition ${
+            className={`px-3.5 py-1 rounded-full text-[13px] font-bold transition ${
               isActive
                 ? "bg-[var(--forest)] text-[var(--surface)] shadow-sm shadow-[var(--forest)]/20"
                 : "text-[var(--muted)] hover:bg-[var(--line)] hover:text-[var(--forest)]"

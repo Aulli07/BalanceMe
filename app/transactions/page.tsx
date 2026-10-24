@@ -8,23 +8,17 @@ import { getTransactionsForMonth } from "@/features/transactions/selectors/get-t
 import { getTransactionActivity } from "@/features/transactions/selectors/get-transactions";
 import { getTransactionSummary } from "@/features/transactions/selectors/get-transaction-summary";
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
+import { months } from "@/features/transactions/data/txn-stuff";
 
-const months = ["October 2026", "September 2026", "August 2026"];
+
 
 export default function TransactionsPage() {
   const [monthIndex, setMonthIndex] = useState(0);
-  const transactions = useMemo(
-    () =>
-      getTransactionsForMonth(
-        getTransactionActivity(ACTIVE_BUSINESS_ID),
-        months[monthIndex],
-      ),
-    [monthIndex],
-  );
-  const summary = useMemo(
-    () => getTransactionSummary(ACTIVE_BUSINESS_ID, months[monthIndex]),
-    [monthIndex],
-  );
+  
+  const transactions = useMemo(() =>
+    getTransactionsForMonth(getTransactionActivity(ACTIVE_BUSINESS_ID),months[monthIndex]), [monthIndex]);
+
+  const summary = useMemo(() => getTransactionSummary(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
 
   return (
     <main className="min-h-screen pb-18 bg-[var(--paper)] text-[var(--ink)]">

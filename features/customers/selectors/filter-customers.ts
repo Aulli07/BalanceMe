@@ -1,14 +1,15 @@
-import { ACTIVE_BUSINESS_ID } from "@/shared/data/current-context";
-import { mockCustomers } from "@/shared/data/domain-mock-data";
+import { ACTIVE_BUSINESS_ID, mockCustomers } from "@/shared/data/domain-mock-data";
 import { getTotalAmountOwedForCustomer } from "@/features/dashboard/selectors/get-customers-owing";
-import { filters } from "../data/customers";
 import { getCustomerSaleTransactionCount } from "./get-customer-txn-count";
+import { customerFilters } from "../data/customers";
+import { getCustomers } from "@/shared/selectors/getters";
 
-const customers = mockCustomers.filter(
-  (customer) => customer.businessId === ACTIVE_BUSINESS_ID,
-);
 
-export function filterCustomers(activeFilter: (typeof filters)[number]) {
+
+
+export function filterCustomers(activeFilter: (typeof customerFilters)[number]) {
+  const customers = getCustomers(ACTIVE_BUSINESS_ID);
+  
   switch (activeFilter) {
     case "All":
       return customers;

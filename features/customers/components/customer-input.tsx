@@ -21,7 +21,7 @@ export function CustomerInput({
   }
 
   return (
-    <label className="flex h-12 items-center gap-2.5 rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-3.5 text-[var(--muted)] shadow-sm shadow-[var(--forest)]/5 focus-within:border-[var(--forest-soft)] focus-within:ring-4 focus-within:ring-[var(--lime)]/20">
+    <label className="flex h-12 mt-5 items-center gap-2.5 rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-3.5 text-[var(--muted)] shadow-sm shadow-[var(--forest)]/5 focus-within:border-[var(--forest-soft)] focus-within:ring-4 focus-within:ring-[var(--lime)]/20">
       <LuSearch className="size-4.5 shrink-0" aria-hidden="true" />
       <span className="sr-only">Search Customers</span>
       <input
