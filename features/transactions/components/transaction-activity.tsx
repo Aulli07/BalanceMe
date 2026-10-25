@@ -20,7 +20,7 @@ export function TransactionActivity({ transactions }: TransactionActivityProps) 
 
       {Object.entries(transactions).map(([day, dayTransactions]) => (
         <div key={day}>
-          <h3 className="mb-0.5 px-0.5 text-sm font-bold tracking-tight text-[var(--muted)]">
+          <h3 className="mb-0.5 px-0.5 text-sm font-bold tracking-tight text-[var(--forest-green)]">
             {day}
           </h3>
 
@@ -39,21 +39,21 @@ export function TransactionActivity({ transactions }: TransactionActivityProps) 
                       alt={customerName}
                       width={48}
                       height={48}
-                      className="size-12 shrink-0 rounded-xl object-cover"
+                      className="size-9 shrink-0 rounded-full object-cover"
                     />
                   ) : (
-                    <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-[var(--line)] text-sm font-extrabold text-[var(--forest)]">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[var(--line)] text-sm font-extrabold text-[var(--forest)]">
                       {getInitials(customerName)}
                     </span>
                   )}
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-bold leading-tight text-[var(--ink)]">
-                      {transaction.description}
+                      {transaction.category}
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium leading-tight text-[var(--muted)]">
-                      <span>{transaction.category}</span>
-                      <span aria-hidden="true">•</span>
+                      {/* <span>{transaction.category}</span>
+                      <span aria-hidden="true">•</span> */}
                       <span>{customerName}</span>
                       <span aria-hidden="true">•</span>
                       <time dateTime={transaction.createdAt}>

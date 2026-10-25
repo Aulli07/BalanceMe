@@ -3,18 +3,11 @@
 import { useState } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { formatNaira } from "@/shared/utils/format-naira";
-import type { NairaKobo } from "@/shared/types/domain";
+import { TransactionSummaryProps } from "../types/transaction-props";
+import { filters } from "../data/txn-stuff";
 
-const filters = ["All", "Paid", "Owed"];
 
-type TransactionSummaryProps = {
-  month: string;
-  monthIndex: number;
-  monthCount: number;
-  onMonthChange: React.Dispatch<React.SetStateAction<number>>;
-  paidKobo: NairaKobo;
-  owedKobo: NairaKobo;
-};
+
 
 export function TransactionSummary({
   month,
@@ -67,16 +60,18 @@ export function TransactionSummary({
         </button>
       </div>
 
+      {/* bg-[#e4f1e8] text-[#377052]  */}
+
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <article className="rounded-3xl border border-[#cce2d2] bg-[#e4f1e8] px-4 py-2">
-          <p className="text-sm font-semibold text-[#377052] leading-tight">Paid</p>
-          <p className="mt-2 text-xl font-bold tracking-tight leading-tight text-[var(--forest)]">
+        <article className="rounded-xl border border-[#cce2d2] bg-[var(--forest)] px-4 py-3">
+          <p className="text-xs font-semibold text-white leading-tight">Paid</p>
+          <p className="mt-2 text-lg font-bold tracking-tight leading-tight text-white">
             {formatNaira(paidKobo)}
           </p>
         </article>
-        <article className="rounded-3xl border border-[#f1dfbd] bg-[#fff0d5] px-4 py-2">
-          <p className="text-sm font-semibold text-[#8a631d] leading-tight">Owed</p>
-          <p className="mt-2 text-xl font-bold tracking-tight text-[#714e15]">
+        <article className="rounded-xl border border-[#f1dfbd] bg-white px-4 py-3">
+          <p className="text-sm font-semibold text-[var(--forest)] leading-tight">Owed</p>
+          <p className="mt-2 text-xl font-bold tracking-tight text-[var(--forest)]">
             {formatNaira(owedKobo)}
           </p>
         </article>

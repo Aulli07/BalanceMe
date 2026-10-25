@@ -1,4 +1,4 @@
-import { PaymentAllocation, PaymentTransaction, SaleTransaction } from "@/shared/types/domain";
+import { NairaKobo, PaymentAllocation, PaymentTransaction, SaleTransaction } from "@/shared/types/domain";
 
 
 export type PaymentTransactionUiProps = {
@@ -13,4 +13,13 @@ export type SaleTransactionUiProps = {
   productPrice: number;
   amountPaid: number;
   balance: number;
+};
+
+export type TransactionSummaryProps = {
+  month: string;
+  monthIndex: number;
+  monthCount: number;
+  onMonthChange: React.Dispatch<React.SetStateAction<number>>;
+  paidKobo: NairaKobo;
+  owedKobo: NairaKobo;
 };
