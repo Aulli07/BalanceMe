@@ -14,20 +14,20 @@ export function PaymentTransactionUi({
   const customer = getCustomer(transaction.customerId);
 
   return (
-    <section className="mt-6 flex min-h-[calc(100dvh-5rem)] flex-col px-5 pb-6">
+    <section className="mt-5 min-h-[calc(100vh-7rem)]  flex flex-col px-5 pb-6">
       <div className="rounded-[1.75rem] bg-[var(--forest)] p-6 text-white shadow-sm">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-bold text-[var(--lime)]">Payment received</p>
-          <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white">Payment</span>
+          <p className="text-xs font-bold text-[var(--lime)]">Payment received</p>
+          <span className="rounded-full bg-white/10 px-2 py-1 text-[11px] font-bold text-white">Payment</span>
         </div>
-        <p className="mt-5 text-sm font-medium text-white/70">Amount received</p>
-        <p className="mt-1 text-5xl font-extrabold leading-none tracking-tight">
+        <p className="mt-5 text-xs font-medium text-white/70">Amount received</p>
+        <p className="mt-1 text-2xl font-extrabold leading-none tracking-tight">
           {formatNaira(amountPaid)}
         </p>
       </div>
 
-      <div className="mt-6">
-        <p className="text-sm font-bold text-[var(--forest-soft)]">Payment information</p>
+      <div className="mt-4">
+        {/* <p className="text-sm font-bold text-[var(--forest-soft)]">Payment information</p> */}
         <dl className="mt-3 divide-y divide-[var(--line)] rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-4">
           <DetailRow label="Customer" value={customer?.name ?? "Unknown customer"} />
           {transaction.note && <DetailRow label="Note" value={transaction.note} />}
@@ -66,7 +66,7 @@ export function PaymentTransactionUi({
 
       <time
         dateTime={transaction.createdAt}
-        className="mt-6 text-center text-sm font-medium text-[var(--muted)]"
+        className="mt-3 text-center text-[14px] font-medium text-[var(--muted)]"
       >
         {getDateString(transaction.createdAt)}
       </time>

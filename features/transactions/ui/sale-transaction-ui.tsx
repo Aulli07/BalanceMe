@@ -17,7 +17,7 @@ export function SaleTransactionUi({
   const receipt = getReceiptAttachment(transaction.receiptId ?? "");
 
   return (
-    <section className="mt-6 flex min-h-[calc(100dvh-5rem)] flex-col px-5 pb-6">
+    <section className="mt-5 flex min-h-[calc(100dvh-5rem)] flex-col px-5 pb-6">
       <div className="rounded-[1.75rem] bg-[var(--forest)] p-6 text-white shadow-sm">
         <div className="flex items-center justify-between gap-3">
           <p className="text-sm font-bold text-[var(--lime)]">Sale recorded</p>
