@@ -10,6 +10,8 @@ import { filters } from "../data/txn-stuff";
 
 
 export function TransactionSummary({
+  setActiveFilter,
+  activeFilter,
   month,
   monthIndex,
   monthCount,
@@ -17,7 +19,7 @@ export function TransactionSummary({
   paidKobo,
   owedKobo,
 }: TransactionSummaryProps) {
-  const [activeFilter, setActiveFilter] = useState("All");
+  // const [activeFilter, setActiveFilter] = useState<typeof filters[number]>("All");
 
   return (
     <section className="mt-4 px-5" aria-labelledby="monthly-summary-heading">

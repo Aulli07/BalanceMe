@@ -3,6 +3,8 @@ import { customerFilters } from "../data/customers";
 import { filterCustomers } from "../selectors/filter-customers";
 import { Customer } from "@/shared/types/domain";
 
+
+
 export function CustomerFilter({
   setVisibleCustomers
 } : {

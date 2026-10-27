@@ -4,12 +4,9 @@ import { formatNaira } from "@/shared/utils/format-naira";
 import { formatTransactionTime } from "../utils/format-time";
 import { getInitials } from "../utils/get-name-initials";
 import Link from "next/link";
+import { TransactionActivityProps } from "../types/transaction-props";
 
-type TransactionActivityProps = {
-  transactions: ReturnType<
-    typeof import("../selectors/get-transactions").getTransactionActivity
-  >;
-};
+
 
 export function TransactionActivity({ transactions }: TransactionActivityProps) {
   return (

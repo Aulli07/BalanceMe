@@ -1,4 +1,8 @@
+import type { getTransactionActivity } from "../selectors/get-transactions";
+
 import { NairaKobo, PaymentAllocation, PaymentTransaction, SaleTransaction } from "@/shared/types/domain";
+import { Dispatch, SetStateAction } from "react";
+import { filters } from "../data/txn-stuff";
 
 
 export type PaymentTransactionUiProps = {
@@ -16,6 +20,8 @@ export type SaleTransactionUiProps = {
 };
 
 export type TransactionSummaryProps = {
+  setActiveFilter: Dispatch<SetStateAction<(typeof filters)[number]>>;
+  activeFilter: (typeof filters)[number];
   month: string;
   monthIndex: number;
   monthCount: number;
@@ -23,3 +29,16 @@ export type TransactionSummaryProps = {
   paidKobo: NairaKobo;
   owedKobo: NairaKobo;
 };
+
+
+export type TransactionActivityProps = ReturnType<typeof getTransactionActivity>;
+
+// Gets the single transaction
+export type TransactionActivityItemProps = TransactionActivityProps[number];
+
+
+
+// export type TransactionFilterProps = {
+//   transactions: ReturnType<
+//     typeof import ("../selectors/get-transactions").
+// }

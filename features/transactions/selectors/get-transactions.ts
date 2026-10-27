@@ -51,15 +51,15 @@ export function getTransactionActivity(businessId: string) {
     };
   });
   
-  const transactionsByDay = correctedTxns.reduce<Record<string, typeof correctedTxns>>(
-    (groups, transaction) => {
-      const day = getDayLabel(transaction.createdAt);
-      groups[day] ??= [];
-      groups[day].push(transaction);
-      return groups;
-    },
-    {},
-  );
+  // const transactionsByDay = correctedTxns.reduce<Record<string, typeof correctedTxns>>(
+  //   (groups, transaction) => {
+  //     const day = getDayLabel(transaction.createdAt);
+  //     groups[day] ??= [];
+  //     groups[day].push(transaction);
+  //     return groups;
+  //   },
+  //   {},
+  // );
 
-  return transactionsByDay;
+  return correctedTxns;
 }
