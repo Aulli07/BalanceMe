@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { TransactionHeader } from "@/features/transactions/components/transaction-header";
 import { TransactionSummary } from "@/features/transactions/components/transaction-summary";
 import { TransactionActivity } from "@/features/transactions/components/transaction-activity";
-import { getTransactionsForMonth } from "@/features/transactions/selectors/get-transactions-for-month";
+import { getTransactionsForDay, getTransactionsForMonth } from "@/features/transactions/selectors/get-transactions-for-month";
 import { getTransactionActivity } from "@/features/transactions/selectors/get-transactions";
 import { getTransactionSummary } from "@/features/transactions/selectors/get-transaction-summary";
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
@@ -21,8 +21,8 @@ export default function TransactionsPage() {
 
 
   const transactions = useMemo(() =>
-    getTransactionsForMonth(getTransactionActivity(ACTIVE_BUSINESS_ID),months[monthIndex]), 
-    [monthIndex]);
+    getTransactionsForMonth(getTransactionsForDay(filteredTxns), months[monthIndex]), 
+    [monthIndex, activeFilter]);
 
   const summary = useMemo(() => getTransactionSummary(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
 

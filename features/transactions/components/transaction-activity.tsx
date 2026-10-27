@@ -4,11 +4,11 @@ import { formatNaira } from "@/shared/utils/format-naira";
 import { formatTransactionTime } from "../utils/format-time";
 import { getInitials } from "../utils/get-name-initials";
 import Link from "next/link";
-import { TransactionActivityProps } from "../types/transaction-props";
+import { TransactionMonthlyActivityProps } from "../types/transaction-props";
 
 
 
-export function TransactionActivity({ transactions }: TransactionActivityProps) {
+export function TransactionActivity({transactions}: TransactionMonthlyActivityProps) {
   return (
     <section className="flex flex-col gap-4 px-5 pt-5" aria-labelledby="activity-heading">
       <h2 id="activity-heading" className="sr-only">

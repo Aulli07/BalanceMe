@@ -19,8 +19,6 @@ export function TransactionSummary({
   paidKobo,
   owedKobo,
 }: TransactionSummaryProps) {
-  // const [activeFilter, setActiveFilter] = useState<typeof filters[number]>("All");
-
   return (
     <section className="mt-4 px-5" aria-labelledby="monthly-summary-heading">
       <div className="flex items-center justify-between gap-3">

@@ -37,8 +37,7 @@ export type TransactionActivityProps = ReturnType<typeof getTransactionActivity>
 export type TransactionActivityItemProps = TransactionActivityProps[number];
 
 
+export type TransactionMonthlyActivityProps = {
+  transactions: Record<string, TransactionActivityProps>;
+}
 
-// export type TransactionFilterProps = {
-//   transactions: ReturnType<
-//     typeof import ("../selectors/get-transactions").
-// }
