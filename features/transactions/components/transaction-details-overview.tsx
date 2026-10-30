@@ -9,6 +9,7 @@ import { SaleTransactionUi } from "../ui/sale-transaction-ui";
 export function TransactionDetailsOverview({
   transaction,
 }: {transaction: Transaction}) {
+  
   if (transaction.type === "payment") {
     const { amountPaidKobo, allocations } = getPaymentDetails(transaction);
 
