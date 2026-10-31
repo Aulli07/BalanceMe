@@ -16,7 +16,7 @@ export function CustomerTransactionHistory({
           Transaction history
         </h2>
         <p className="text-[11px] text-[var(--muted)]">
-          Latest first · {transactions.length} shown
+          Latest first · {transactions.length} shownn
         </p>
       </div>
 
