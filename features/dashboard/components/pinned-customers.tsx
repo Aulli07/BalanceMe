@@ -1,72 +1,36 @@
-import Image from "next/image";
-import { ACTIVE_BUSINESS_ID, mockCustomers } from "@/shared/data/domain-mock-data";
-import { formatNaira } from "@/shared/utils/format-naira";
-import { getTotalAmountOwedForCustomer } from "../selectors/get-customers-owing";
+import { LuPin } from "react-icons/lu";
+import { mockCustomers } from "@/shared/data/domain-mock-data";
+import { PinnedCustomerCard } from "@/features/customers/components/pinned-customer-card";
 
-
-
-export function PinnedCustomers({businessId}: {businessId: string}) {
-  const pinnedCustomers = mockCustomers.filter((customer) => customer.businessId === businessId && customer.pinned);
+export function PinnedCustomers({ businessId }: { businessId: string }) {
+  const pinnedCustomers = mockCustomers.filter(
+    (customer) => customer.businessId === businessId && customer.pinned
+  );
 
   if (pinnedCustomers.length === 0) return null;
 
   return (
-    <section aria-labelledby="pinned-customers-heading">
-      <h2
-        id="pinned-customers-heading"
-        className="mb-3 mt-3 text-xl font-bold leading-tight tracking-tight text-[var(--ink)]"
+    <section aria-labelledby="pinned-customers-heading" className="mt-2">
+      <div className="mb-2.5 flex items-center justify-between">
+        <h2
+          id="pinned-customers-heading"
+          className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-[var(--muted)]"
+        >
+          <LuPin className="size-3.5 text-[var(--forest)]" aria-hidden="true" />
+          Pinned customers
+        </h2>
+        <span className="rounded-full bg-[#e2ecd7] px-2 py-0.5 text-[10px] font-bold text-[var(--forest)]">
+          {pinnedCustomers.length}
+        </span>
+      </div>
+
+      <div
+        className="flex gap-2.5 overflow-x-auto pb-1 -mx-1 px-1"
+        style={{ scrollbarWidth: "none" }}
       >
-        Pinned customers
-      </h2>
-      <div className="grid grid-cols-2 gap-3" aria-label="Pinned customers">
-        {pinnedCustomers.map((customer) => {
-          const amountOwed = getTotalAmountOwedForCustomer(
-            ACTIVE_BUSINESS_ID,
-            customer.id,
-          );
-          const owesMoney = amountOwed > 0;
-
-          return (
-            <article
-              key={customer.id}
-              className="flex min-h-32 min-w-0 w-full flex-col justify-between overflow-hidden rounded-3xl border border-[var(--line)] bg-[var(--surface)] p-4 shadow-sm shadow-[var(--forest)]/5"
-            >
-              <div className="flex items-center gap-2.5">
-                {customer.avatarUrl ? (
-                  <Image
-                    src={customer.avatarUrl}
-                    alt={customer.name}
-                    width={44}
-                    height={44}
-                    className="size-11 rounded-2xl object-cover"
-                  />
-                ) : (
-                  <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-[var(--forest)] text-xs font-bold text-[var(--lime)]">
-                    {customer.name
-                      .split(" ")
-                      .map((name) => name[0])
-                      .join("")}
-                  </span>
-                )}
-
-                <h3 className="min-w-0 truncate text-sm font-bold text-[var(--ink)]">
-                  {customer.name}
-                </h3>
-              </div>
-
-              <div>
-                <p
-                  className={`text-[11px] font-semibold ${owesMoney ? "text-[#a7503e]" : "text-[var(--forest-soft)]"}`}
-                >
-                  {owesMoney ? "Owes you" : "All settled"}
-                </p>
-                <p className="mt-0.5 text-lg font-extrabold tracking-tight text-[var(--forest)]">
-                  {formatNaira(amountOwed)}
-                </p>
-              </div>
-            </article>
-          );
-        })}
+        {pinnedCustomers.map((customer) => (
+          <PinnedCustomerCard key={customer.id} customer={customer} />
+        ))}
       </div>
     </section>
   );
