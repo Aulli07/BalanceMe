@@ -8,6 +8,7 @@ import type { Customer } from "@/shared/types/domain";
 import { CustomerHeader } from "@/features/customers/components/customer-header";
 import { CustomerInput } from "@/features/customers/components/customer-input";
 import { CustomerFilter } from "@/features/customers/components/customer-filter";
+import { PinnedCustomers } from "@/features/customers/components/pinned-customers";
 import { CustomerSummary } from "@/features/customers/components/customer-summary";
 import { AddCustomerSheet } from "@/features/customers/components/add-customer-sheet";
 
@@ -30,6 +31,7 @@ export default function CustomersPage() {
       <CustomerHeader onAddCustomer={() => setAddOpen(true)} />
       <CustomerInput key={`input-${refreshKey}`} setVisibleCustomers={setVisibleCustomers} />
       <CustomerFilter key={`filter-${refreshKey}`} setVisibleCustomers={setVisibleCustomers} />
+      <PinnedCustomers customers={visibleCustomers} />
       <CustomerSummary visibleCustomers={visibleCustomers} />
       <AddCustomerSheet
         open={addOpen}

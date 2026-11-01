@@ -1,4 +1,5 @@
 import { LuChartNoAxesCombined, LuDownload } from "react-icons/lu";
+import Link from "next/link";
 
 
 
@@ -16,13 +17,13 @@ export function TransactionHeader() {
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
+          <Link
+            href="/transactions/analytics"
             className="grid size-9 place-items-center text-[var(--forest)]"
             aria-label="View transaction insights"
           >
             <LuChartNoAxesCombined className="size-5" aria-hidden="true" />
-          </button>
+          </Link>
           <button
             type="button"
             className="grid size-9 place-items-center text-[var(--forest)]"
