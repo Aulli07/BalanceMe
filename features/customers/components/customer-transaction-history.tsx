@@ -4,6 +4,8 @@ import { getDayLabel } from "@/features/transactions/utils/get-day-label";
 import { formatTransactionTime } from "@/features/transactions/utils/format-time";
 import type { CustomerTransactionItem } from "../types/customer-detail";
 
+
+
 export function CustomerTransactionHistory({
   transactions,
 }: {
@@ -15,9 +17,9 @@ export function CustomerTransactionHistory({
         <h2 className="text-lg font-bold text-[var(--ink)]">
           Transaction history
         </h2>
-        <p className="text-[11px] text-[var(--muted)]">
-          Latest first · {transactions.length} shownn
-        </p>
+          {/* <p className="text-[11px] text-[var(--muted)]">
+            Latest first · {transactions.length} shownn
+          </p> */}
       </div>
 
       <div className="mt-4 flex flex-col gap-5">
