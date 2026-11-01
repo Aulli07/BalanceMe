@@ -1,11 +1,12 @@
 "use client";
 
 import { createPortal } from "react-dom";
-import { LuChevronDown, LuClock3 } from "react-icons/lu";
-import { useEntryForm } from "../hooks/useEntryForm";
+import { useState } from "react";
+import { LuChevronDown, LuClock3, LuPlus } from "react-icons/lu";
 
 import { EntryProps } from "../types/entry-type";
 import { mockCategories } from "@/shared/data/domain-mock-data";
+import type { Category } from "@/shared/types/domain";
 
 
 
@@ -80,16 +81,35 @@ function EntryDescription({
   entryDescription,
   setEntryDescription,
 }: EntryProps) {
+  const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
+  const [creatingCategory, setCreatingCategory] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [categories, setCategories] = useState<Category[]>(mockCategories);
 
-  const {categoryPickerOpen, setCategoryPickerOpen, updateDescription} = useEntryForm(); 
-  // const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
+  const updateDescription = <Field extends keyof NonNullable<typeof entryDescription>>(
+    field: Field,
+    value: NonNullable<typeof entryDescription>[Field],
+  ) => {
+    setEntryDescription?.((current) => ({ ...current, [field]: value }));
+  };
 
-  // const updateDescription = (field: keyof entryDetailType, value: string | File | undefined) => {
-  //   setEntryDescription((current) => ({
-  //     ...current,
-  //     [field]: value,
-  //   }));
-  // };
+  const createCategory = () => {
+    const name = categoryName.trim();
+    if (!name) return;
+
+    const category: Category = {
+      id: `category-${Date.now()}`,
+      businessId: mockCategories[0]?.businessId ?? "business-farm-001",
+      name,
+      createdAt: new Date().toISOString(),
+    };
+
+    setCategories((current) => [...current, category]);
+    updateDescription("category", category);
+    setCategoryName("");
+    setCreatingCategory(false);
+    setCategoryPickerOpen(false);
+  };
 
   return (
     <section className="mt-5 px-5" aria-labelledby="entry-description-heading">
@@ -130,8 +150,35 @@ function EntryDescription({
                     Close
                   </button>
                 </div>
+                {creatingCategory ? (
+                  <div className="mb-3 rounded-2xl border border-[#c9dcb8] bg-[#f4f8ed] p-3">
+                    <label className="block text-sm font-bold text-[var(--ink)]" htmlFor="new-category-name">
+                      New category name
+                    </label>
+                    <div className="mt-2 flex gap-2">
+                      <input
+                        id="new-category-name"
+                        autoFocus
+                        value={categoryName}
+                        onChange={(event) => setCategoryName(event.target.value)}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") createCategory();
+                        }}
+                        placeholder="e.g. Delivery"
+                        className="min-w-0 flex-1 rounded-xl border border-[#dfe6d9] bg-white px-3 py-2 text-sm font-medium outline-none focus:border-[var(--forest)]"
+                      />
+                      <button type="button" onClick={createCategory} disabled={!categoryName.trim()} className="rounded-xl bg-[var(--forest)] px-3 text-sm font-bold text-[var(--lime)] disabled:opacity-40">
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button type="button" onClick={() => setCreatingCategory(true)} className="mb-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-[#a8c487] bg-[#f4f8ed] px-4 py-3 text-sm font-bold text-[var(--forest)]">
+                    <LuPlus className="size-4" aria-hidden="true" /> New category
+                  </button>
+                )}
                 <div className="grid gap-2">
-                  {mockCategories.map((category) => (
+                  {categories.map((category) => (
                     <button
                       key={category.id}
                       type="button"
