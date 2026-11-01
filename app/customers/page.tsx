@@ -31,7 +31,6 @@ export default function CustomersPage() {
       <CustomerHeader onAddCustomer={() => setAddOpen(true)} />
       <CustomerInput key={`input-${refreshKey}`} setVisibleCustomers={setVisibleCustomers} />
       <CustomerFilter key={`filter-${refreshKey}`} setVisibleCustomers={setVisibleCustomers} />
-      <PinnedCustomers customers={visibleCustomers} />
       <CustomerSummary visibleCustomers={visibleCustomers} />
       <AddCustomerSheet
         open={addOpen}
