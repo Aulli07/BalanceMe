@@ -18,6 +18,12 @@ export function Footer() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const openEntry = () => setOpen(true);
+    window.addEventListener("balance-me:open-add-entry", openEntry);
+    return () => window.removeEventListener("balance-me:open-add-entry", openEntry);
+  }, []);
+
   if (!mounted) return null;
 
 
