@@ -3,12 +3,13 @@ import { getCustomer } from "@/shared/selectors/getters";
 import { getCustomerStats } from "@/features/customers/selectors/get-customer-stats";
 import { getCustomerRecentTransactions } from "@/features/customers/selectors/get-customer-transactions";
 import { getCustomerMonthlyActivity } from "@/features/customers/selectors/get-customer-monthly-activity";
-import { CustomerDetailHeader } from "@/features/customers/components/customer-detail-header";
-import { CustomerProfileCard } from "@/features/customers/components/customer-profile-card";
-import { CustomerActions } from "@/features/customers/components/customer-actions";
-import { CustomerFinancialSummary } from "@/features/customers/components/customer-financial-summary";
-import { CustomerInteractions } from "@/features/customers/components/customer-interactions";
-import { CustomerTransactionHistory } from "@/features/customers/components/customer-transaction-history";
+import { AiInsight } from "@/features/customers/ui/ai-insight";
+import { BalanceCard } from "@/features/customers/ui/balance-card";
+import { CustomerProfile } from "@/features/customers/ui/customer-profile";
+import { CustomerStatsCards } from "@/features/customers/ui/customer-stats";
+import { DetailTopbar } from "@/features/customers/ui/detail-topbar";
+import { InteractionChart } from "@/features/customers/ui/interaction-chart";
+import { CustomerTransactionHistory } from "@/features/customers/ui/transaction-history";
 
 export default async function CustomerPage({
   params,
@@ -20,20 +21,24 @@ export default async function CustomerPage({
   if (!customer) notFound();
 
   const stats = getCustomerStats(customer.id);
-  const transactions = getCustomerRecentTransactions(customer.id, 3);
-  const { months, averagePerMonth } = getCustomerMonthlyActivity(customer.id);
+  const transactions = getCustomerRecentTransactions(customer.id);
+  const { months } = getCustomerMonthlyActivity(customer.id);
+  const totalHandled = stats.paidTotalKobo + stats.owesNowKobo;
+  const repaidPercent = totalHandled
+    ? Math.round((stats.paidTotalKobo / totalHandled) * 100)
+    : 100;
 
   return (
-    <main className="min-h-screen bg-[var(--paper)] px-5 pt-5 text-[var(--ink)]">
-      <CustomerDetailHeader />
-      <CustomerProfileCard customer={customer} />
-      <CustomerActions phone={customer.phone} />
-      <CustomerFinancialSummary stats={stats} />
-      <CustomerInteractions
-        months={months}
-        averagePerMonth={averagePerMonth}
-      />
-      <CustomerTransactionHistory transactions={transactions} />
+    <main className="min-h-screen bg-[var(--paper)] pb-28 text-[var(--ink)]">
+      <section className="px-5 pt-5">
+        <DetailTopbar />
+        <CustomerProfile customer={customer} />
+        <BalanceCard stats={stats} />
+        <CustomerStatsCards stats={stats} />
+        <AiInsight name={customer.name} repaidPercent={repaidPercent} />
+        <InteractionChart months={months} stats={stats} />
+        <CustomerTransactionHistory transactions={transactions} />
+      </section>
     </main>
   );
 }

@@ -11,7 +11,7 @@ import type { CustomerTransactionItem } from "../types/customer-detail";
  */
 export function getCustomerRecentTransactions(
   customerId: string,
-  limit = 3,
+  limit?: number,
 ): CustomerTransactionItem[] {
   const sales: CustomerTransactionItem[] = mockSaleTransactions
     .filter((txn) => txn.customerId === customerId)
