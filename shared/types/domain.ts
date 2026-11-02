@@ -56,6 +56,8 @@ export interface Notification {
   category: NotificationCategory;
   unread: boolean;
   createdAt: ISODateTime;
+  transactionId?: EntityId;
+  customerId?: EntityId;
 }
 
 export interface ReceiptAttachment {

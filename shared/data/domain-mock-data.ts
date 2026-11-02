@@ -96,6 +96,19 @@ export const mockNotifications: Notification[] = [
     category: "Paid",
     unread: true,
     createdAt: "2026-10-15T09:42:00.000Z",
+    transactionId: "payment-001",
+    customerId: "customer-chika-001",
+  },
+  {
+    id: "notification-purchase-001",
+    businessId: "business-farm-001",
+    title: "Purchase made",
+    detail: "Chika Okafor bought Ten bags of poultry feed.",
+    category: "Paid",
+    unread: false,
+    createdAt: "2026-10-15T08:50:00.000Z",
+    transactionId: "sale-001",
+    customerId: "customer-chika-001",
   },
   {
     id: "notification-balance-001",
@@ -105,6 +118,7 @@ export const mockNotifications: Notification[] = [
     category: "Owed",
     unread: true,
     createdAt: "2026-10-15T08:15:00.000Z",
+    customerId: "customer-chika-001",
   },
   {
     id: "notification-analytics-001",
@@ -123,6 +137,8 @@ export const mockNotifications: Notification[] = [
     category: "Paid",
     unread: false,
     createdAt: "2026-10-14T09:00:00.000Z",
+    transactionId: "sale-002",
+    customerId: "customer-tunde-001",
   },
   {
     id: "notification-balance-002",
@@ -132,6 +148,7 @@ export const mockNotifications: Notification[] = [
     category: "Owed",
     unread: false,
     createdAt: "2026-10-13T10:00:00.000Z",
+    customerId: "customer-chika-001",
   },
   {
     id: "notification-summary-001",
