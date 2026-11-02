@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function AnalyticsHeader({ onExport }: { onExport: () => void }) {
   return (
-    <header className="flex items-center justify-between px-5 pt-5">
+    <header className="flex items-center justify-between px-5 pt-5 pb-2">
       <div className="flex items-center gap-3">
         <Link
           href="/transactions"
@@ -12,12 +12,9 @@ export function AnalyticsHeader({ onExport }: { onExport: () => void }) {
         >
           <LuArrowLeft className="size-4" aria-hidden="true" />
         </Link>
-        <div>
-          <p className="text-xs font-semibold text-[var(--muted)]">Transactions</p>
-          <h1 className="text-2xl font-extrabold tracking-tight text-[var(--ink)]">
-            Analytics
-          </h1>
-        </div>
+        <h1 className="text-xl font-extrabold tracking-tight text-[var(--ink)]">
+          Analytics
+        </h1>
       </div>
       <button
         type="button"

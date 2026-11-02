@@ -14,7 +14,11 @@ import type {
 } from "../types/transaction-analytics";
 
 function getStartOffset(period: AnalyticsPeriod) {
-  return period === "TODAY" ? 0 : period === "7D" ? 6 : 29;
+  if (period === "TODAY") return 0;
+  if (period === "YESTERDAY") return 1;
+  if (period === "7D") return 6;
+  if (period === "14D") return 13;
+  return 29;
 }
 
 function getDateKey(date: Date) {
@@ -38,11 +42,27 @@ function getOwedKobo(transaction: Transaction) {
 export function getAnalyticsData(
   businessId: string,
   period: AnalyticsPeriod,
+  month?: string | null,
 ): TransactionAnalyticsData {
   const transactions = [...mockSaleTransactions, ...mockPaymentTransactions]
     .filter((transaction) => transaction.businessId === businessId)
     .sort((first, second) => first.createdAt.localeCompare(second.createdAt));
-  const endDate = new Date(transactions.at(-1)?.createdAt ?? new Date());
+  const latestMonth = new Date(transactions.at(-1)?.createdAt ?? new Date()).toLocaleDateString(
+    "en-NG",
+    { month: "long", year: "numeric", timeZone: "UTC" },
+  );
+  const selectedMonth = month ?? latestMonth;
+  const [monthName, year] = selectedMonth.split(" ");
+  const monthIndex = new Date(`${monthName} 1, ${year}`).getUTCMonth();
+  const monthYear = Number(year);
+  const latestTransaction = transactions.at(-1);
+  const isLatestMonth =
+    latestTransaction &&
+    new Date(latestTransaction.createdAt).getUTCFullYear() === monthYear &&
+    new Date(latestTransaction.createdAt).getUTCMonth() === monthIndex;
+  const endDate = isLatestMonth
+    ? new Date(latestTransaction.createdAt)
+    : new Date(Date.UTC(monthYear, monthIndex + 1, 0, 23, 59, 59, 999));
   const startDate = new Date(endDate);
   startDate.setUTCDate(startDate.getUTCDate() - getStartOffset(period));
   const selectedTransactions = transactions.filter((transaction) => {

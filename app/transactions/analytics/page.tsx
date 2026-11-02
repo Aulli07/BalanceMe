@@ -10,25 +10,36 @@ import { CustomerRankings } from "@/features/analytics/components/customer-ranki
 import { MoneyTrend } from "@/features/analytics/components/money-trend";
 import { getAnalyticsData } from "@/features/analytics/selectors/get-analytics-data";
 import { handleExport } from "@/features/analytics/selectors/handle-export";
-import { ANALYTICS_PERIODS, type AnalyticsPeriod } from "@/features/analytics/data/analytics-periods";
+import {
+  ANALYTICS_PERIODS,
+  type AnalyticsPeriod,
+  type AnalyticsSelection,
+} from "@/features/analytics/data/analytics-periods";
+import { months } from "@/features/transactions/data/txn-stuff";
 
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 
 export default function TransactionAnalytics() {
-  const [period, setPeriod] = useState<AnalyticsPeriod>("7D");
+  const [selection, setSelection] = useState<AnalyticsSelection>("TODAY");
+  const isDayPeriod = (value: AnalyticsSelection): value is AnalyticsPeriod =>
+    ANALYTICS_PERIODS.some((period) => period.id === value);
   const analytics = useMemo(
-    () => getAnalyticsData(ACTIVE_BUSINESS_ID, period),
-    [period],
+    () =>
+      isDayPeriod(selection)
+        ? getAnalyticsData(ACTIVE_BUSINESS_ID, selection)
+        : getAnalyticsData(ACTIVE_BUSINESS_ID, "TODAY", selection),
+    [selection],
   );
 
   return (
     <main className="min-h-screen bg-[var(--paper)] pb-20 text-[var(--ink)]">
-      <AnalyticsHeader onExport={() => handleExport(analytics, period)} />
+      <AnalyticsHeader onExport={() => handleExport(analytics, selection)} />
       <div className="space-y-7 px-5 pt-4">
         <AnalyticsPeriodSelector
           periods={ANALYTICS_PERIODS}
-          selectedPeriod={period}
-          onPeriodChange={setPeriod}
+          selectedPeriod={selection}
+          onPeriodChange={setSelection}
+          months={months}
         />
         <AnalyticsSummaryCards summary={analytics.summary} />
         <MoneyTrend points={analytics.trend} />
