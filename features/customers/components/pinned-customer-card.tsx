@@ -20,7 +20,7 @@ export function PinnedCustomerCard({ customer }: { customer: Customer }) {
   return (
     <Link
       href={`/customers/${customer.id}`}
-      className="flex min-w-[130px] max-w-[160px] flex-1 shrink-0 flex-col items-center justify-between rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-3 text-center shadow-xs transition hover:border-[var(--forest)]/30 active:scale-[0.98]"
+      className="flex min-w-[calc((100vw-65px)/3)] max-w-[calc((100vw-65px)/3)] shrink-0 flex-col items-center justify-between rounded-2xl border border-[var(--line)] bg-[var(--surface)] p-3 text-center shadow-xs transition hover:border-[var(--forest)]/30 active:scale-[0.98]"
       aria-label={`${customer.name}, ${txnCount} transactions, ${owesMoney ? `owes ${formatNaira(amountOwed)}` : "fully paid"}`}
     >
       <div className="flex w-full flex-col items-center">
@@ -61,4 +61,3 @@ export function PinnedCustomerCard({ customer }: { customer: Customer }) {
     </Link>
   );
 }
-
