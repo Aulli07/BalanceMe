@@ -1,4 +1,5 @@
-import { LuSearch } from "react-icons/lu";
+import Link from "next/link";
+import { LuArrowLeft, LuSearch } from "react-icons/lu";
 
 type NotificationsHeaderProps = {
   query: string;
@@ -8,9 +9,18 @@ type NotificationsHeaderProps = {
 export function NotificationsHeader({ query, onQueryChange }: NotificationsHeaderProps) {
   return (
     <header className="sticky top-0 z-10 bg-[var(--paper)]/95 px-5 pt-6 backdrop-blur-sm">
-      <h1 className="text-2xl font-bold tracking-tight text-[var(--forest-dark)]">
-        Notification
-      </h1>
+      <div className="flex items-center gap-3">
+        <Link
+          href="/"
+          aria-label="Back to dashboard"
+          className="grid size-9 place-items-center rounded-full border border-[var(--line)] bg-[var(--surface)] text-[var(--forest)] shadow-sm"
+        >
+          <LuArrowLeft className="size-4" aria-hidden="true" />
+        </Link>
+        <h1 className="text-2xl font-bold tracking-tight text-[var(--forest-dark)]">
+          Notifications
+        </h1>
+      </div>
 
       <label className="mt-5 flex h-12 items-center gap-2.5 rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-3.5 text-[var(--muted)] shadow-sm shadow-[var(--forest)]/5 focus-within:border-[var(--forest-soft)] focus-within:ring-4 focus-within:ring-[var(--lime)]/20">
         <LuSearch className="size-4.5 shrink-0" aria-hidden="true" />
