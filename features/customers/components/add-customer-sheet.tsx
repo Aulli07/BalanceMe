@@ -26,6 +26,8 @@ export function AddCustomerSheet({
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
+  if (typeof document === "undefined") return null;
+
   function resetForm() {
     setName("");
     setPhone("");
@@ -200,4 +202,3 @@ function FormField({
     </div>
   );
 }
-
