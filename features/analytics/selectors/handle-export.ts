@@ -1,10 +1,13 @@
-import { ANALYTICS_PERIODS, type AnalyticsPeriod } from "../data/analytics-periods";
+import {
+  ANALYTICS_PERIODS,
+  type AnalyticsSelection,
+} from "../data/analytics-periods";
 import type { TransactionAnalyticsData } from "../types/transaction-analytics";
 import { formatNaira } from "@/shared/utils/format-naira";
 
 export function handleExport(
   analytics: TransactionAnalyticsData,
-  period: AnalyticsPeriod,
+  period: AnalyticsSelection,
 ) {
   const rows = [
     ["Metric", "Value"],
@@ -26,7 +29,7 @@ export function handleExport(
   const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
   const link = document.createElement("a");
   link.href = url;
-  link.download = `balanceme-analytics-${period.toLowerCase()}.csv`;
+  link.download = `balanceme-analytics-${period.toLowerCase().replaceAll(" ", "-")}.csv`;
   link.click();
   URL.revokeObjectURL(url);
 }
