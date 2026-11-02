@@ -50,17 +50,7 @@ export function TransactionSummary({
             <LuChevronRight className="size-5" aria-hidden="true" />
           </button>
         </div>
-
-        <button
-          type="button"
-          className="text-sm font-bold text-[var(--forest-soft)]"
-          aria-label="View transaction analysis"
-        >
-          Analysis
-        </button>
       </div>
-
-      {/* bg-[#e4f1e8] text-[#377052]  */}
 
       <div className="mt-3 grid grid-cols-2 gap-3">
         <article className="rounded-xl border border-[#cce2d2] bg-[var(--forest)] px-4 py-3">
