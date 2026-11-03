@@ -35,7 +35,7 @@ export function Footer() {
   };
 
   return (
-    <footer className="fixed bottom-0 px-6 w-full border-t border-[#e8eeff] bg-[#f6f6ee]">
+    <footer className="fixed bottom-0 z-20 w-full border-t border-[#e8eeff] bg-[var(--paper)] px-6">
       <nav
         aria-label="Main navigation"
         className="mx-auto flex w-full justify-between items-center pb-2 pt-3"
