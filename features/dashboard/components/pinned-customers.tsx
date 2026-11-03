@@ -14,14 +14,14 @@ export function PinnedCustomers({ businessId }: { businessId: string }) {
       <div className="mb-2.5 flex items-center justify-between">
         <h2
           id="pinned-customers-heading"
-          className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-[var(--muted)]"
+          className="flex items-center gap-1.5 text-base font-extrabold uppercase text-[var(--forest)]"
         >
-          <LuPin className="size-3.5 text-[var(--forest)]" aria-hidden="true" />
+          <LuPin className="size-5 text-[var(--forest)]" aria-hidden="true" />
           Pinned customers
         </h2>
-        <span className="rounded-full bg-[#e2ecd7] px-2 py-0.5 text-[10px] font-bold text-[var(--forest)]">
+        {/* <span className="rounded-full bg-[#e2ecd7] px-2 py-0.5 text-xs font-bold text-[var(--forest)]">
           {pinnedCustomers.length}
-        </span>
+        </span> */}
       </div>
 
       <div
