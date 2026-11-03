@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } from "react-icons/lu";
+import Image from "next/image";
 
 import { pressKey } from "../utils/pressKey";
 import { numbers } from "../data/entry-data";
@@ -32,7 +32,7 @@ export function AddEntryOne({
         type="button"
         onClick={() => setStep?.(2)}
         disabled={!customer || amount[entryType] === "0"}
-        className="mt-5 flex w-full items-center justify-center gap-4 rounded-xl bg-[#c7d9ae] py-2 text-md font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
+        className="mt-6 flex w-full items-center justify-center gap-3 rounded-2xl bg-[var(--lime)] py-3.5 text-base font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/20 transition-all hover:bg-[#b9e554] active:scale-[.98] disabled:cursor-not-allowed disabled:bg-[#dce6d5] disabled:text-[#71806f] disabled:shadow-none"
       >
         Continue
         <LuArrowRight className="size-6" aria-hidden="true" />
@@ -49,22 +49,34 @@ export function EntryCustomer({
   const {selectedTrigger, isSelectedTrigger} = useEntryForm();
 
   return (
-    <section className="" aria-labelledby="entry-customer-heading">
-      <div className="flex w-full items-center gap-3 rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-5 py-3 text-left shadow-sm transition-colors focus-within:border-[var(--forest)]">
-        <span
-          className={`grid size-10 shrink-0 place-items-center rounded-xl text-lg font-extrabold bg-[#e2ecd7] text-[var(--forest)]`}
-        >
-          {(customer?.name.at(0) ?? "S") + (customer?.name.at(1) ?? "C")}
+    <section aria-labelledby="entry-customer-heading">
+      <button
+        type="button"
+        onClick={() => isSelectedTrigger((prev) => !prev)}
+        className="flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl border border-[#dfe6d9] bg-[var(--surface)] px-4 text-left shadow-sm transition-colors active:border-[var(--forest)]"
+      >
+        <span className="flex min-w-0 items-center gap-3">
+          {customer ? (
+            customer.avatarUrl ? (
+              <Image
+                src={customer.avatarUrl}
+                alt=""
+                width={40}
+                height={40}
+                className="size-10 shrink-0 rounded-full object-cover"
+              />
+            ) : (
+              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
+                {customer.name.slice(0, 2).toUpperCase()}
+              </span>
+            )
+          ) : null}
+          <span className="truncate text-lg font-extrabold text-[var(--ink)]">
+            {customer?.name ?? "Select customer"}
+          </span>
         </span>
-        <span className="text-lg font-extrabold text-[var(--ink)] flex-1">{customer?.name ?? "Select customer"}</span>
-        <div className="flex items-center justify-center size-10">
-          <LuChevronDown
-          className="size-7 shrink-0 text-[#758477]"
-          aria-hidden="true"
-          onClick={() => isSelectedTrigger((prev) => !prev)}
-        />
-        </div>
-      </div>
+        <LuChevronDown className="size-6 shrink-0 text-[#758477]" aria-hidden="true" />
+      </button>
 
       {selectedTrigger &&
         createPortal(
@@ -121,10 +133,7 @@ export function EntryAmount({
   amount,
 }: EntryProps) {
 
-  const [direction, setDirection] = useState(1);
-
   const selectEntryType = (nextType: 0 | 1) => {
-    // setDirection(nextType > entryType ? 1 : -1);
     setEntryType?.(nextType);
   };
 
