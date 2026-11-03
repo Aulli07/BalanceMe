@@ -9,13 +9,23 @@ import { TransactionMonthlyActivityProps } from "../types/transaction-props";
 
 
 export function TransactionActivity({transactions}: TransactionMonthlyActivityProps) {
+  const hasTransactions = Object.keys(transactions).length > 0;
+
   return (
     <section className="flex flex-col gap-4 px-5 pt-5" aria-labelledby="activity-heading">
       <h2 id="activity-heading" className="sr-only">
         Transaction activity
       </h2>
 
-      {Object.entries(transactions).map(([day, dayTransactions]) => (
+      {!hasTransactions ? (
+        <div className="flex min-h-44 flex-col items-center justify-center rounded-xl border border-dashed border-[var(--line)] bg-[var(--surface)] px-6 text-center">
+          <LuClock3 className="size-7 text-[var(--muted)]" aria-hidden="true" />
+          <p className="mt-3 text-sm font-bold text-[var(--ink)]">No transactions for this period</p>
+          <p className="mt-1 max-w-xs text-xs leading-relaxed text-[var(--muted)]">
+            Try another month or change the transaction filter.
+          </p>
+        </div>
+      ) : Object.entries(transactions).map(([day, dayTransactions]) => (
         <div key={day}>
           <h3 className="mb-0.5 px-0.5 text-sm font-bold tracking-tight text-[var(--forest-green)]">
             {day}

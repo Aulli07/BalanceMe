@@ -24,7 +24,7 @@ export default function TransactionsPage() {
 
   const transactions = useMemo(() =>
     getTransactionsForMonth(getTransactionsForDay(filteredTxns), months[monthIndex]), 
-    [monthIndex, activeFilter]);
+    [filteredTxns, monthIndex]);
 
   const summary = useMemo(() => getTransactionSummary(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
 
