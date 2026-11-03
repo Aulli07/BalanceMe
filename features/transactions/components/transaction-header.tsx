@@ -4,7 +4,7 @@ import Link from "next/link";
 
 
 
-export function TransactionHeader() {
+export function TransactionHeader({ onDownload }: { onDownload: () => void }) {
   return (
     <section aria-labelledby="transactions-heading" className="px-5 pt-5">
       <div className="mb-4 flex items-end justify-between gap-4">
@@ -28,6 +28,7 @@ export function TransactionHeader() {
             type="button"
             className="grid size-9 place-items-center text-[var(--forest)]"
             aria-label="Download transaction data"
+            onClick={onDownload}
           >
             <LuDownload className="size-5" aria-hidden="true" />
           </button>

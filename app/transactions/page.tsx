@@ -10,6 +10,7 @@ import { getTransactionSummary } from "@/features/transactions/selectors/get-tra
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { filters, months } from "@/features/transactions/data/txn-stuff";
 import { getFilteredTransactions } from "@/features/transactions/selectors/get-filtered-transactions";
+import { handleTransactionExport } from "@/features/transactions/selectors/handle-export";
 
 
 
@@ -17,7 +18,8 @@ export default function TransactionsPage() {
   const [monthIndex, setMonthIndex] = useState(0);
   const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
 
-  const filteredTxns = getFilteredTransactions(getTransactionActivity(ACTIVE_BUSINESS_ID), activeFilter);
+  const allTransactions = useMemo(() => getTransactionActivity(ACTIVE_BUSINESS_ID), []);
+  const filteredTxns = getFilteredTransactions(allTransactions, activeFilter);
 
 
   const transactions = useMemo(() =>
@@ -28,7 +30,7 @@ export default function TransactionsPage() {
 
   return (
     <main className="min-h-screen pb-18 bg-[var(--paper)] text-[var(--ink)]">
-      <TransactionHeader />
+      <TransactionHeader onDownload={() => handleTransactionExport(allTransactions)} />
       <TransactionSummary
         setActiveFilter={setActiveFilter}
         activeFilter={activeFilter}
