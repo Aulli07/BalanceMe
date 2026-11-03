@@ -1,17 +1,13 @@
 import type { Notification } from "@/shared/types/domain";
 import { mockCustomers, mockTransactions } from "@/shared/data/domain-mock-data";
 
-/**
- * Resolves the destination URL for a notification click:
- * - Payment received or purchase made -> transaction receipt (/transactions/:id)
- * - Balance reminder -> customer screen (/customers/:id)
- * - Trend-related/analytics -> transaction analytics page (/transactions/analytics)
- */
+
 export function getNotificationHref(notification: Notification): string {
   // 1. Direct transaction reference (payment received or purchase made)
   if (notification.transactionId) {
     return `/transactions/${notification.transactionId}`;
   }
+  
 
   // 2. Balance reminder (category Owed or title/detail indicating balance reminder)
   const isBalanceReminder =
@@ -25,8 +21,7 @@ export function getNotificationHref(notification: Notification): string {
 
     // Try finding customer referenced in detail
     const matchedCustomer = mockCustomers.find((c) =>
-      notification.detail.toLowerCase().includes(c.name.toLowerCase()),
-    );
+      notification.detail.toLowerCase().includes(c.name.toLowerCase()));
     if (matchedCustomer) {
       return `/customers/${matchedCustomer.id}`;
     }
