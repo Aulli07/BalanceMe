@@ -35,8 +35,20 @@ export interface Customer {
   phone?: string;
   email?: string;
   avatarUrl?: string;
+  reminder?: CustomerReminder;
+  lastReminded?: CustomerLastReminded;
   createdAt: ISODateTime;
   updatedAt: ISODateTime;
+}
+
+export interface CustomerReminder {
+  date: ISODateTime;
+  note?: string;
+}
+
+export interface CustomerLastReminded {
+  channel: "whatsapp" | "sms" | "email";
+  at: ISODateTime;
 }
 
 export interface Category {

@@ -58,6 +58,14 @@ export const mockCustomers: Customer[] = [
     phone: "+2348034567890",
     email: "chika@example.com",
     avatarUrl: "https://i.pravatar.cc/160?img=32",
+    reminder: {
+      date: "2026-11-07T09:00:00.000Z",
+      note: "Promised to pay Fri, 7 Nov",
+    },
+    lastReminded: {
+      channel: "whatsapp",
+      at: "2026-11-01T10:00:00.000Z",
+    },
     createdAt,
     updatedAt,
   },

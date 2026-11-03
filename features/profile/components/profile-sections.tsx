@@ -7,6 +7,7 @@ import {
   LuMoon,
   LuShieldCheck,
 } from "react-icons/lu";
+import Link from "next/link";
 
 
 
@@ -37,7 +38,10 @@ export function ProfileSections() {
         </div>
       </section>
 
-      <button type="button" className="mt-5 flex min-h-18 w-full items-center gap-2.5 rounded-2xl border border-[#f0ddd5] bg-[#fff0eb] px-3 text-left active:scale-[.99]">
+      <Link 
+        href="/profile/messages" 
+        className="mt-5 flex min-h-18 w-full items-center gap-2.5 rounded-2xl border border-[#f0ddd5] bg-[#fff0eb] px-3 text-left active:scale-[.99]"
+      >
         <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#f6dfd7] text-[#865347]">
           <LuMessageCircle className="size-5" aria-hidden="true" />
         </span>
@@ -46,7 +50,7 @@ export function ProfileSections() {
           <span className="mt-1 block text-[11px] leading-tight text-[#936c61]">Review a friendly balance reminder before you decide</span>
         </span>
         <LuChevronRight className="size-5 shrink-0 text-[#a67568]" aria-hidden="true" />
-      </button>
+      </Link>
 
 
       <section className="mt-8" aria-labelledby="help-heading">
