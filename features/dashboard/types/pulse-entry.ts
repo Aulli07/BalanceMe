@@ -39,19 +39,26 @@ export type PulseEntry = {
   icon: PulseIcon;
 };
 
-
 export type PulseDisplayData = {
   id: string;
+  category: PulseCategory;
   priority: PulsePriority;
   tone: PulseTone;
   title: string;
   amount: string;
-  detail: string;
   trend?: string;
   bgColor: string;
   elementColor: string;
   borderColor: string;
+  cardGradient?: string;
+  badgeBg?: string;
+  iconBg?: string;
+  tagLabel?: string;
+  metricLabel?: string;
+  metricTag?: string;
   icon: PulseIcon;
+  actionHref?: string;
+  actionLabel?: string;
 };
 
 export type PulseValues = Record<string, string | number>;
