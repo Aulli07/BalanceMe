@@ -14,16 +14,13 @@ export function CustomerTransactionHistory({
         <h2 id="history-heading" className="text-lg font-bold">
           Transactions
         </h2>
-        <button
-          type="button"
-          onClick={() =>
-            window.dispatchEvent(new Event("balance-me:open-add-entry"))
-          }
+        <Link
+          href="/add-entry"
           className="grid size-9 place-items-center rounded-full bg-[var(--forest)] text-[var(--lime)]"
           aria-label="Add transaction"
         >
           <LuPlus className="size-5" />
-        </button>
+        </Link>
       </div>
       <div className="mt-3 divide-y divide-[var(--line)]">
         {transactions.map((transaction) => (

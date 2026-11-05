@@ -1,31 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import footerLinks from "@/shared/data/footer-links";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { AddEntry } from "./add-entry";
 import { normalizePath } from "../utils/normalize-path";
 
 
 
 export function Footer() {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-  const [ open, setOpen ] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const openEntry = () => setOpen(true);
-    window.addEventListener("balance-me:open-add-entry", openEntry);
-    return () => window.removeEventListener("balance-me:open-add-entry", openEntry);
-  }, []);
-
-  if (!mounted) return null;
-
 
   const current = normalizePath(pathname);
   const isActive = (to: string) => {
@@ -46,17 +29,14 @@ export function Footer() {
 
           if (isAddButton) {
             return (
-              <div key={link.title}> 
-                <AddEntry open={open} setOpen={setOpen} />
-                <button
-                  onClick={() => setOpen(prev => !prev)}
-                  type="button"
-                  aria-label={link.title}
-                  className="-mt-2 grid size-12 place-items-center justify-self-center rounded-2xl border-4 border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-lg shadow-[#1d4627]/20 transition-transform active:scale-95"
-                >
-                  {link.lightIcon && <link.lightIcon className="h-8 w-8 font-bold" />}
-                </button>
-              </div>
+              <Link
+                href="/add-entry"
+                key={link.title}
+                aria-label={link.title}
+                className="-mt-2 grid size-12 place-items-center justify-self-center rounded-2xl border-4 border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-lg shadow-[#1d4627]/20 transition-transform active:scale-95"
+              >
+                {link.lightIcon && <link.lightIcon className="h-8 w-8 font-bold" />}
+              </Link>
             );
           }
           
