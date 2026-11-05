@@ -2,7 +2,8 @@
 
 import { createPortal } from "react-dom";
 import { useState } from "react";
-import { LuChevronDown, LuClock3, LuPlus } from "react-icons/lu";
+import Image from "next/image";
+import { LuArrowRight, LuCalendarDays, LuChevronDown, LuPlus } from "react-icons/lu";
 
 import { EntryProps } from "../types/entry-type";
 import { mockCategories } from "@/shared/data/domain-mock-data";
@@ -18,9 +19,8 @@ export function AddEntryTwo({
   setEntryDescription,
   setStep
 }: EntryProps) {
-
   return (
-    <main>
+    <main className="flex min-h-[calc(100vh-6rem)] flex-col px-5 pb-7 pt-5">
       <EntryConfirmedDetails customer={customer} amount={amount} entryType={entryType} />
       <EntryDescription
         entryDescription={entryDescription}
@@ -30,9 +30,10 @@ export function AddEntryTwo({
         type="button"
         onClick={() => setStep?.(3)}
         disabled={!entryDescription?.category}
-        className="mt-5 flex w-full items-center justify-center gap-4 rounded-xl bg-[#c7d9ae] py-2 text-md font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/15"
+        className="mt-auto flex w-full items-center justify-center gap-1 rounded-2xl bg-[var(--forest)] px-5 py-3 text-[16px] font-bold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-all hover:bg-[var(--forest-dark)] active:scale-[.98] disabled:cursor-not-allowed disabled:bg-[var(--forest)]/80 disabled:text-[var(--surface)]/90 disabled:shadow-none"
       >
         Complete
+        <LuArrowRight className="size-5" aria-hidden="true" />
       </button>
     </main>
   )
@@ -41,11 +42,48 @@ export function AddEntryTwo({
 
 
 
-export function EntryConfirmedDetails({
+export function EntryConfirmedDetails({ customer, amount }: EntryProps) {
+  const productPrice = Number(amount?.[0] || 0);
+  const amountPaid = Number(amount?.[1] || 0);
+  const amountOwed = Math.max(productPrice - amountPaid, 0);
+
+  return (
+    <section className="relative overflow-hidden rounded-[1.75rem] bg-[var(--forest)] px-5 py-6 text-[var(--surface)] shadow-lg shadow-[var(--forest)]/20" aria-label="Confirmed entry details">
+      <div className="relative flex items-start justify-between gap-4">
+        <div className="min-w-0 text-center flex gap-3">
+          {customer?.avatarUrl ? (
+            <Image src={customer.avatarUrl} alt={`${customer.name}'s profile`} width={52} height={52} className="mx-auto size-14 rounded-full border-2 border-white/25 object-cover" />
+          ) : (
+            <span className="mx-auto grid size-13 place-items-center rounded-full bg-[#d9e8c5] text-base font-extrabold text-[var(--forest)]">{customer?.name.slice(0, 2).toUpperCase() ?? "SC"}</span>
+          )}
+          <p className="mt-3 truncate text-lg font-extrabold">{customer?.name ?? "Select customer"}</p>
+        </div>
+        <div className="shrink-0 pt-1 text-right">
+          <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d9e8c5]">Amount owed</p>
+          <p className="mt-1 text-2xl font-extrabold tracking-tight">{"\u20A6"}{amountOwed.toLocaleString("en-NG")}</p>
+        </div>
+      </div>
+      <div className="relative mt-7 flex justify-end gap-2 text-right">
+        <div className="rounded-xl bg-white/10 px-3 py-2">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-[#d9e8c5]">Product price</p>
+          <p className="mt-0.5 text-sm font-extrabold">{"\u20A6"}{productPrice.toLocaleString("en-NG")}</p>
+        </div>
+        <div className="rounded-xl bg-[#d9e8c5] px-3 py-2 text-[var(--forest)]">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-[#48684e]">Amount paid</p>
+          <p className="mt-0.5 text-sm font-extrabold">{"\u20A6"}{amountPaid.toLocaleString("en-NG")}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* Legacy layout retained below temporarily while the entry flow is being redesigned. */
+export function EntryConfirmedDetailsLegacy({
   customer,
   amount,
-  entryType
+  entryType: _entryType
 }: EntryProps) {
+  void _entryType;
 
   return (
     <section className="mx-5 mt-5 overflow-hidden rounded-3xl border border-[#dce7d2] bg-[#f7faf2] shadow-sm" aria-label="Confirmed entry details">
@@ -67,7 +105,7 @@ export function EntryConfirmedDetails({
               ? "bg-[#f5e8d8] text-[#855126]"
               : "bg-[#dfeeda] text-[#568044]"
           }`}>
-            {amount?.[1] && <LuClock3 className="size-2.5" aria-hidden="true" />}
+            {amount?.[1] && <span aria-hidden="true">•</span>}
             {amount?.[1] && "Due"} + {Number(amount?.[1] || 0).toLocaleString("en-NG")}
           </span>
         </div>
@@ -81,10 +119,10 @@ function EntryDescription({
   entryDescription,
   setEntryDescription,
 }: EntryProps) {
-  const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
-  const [creatingCategory, setCreatingCategory] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
-  const [categories, setCategories] = useState<Category[]>(mockCategories);
+  // const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
+  // const [creatingCategory, setCreatingCategory] = useState(false);
+  // const [categoryName, setCategoryName] = useState("");
+  // const [categories, setCategories] = useState<Category[]>(mockCategories);
 
   const updateDescription = <Field extends keyof NonNullable<typeof entryDescription>>(
     field: Field,
@@ -93,27 +131,27 @@ function EntryDescription({
     setEntryDescription?.((current) => ({ ...current, [field]: value }));
   };
 
-  const createCategory = () => {
-    const name = categoryName.trim();
-    if (!name) return;
+  // const createCategory = () => {
+  //   const name = categoryName.trim();
+  //   if (!name) return;
 
-    const category: Category = {
-      id: `category-${Date.now()}`,
-      businessId: mockCategories[0]?.businessId ?? "business-farm-001",
-      name,
-      createdAt: new Date().toISOString(),
-    };
+  //   const category: Category = {
+  //     id: `category-${Date.now()}`,
+  //     businessId: mockCategories[0]?.businessId ?? "business-farm-001",
+  //     name,
+  //     createdAt: new Date().toISOString(),
+  //   };
 
-    setCategories((current) => [...current, category]);
-    updateDescription("category", category);
-    setCategoryName("");
-    setCreatingCategory(false);
-    setCategoryPickerOpen(false);
-  };
+    // setCategories((current) => [...current, category]);
+    // updateDescription("category", category);
+    // setCategoryName("");
+    // setCreatingCategory(false);
+    // setCategoryPickerOpen(false);
 
   return (
-    <section className="mt-5 px-5" aria-labelledby="entry-description-heading">
-      <div className="mt-4 grid gap-4 min-w-0">
+    <section className="mt-5" aria-labelledby="entry-description-heading">
+      <div className="grid min-w-0 gap-4">
+      {/* <div className="grid min-w-0 gap-4">
         <div className="grid gap-2 text-md min-w-0 w-full font-bold text-[var(--ink)]">
           Category
           <button
@@ -199,7 +237,7 @@ function EntryDescription({
               </div>
             </div>,
             document.body,
-          )}
+          )} */}
 
         <label className="grid min-w-0 gap-2 text-md font-bold text-[var(--ink)]">
           Description
@@ -213,15 +251,19 @@ function EntryDescription({
           />
         </label>
 
-        <label className="grid min-w-0 gap-2 text-md font-bold text-[var(--ink)]">
-          Receipt
-          <input
-            name="receipt"
-            type="file"
-            accept="image/*"
-            onChange={(event) => updateDescription("receipt", event.target.files?.[0])}
-            className="box-border block min-w-0 w-full max-w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 text-sm font-medium shadow-sm file:mr-3 file:rounded-lg file:border-0 file:bg-[#e8eee1] file:px-3 file:py-2 file:font-bold file:text-[var(--forest)]"
-          />
+        <label className="grid min-w-0 gap-2 text-md font-bold text-[var(--ink)]" htmlFor="entry-due-date">
+          Due date
+          <span className="relative flex items-center">
+            <LuCalendarDays className="pointer-events-none absolute left-4 size-5 text-[var(--forest)]" aria-hidden="true" />
+            <input
+              id="entry-due-date"
+              name="dueDate"
+              type="date"
+              value={entryDescription?.dueDate ?? ""}
+              onChange={(event) => updateDescription("dueDate", event.target.value)}
+              className="box-border block min-h-12 w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] py-3 pl-12 pr-4 font-medium text-[var(--ink)] shadow-sm outline-none focus:border-[var(--forest)]"
+            />
+          </span>
         </label>
       </div>
     </section>

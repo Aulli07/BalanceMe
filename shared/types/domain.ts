@@ -94,6 +94,7 @@ export interface SaleTransaction extends TransactionBase {
   description: string;
   totalKobo: NairaKobo;
   initialPaidKobo: NairaKobo;
+  dueDate?: ISODateTime;
   receiptId?: EntityId;
 }
 

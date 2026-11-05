@@ -28,7 +28,7 @@ export type VoiceEntryProps = {
 export type entryDetailType = {
   category?: Category;
   description: string;
-  receipt?: File;
+  dueDate?: string;
 }
 
 
