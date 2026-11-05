@@ -23,9 +23,9 @@ export default async function CustomerPage({
   const stats = getCustomerStats(customer.id);
   const transactions = getCustomerRecentTransactions(customer.id);
   const { months } = getCustomerMonthlyActivity(customer.id);
-  const totalHandled = stats.paidTotalKobo + stats.owesNowKobo;
+  const totalHandled = stats.paidTotalAmount + stats.owesNowAmount;
   const repaidPercent = totalHandled
-    ? Math.round((stats.paidTotalKobo / totalHandled) * 100)
+    ? Math.round((stats.paidTotalAmount / totalHandled) * 100)
     : 100;
 
   return (

@@ -21,7 +21,7 @@ export function WhoOwesYou({ businessId }: { businessId: string }) {
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2
           id="who-owes-you-heading"
-          className="text-base font-extrabold text-[var(--forest)]"
+          className="text-lg font-extrabold text-[var(--forest)] tracking-tight"
         >
           Who owes you
         </h2>
@@ -92,7 +92,7 @@ export function WhoOwesYou({ businessId }: { businessId: string }) {
                     </div>
                   </div>
                   <p className="shrink-0 text-right text-lg font-extrabold tracking-tight text-[var(--forest)]">
-                    {formatNaira(summary.owedKobo)}
+                    {formatNaira(summary.owedAmount)}
                   </p>
                 </div>
 
@@ -101,7 +101,7 @@ export function WhoOwesYou({ businessId }: { businessId: string }) {
                     href={getWhatsAppHref(
                       customer.name,
                       customer.phone,
-                      summary.owedKobo,
+                      summary.owedAmount,
                     )}
                     target="_blank"
                     rel="noreferrer"

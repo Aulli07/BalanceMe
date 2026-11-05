@@ -11,25 +11,25 @@ export function TransactionDetailsOverview({
 }: {transaction: Transaction}) {
   
   if (transaction.type === "payment") {
-    const { amountPaidKobo, allocations } = getPaymentDetails(transaction);
+    const { amountPaid, allocations } = getPaymentDetails(transaction);
 
     return (
       <PaymentTransactionUi
         transaction={transaction}
-        amountPaid={amountPaidKobo}
+        amountPaid={amountPaid}
         allocations={allocations}
       />
     );
   }
 
-  const { productPriceKobo, amountPaidKobo, balanceKobo } = getSaleDetails(transaction);
+  const { productPrice, amountPaid, balance } = getSaleDetails(transaction);
 
   return (
     <SaleTransactionUi 
       transaction={transaction} 
-      productPrice={productPriceKobo}
-      amountPaid={amountPaidKobo}
-      balance={balanceKobo}
+      productPrice={productPrice}
+      amountPaid={amountPaid}
+      balance={balance}
    />
   )
 }

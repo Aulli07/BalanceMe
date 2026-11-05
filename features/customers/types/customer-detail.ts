@@ -1,9 +1,9 @@
-import type { NairaKobo } from "@/shared/types/domain";
+import type { NairaAmount } from "@/shared/types/domain";
 
 export interface CustomerStats {
-  paidTotalKobo: NairaKobo;
+  paidTotalAmount: NairaAmount;
   transactionCount: number;
-  owesNowKobo: NairaKobo;
+  owesNowAmount: NairaAmount;
 }
 
 export interface CustomerMonthlyActivity {
@@ -16,7 +16,7 @@ export interface CustomerTransactionItem {
   type: "sale" | "payment";
   title: string;
   description: string;
-  amountKobo: NairaKobo;
+  amount: NairaAmount;
   createdAt: string;
   paymentStatus: string;
   categoryName?: string;

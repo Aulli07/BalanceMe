@@ -1,13 +1,14 @@
-import { NairaKobo } from "../types/domain";
+import { NairaAmount } from "../types/domain";
 
-export function formatNaira(kobo: NairaKobo) {
+export function formatNaira(amount: NairaAmount) {
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
-    currency: "NGN"
-  }).format(kobo/100);
+    currency: "NGN",
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+  }).format(amount);
 }
 
-export function parseNairaToKobo(amount: string): NairaKobo {
-  const parsedAmount = parseFloat(amount.replace(/[^0-9.-]+/g, ""));
-  return Math.round(parsedAmount * 100);
+export function parseNaira(value: string): NairaAmount {
+  return Math.round(parseFloat(value.replace(/[^0-9.-]+/g, "")));
 }

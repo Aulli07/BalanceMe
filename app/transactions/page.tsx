@@ -11,8 +11,8 @@ import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { filters, months } from "@/features/transactions/data/txn-stuff";
 import { getFilteredTransactions } from "@/features/transactions/selectors/get-filtered-transactions";
 import { handleTransactionExport } from "@/features/transactions/selectors/handle-export";
-import { getProductPriceKoboForMonth } from "@/features/transactions/selectors/get-product-price-amounts";
-import { getCollectedKoboForMonth } from "@/features/transactions/selectors/get-collected-amounts";
+import { getProductPriceForMonth } from "@/features/transactions/selectors/get-product-price-amounts";
+import { getCollectedAmountForMonth } from "@/features/transactions/selectors/get-collected-amounts";
 
 
 
@@ -28,8 +28,8 @@ export default function TransactionsPage() {
     getTransactionsForMonth(getTransactionsForDay(filteredTxns), months[monthIndex]), 
     [filteredTxns, monthIndex]);
 
-  const totalPrice = useMemo(() => getProductPriceKoboForMonth(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
-  const totalCollected = useMemo(() => getCollectedKoboForMonth(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
+  const totalPrice = useMemo(() => getProductPriceForMonth(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
+  const totalCollected = useMemo(() => getCollectedAmountForMonth(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
   // const summary = useMemo(() => getTransactionSummary(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
 
   return (
@@ -42,8 +42,8 @@ export default function TransactionsPage() {
         monthIndex={monthIndex}
         monthCount={months.length}
         onMonthChange={setMonthIndex}
-        productPriceKobo={totalPrice}
-        collectedKobo={totalCollected}
+        productPrice={totalPrice}
+        collectedAmount={totalCollected}
       />
       <TransactionActivity transactions={transactions} />
     </main>

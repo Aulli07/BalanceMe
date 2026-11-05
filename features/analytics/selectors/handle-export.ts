@@ -14,8 +14,8 @@ export function handleExport(
   const rows = [
     ["Metric", "Value"],
     ["Period", ANALYTICS_PERIODS.find((item) => item.id === period)?.label ?? period],
-    ["Total received", formatNaira(analytics.summary.totalReceivedKobo)],
-    ["Total owed", formatNaira(analytics.summary.totalOwedKobo)],
+    ["Total received", formatNaira(analytics.summary.totalReceivedAmount)],
+    ["Total owed", formatNaira(analytics.summary.totalOwedAmount)],
     ["Collection rate", `${analytics.summary.collectionRate}%`],
     ["Transaction count", String(analytics.summary.transactionCount)],
   ];

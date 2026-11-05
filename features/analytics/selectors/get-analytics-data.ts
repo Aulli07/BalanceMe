@@ -3,7 +3,7 @@ import {
   mockPaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { NairaKobo, Transaction } from "@/shared/types/domain";
+import type { NairaAmount, Transaction } from "@/shared/types/domain";
 import type { AnalyticsPeriod } from "../data/analytics-periods";
 import type {
   AnalyticsCustomer,
@@ -23,18 +23,18 @@ function getDateKey(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-function getReceivedKobo(transaction: Transaction) {
+function getReceivedAmount(transaction: Transaction) {
   if (transaction.type === "payment") return transaction.amountReceived;
   return transaction.amountPaid;
 }
 
-function getOwedKobo(transaction: Transaction) {
+function getOwedAmount(transaction: Transaction) {
   if (transaction.type === "payment") return 0;
-  const allocatedKobo = mockPaymentTransactions
+  const allocatedAmount = mockPaymentTransactions
     .flatMap((payment) => payment.allocations)
     .filter((allocation) => allocation.saleTransactionId === transaction.id)
     .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
-  return Math.max(0, transaction.productPrice - transaction.amountPaid - allocatedKobo);
+  return Math.max(0, transaction.productPrice - transaction.amountPaid - allocatedAmount);
 }
 
 export function getAnalyticsData(
@@ -68,22 +68,22 @@ export function getAnalyticsData(
     return date >= startDate && date <= endDate;
   });
 
-  const totalReceivedKobo = selectedTransactions.reduce(
-    (total, transaction) => total + getReceivedKobo(transaction),
+  const totalReceivedAmount = selectedTransactions.reduce(
+    (total, transaction) => total + getReceivedAmount(transaction),
     0,
   );
-  const totalOwedKobo = selectedTransactions.reduce(
-    (total, transaction) => total + getOwedKobo(transaction),
+  const totalOwedAmount = selectedTransactions.reduce(
+    (total, transaction) => total + getOwedAmount(transaction),
     0,
   );
-  const totalValueKobo = selectedTransactions
+  const totalValue = selectedTransactions
     .filter((transaction) => transaction.type === "sale")
     .reduce((total, transaction) => total + transaction.productPrice, 0);
   const summary = {
-    totalReceivedKobo,
-    totalOwedKobo,
-    collectionRate: totalValueKobo
-      ? Math.round((totalReceivedKobo / totalValueKobo) * 100)
+    totalReceivedAmount,
+    totalOwedAmount,
+    collectionRate: totalValue
+      ? Math.round((totalReceivedAmount / totalValue) * 100)
       : 0,
     transactionCount: selectedTransactions.length,
   };
@@ -104,40 +104,40 @@ export function getAnalyticsData(
           ? "Today"
           : date.toLocaleDateString("en-NG", { day: "numeric", month: "short", timeZone: "UTC" }),
       amountReceived: dailyTransactions.reduce(
-        (total, transaction) => total + getReceivedKobo(transaction),
+        (total, transaction) => total + getReceivedAmount(transaction),
         0,
       ),
-      owedKobo: dailyTransactions.reduce(
-        (total, transaction) => total + getOwedKobo(transaction),
+      owedAmount: dailyTransactions.reduce(
+        (total, transaction) => total + getOwedAmount(transaction),
         0,
       ),
     };
   });
 
-  const customerTotals = new Map<string, { amountReceived: number; owedKobo: number }>();
+  const customerTotals = new Map<string, { amountReceived: number; owedAmount: number }>();
   selectedTransactions.forEach((transaction) => {
     const current = customerTotals.get(transaction.customerId) ?? {
       amountReceived: 0,
-      owedKobo: 0,
+      owedAmount: 0,
     };
-    current.amountReceived += getReceivedKobo(transaction);
-    current.owedKobo += getOwedKobo(transaction);
+    current.amountReceived += getReceivedAmount(transaction);
+    current.owedAmount += getOwedAmount(transaction);
     customerTotals.set(transaction.customerId, current);
   });
-  const toCustomer = (key: "amountReceived" | "owedKobo"): AnalyticsCustomer[] =>
+  const toCustomer = (key: "amountReceived" | "owedAmount"): AnalyticsCustomer[] =>
     [...customerTotals.entries()]
       .sort((first, second) => second[1][key] - first[1][key])
       .slice(0, 3)
       .map(([customerId, values]) => ({
         customerId,
         name: mockCustomers.find((customer) => customer.id === customerId)?.name ?? "Unknown customer",
-        valueKobo: values[key],
+        value: values[key],
       }));
 
   return {
     summary,
     trend,
     topCustomers: toCustomer("amountReceived"),
-    topOwers: toCustomer("owedKobo"),
+    topOwers: toCustomer("owedAmount"),
   };
 }

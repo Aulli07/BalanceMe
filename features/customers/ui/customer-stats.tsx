@@ -1,7 +1,7 @@
 import { formatNaira } from "@/shared/utils/format-naira";
 import type { CustomerStats } from "../types/customer-detail";
 export function CustomerStatsCards({ stats }: { stats: CustomerStats }) {
-  const totalHandled = stats.paidTotalKobo + stats.owesNowKobo;
+  const totalHandled = stats.paidTotalAmount + stats.owesNowAmount;
   const averageValue = stats.transactionCount
     ? Math.round(totalHandled / stats.transactionCount)
     : 0;
@@ -10,7 +10,7 @@ export function CustomerStatsCards({ stats }: { stats: CustomerStats }) {
       className="mt-4 grid grid-cols-3 gap-2.5"
       aria-label="Customer statistics"
     >
-      <StatCard label="Paid total" value={formatNaira(stats.paidTotalKobo)} />
+      <StatCard label="Paid total" value={formatNaira(stats.paidTotalAmount)} />
       <StatCard label="Transactions" value={String(stats.transactionCount)} />
       <StatCard label="Avg. value" value={formatNaira(averageValue)} />
     </section>

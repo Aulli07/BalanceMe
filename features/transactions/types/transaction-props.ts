@@ -1,6 +1,6 @@
 import type { getTransactionActivity } from "../selectors/get-transactions";
 
-import { NairaKobo, PaymentAllocation, PaymentTransaction, SaleTransaction } from "@/shared/types/domain";
+import { NairaAmount, PaymentAllocation, PaymentTransaction, SaleTransaction } from "@/shared/types/domain";
 import { Dispatch, SetStateAction } from "react";
 import { filters } from "../data/txn-stuff";
 
@@ -26,8 +26,8 @@ export type TransactionSummaryProps = {
   monthIndex: number;
   monthCount: number;
   onMonthChange: React.Dispatch<React.SetStateAction<number>>;
-  productPriceKobo: NairaKobo;
-  collectedKobo: NairaKobo;
+  productPrice: NairaAmount;
+  collectedAmount: NairaAmount;
 };
 
 

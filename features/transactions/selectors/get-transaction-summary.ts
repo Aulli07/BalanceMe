@@ -1,10 +1,10 @@
-// import type { NairaKobo } from "@/shared/types/domain";
-// import { getCollectedKoboForMonth } from "./get-collected-amounts";
-// import { getProductPriceKoboForMonth } from "./get-product-price-amounts";
+// import type { NairaAmount } from "@/shared/types/domain";
+// import { getCollectedAmountForMonth } from "./get-collected-amounts";
+// import { getProductPriceForMonth } from "./get-product-price-amounts";
 
 // export type TransactionSummary = {
-//   productPriceKobo: NairaKobo;
-//   collectedKobo: NairaKobo;
+//   productPrice: NairaAmount;
+//   collectedAmount: NairaAmount;
 // };
 
 // export function getTransactionSummary(
@@ -12,7 +12,7 @@
 //   month: string,
 // ): TransactionSummary {
 //   return {
-//     productPriceKobo: getProductPriceKoboForMonth(businessId, month),
-//     collectedKobo: getCollectedKoboForMonth(businessId, month),
+//     productPrice: getProductPriceForMonth(businessId, month),
+//     collectedAmount: getCollectedAmountForMonth(businessId, month),
 //   };
 // }

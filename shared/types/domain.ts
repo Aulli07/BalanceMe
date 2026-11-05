@@ -1,6 +1,6 @@
 export type EntityId = string;
 export type ISODateTime = string;
-export type NairaKobo = number;
+export type NairaAmount = number;
 
 export interface User {
   id: EntityId;
@@ -84,20 +84,20 @@ interface TransactionBase {
 export interface SaleTransaction extends TransactionBase {
   type: "sale";
   description: string;
-  productPrice: NairaKobo;
-  amountPaid: NairaKobo;
+  productPrice: NairaAmount;
+  amountPaid: NairaAmount;
   dueDate?: ISODateTime;
   receiptId?: EntityId;
 }
 
 export interface PaymentAllocation {
   saleTransactionId: EntityId;
-  debtAmountPaid: NairaKobo;
+  debtAmountPaid: NairaAmount;
 }
 
 export interface PaymentTransaction extends TransactionBase {
   type: "payment";
-  amountReceived: NairaKobo;
+  amountReceived: NairaAmount;
   allocations: PaymentAllocation[];
   note?: string;
   receiptId?: EntityId;
@@ -111,9 +111,9 @@ export interface WrittenEntryDraft {
   businessId: EntityId;
   customerId: EntityId;
   description: string;
-  productPrice: NairaKobo;
-  amountPaid: NairaKobo;
-  amountOwed: NairaKobo;
+  productPrice: NairaAmount;
+  amountPaid: NairaAmount;
+  amountOwed: NairaAmount;
   receiptFiles?: File[];
   createdAt: ISODateTime;
 }

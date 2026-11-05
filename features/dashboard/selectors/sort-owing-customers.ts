@@ -14,6 +14,6 @@ export function sortCustomers(customers: CustomerDebtSummary[]) {
       new Date(second.oldestOutstandingAt).getTime();
     if (oldestDifference !== 0) return oldestDifference;
 
-    return second.owedKobo - first.owedKobo;
+    return second.owedAmount - first.owedAmount;
   });
 }

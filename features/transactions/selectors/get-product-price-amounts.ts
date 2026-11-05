@@ -2,12 +2,12 @@ import {
   mockCustomers,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { Customer, NairaKobo } from "@/shared/types/domain";
+import type { Customer, NairaAmount } from "@/shared/types/domain";
 import { isInMonth } from "../utils/check-month-aligns";
 
 export type CustomerProductPriceAmount = {
   customer: Customer | undefined;
-  amountKobo: NairaKobo;
+  amount: NairaAmount;
 };
 
 // function isInMonth(createdAt: string, month: string) {
@@ -19,16 +19,16 @@ export type CustomerProductPriceAmount = {
 //   );
 // }
 
-export function getTotalProductPriceKobo(businessId: string): NairaKobo {
+export function getTotalProductPrice(businessId: string): NairaAmount {
   return mockSaleTransactions
     .filter((sale) => sale.businessId === businessId)
     .reduce((total, sale) => total + sale.productPrice, 0);
 }
 
-export function getProductPriceKoboForCustomer(
+export function getProductPriceForCustomer(
   businessId: string,
   customerId: string,
-): NairaKobo {
+): NairaAmount {
   return mockSaleTransactions
     .filter(
       (sale) =>
@@ -44,10 +44,10 @@ export function getLargestProductPriceCustomer(
     .filter((customer) => customer.businessId === businessId)
     .map((customer) => ({
       customer,
-      amountKobo: getProductPriceKoboForCustomer(businessId, customer.id),
+      amount: getProductPriceForCustomer(businessId, customer.id),
     }))
-    .filter((item) => item.amountKobo > 0)
-    .sort((first, second) => second.amountKobo - first.amountKobo)[0];
+    .filter((item) => item.amount > 0)
+    .sort((first, second) => second.amount - first.amount)[0];
 }
 
 export function getLowestProductPriceCustomer(
@@ -57,16 +57,16 @@ export function getLowestProductPriceCustomer(
     .filter((customer) => customer.businessId === businessId)
     .map((customer) => ({
       customer,
-      amountKobo: getProductPriceKoboForCustomer(businessId, customer.id),
+      amount: getProductPriceForCustomer(businessId, customer.id),
     }))
-    .filter((item) => item.amountKobo > 0)
-    .sort((first, second) => first.amountKobo - second.amountKobo)[0];
+    .filter((item) => item.amount > 0)
+    .sort((first, second) => first.amount - second.amount)[0];
 }
 
-export function getProductPriceKoboForMonth(
+export function getProductPriceForMonth(
   businessId: string,
   month: string,
-): NairaKobo {
+): NairaAmount {
   return mockSaleTransactions
     .filter(
       (sale) =>

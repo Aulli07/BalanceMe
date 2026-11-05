@@ -1,9 +1,9 @@
 import { formatNaira } from "@/shared/utils/format-naira";
 import type { CustomerStats } from "../types/customer-detail";
 export function BalanceCard({ stats }: { stats: CustomerStats }) {
-  const totalHandled = stats.paidTotalKobo + stats.owesNowKobo;
+  const totalHandled = stats.paidTotalAmount + stats.owesNowAmount;
   const repaidPercent = totalHandled
-    ? Math.round((stats.paidTotalKobo / totalHandled) * 100)
+    ? Math.round((stats.paidTotalAmount / totalHandled) * 100)
     : 100;
   return (
     <section
@@ -19,7 +19,7 @@ export function BalanceCard({ stats }: { stats: CustomerStats }) {
             Owes now
           </p>
           <p className="mt-1 text-3xl font-extrabold tracking-tight text-[var(--lime)]">
-            {formatNaira(stats.owesNowKobo)}
+            {formatNaira(stats.owesNowAmount)}
           </p>
         </div>
         <span className="rounded-full bg-white/10 px-2.5 py-1 text-xs font-semibold">
@@ -38,7 +38,7 @@ export function BalanceCard({ stats }: { stats: CustomerStats }) {
           />
         </div>
         <p className="mt-3 text-xs text-white/70">
-          Outstanding for 14 days · {formatNaira(stats.paidTotalKobo)} repaid so
+          Outstanding for 14 days · {formatNaira(stats.paidTotalAmount)} repaid so
           far
         </p>
       </div>

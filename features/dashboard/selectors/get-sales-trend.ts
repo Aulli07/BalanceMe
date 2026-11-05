@@ -8,7 +8,7 @@ export function getSalesTrend(businessId: string, days = 7) {
   const previousPeriodStart = new Date(currentPeriodStart);
   previousPeriodStart.setDate(previousPeriodStart.getDate() - days);
 
-  const currentTotalKobo = mockSaleTransactions
+  const currentTotal = mockSaleTransactions
     .filter(
       (sale) =>
         sale.businessId === businessId &&
@@ -17,7 +17,7 @@ export function getSalesTrend(businessId: string, days = 7) {
     )
     .reduce((total, sale) => total + sale.productPrice, 0);
 
-  const previousTotalKobo = mockSaleTransactions
+  const previousTotal = mockSaleTransactions
     .filter(
       (sale) =>
         sale.businessId === businessId &&
@@ -27,8 +27,8 @@ export function getSalesTrend(businessId: string, days = 7) {
     .reduce((total, sale) => total + sale.productPrice, 0);
 
   return {
-    currentTotalKobo,
-    previousTotalKobo,
-    differenceKobo: currentTotalKobo - previousTotalKobo,
+    currentTotal,
+    previousTotal,
+    differenceAmount: currentTotal - previousTotal,
   };
 }

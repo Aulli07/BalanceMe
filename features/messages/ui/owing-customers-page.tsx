@@ -25,7 +25,7 @@ export function OwingCustomersPage() {
     businessName,
     customers,
     messages,
-    totalOwedKobo,
+    totalOwedAmount,
     getSortedCustomers,
     updateMessage,
     setChannel,
@@ -95,7 +95,7 @@ export function OwingCustomersPage() {
           </p>
           <div className="mt-2 flex items-end justify-between gap-3">
             <p className="min-w-0 truncate text-3xl font-extrabold tracking-tight">
-              {formatNaira(totalOwedKobo)}
+              {formatNaira(totalOwedAmount)}
             </p>
             <span className="mb-1 flex shrink-0 items-center gap-1.5 rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold">
               <LuUsersRound className="size-3.5" />

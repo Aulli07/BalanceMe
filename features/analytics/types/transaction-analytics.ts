@@ -1,22 +1,22 @@
-import type { NairaKobo } from "@/shared/types/domain";
+import type { NairaAmount } from "@/shared/types/domain";
 
 export interface AnalyticsSummary {
-  totalReceivedKobo: NairaKobo;
-  totalOwedKobo: NairaKobo;
+  totalReceivedAmount: NairaAmount;
+  totalOwedAmount: NairaAmount;
   collectionRate: number;
   transactionCount: number;
 }
 
 export interface TrendPoint {
   label: string;
-  amountReceived: NairaKobo;
-  owedKobo: NairaKobo;
+  amountReceived: NairaAmount;
+  owedAmount: NairaAmount;
 }
 
 export interface AnalyticsCustomer {
   customerId: string;
   name: string;
-  valueKobo: NairaKobo;
+  value: NairaAmount;
 }
 
 export interface TransactionAnalyticsData {

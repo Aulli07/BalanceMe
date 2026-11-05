@@ -1,11 +1,11 @@
 import { formatNaira } from "@/shared/utils/format-naira";
 
-export function getWhatsAppHref(name: string, phone: string | undefined, owedKobo: number) {
+export function getWhatsAppHref(name: string, phone: string | undefined, owedAmount: number) {
   const digits = phone?.replace(/\D/g, "") ?? "";
   const recipient = digits.startsWith("0") ? `234${digits.slice(1)}` : digits;
   const firstName = name.trim().split(/\s+/)[0] ?? "there";
   const message = encodeURIComponent(
-    `Hi ${firstName}, a friendly reminder that your outstanding balance is ${formatNaira(owedKobo)}. Thank you.`,
+    `Hi ${firstName}, a friendly reminder that your outstanding balance is ${formatNaira(owedAmount)}. Thank you.`,
   );
 
   return recipient

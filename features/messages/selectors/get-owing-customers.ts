@@ -9,17 +9,17 @@ import type { OwingCustomer } from "../types";
 
 
 
-function getOutstandingKobo(customerId: string) {
+function getOutstandingAmount(customerId: string) {
   const sales = mockSaleTransactions.filter(
     (sale) => sale.customerId === customerId,
   );
   return sales.reduce((total, sale) => {
-    const allocatedKobo = mockPaymentTransactions
+    const allocatedAmount = mockPaymentTransactions
       .flatMap((payment) => payment.allocations)
       .filter((allocation) => allocation.saleTransactionId === sale.id)
       .reduce((sum, allocation) => sum + allocation.debtAmountPaid, 0);
 
-    return total + Math.max(0, sale.productPrice - sale.amountPaid - allocatedKobo);
+    return total + Math.max(0, sale.productPrice - sale.amountPaid - allocatedAmount);
   }, 0);
 }
 
@@ -33,9 +33,9 @@ export function getOwingCustomers(): OwingCustomer[] {
 
       return {
         ...customer,
-        owedKobo: getOutstandingKobo(customer.id),
+        owedAmount: getOutstandingAmount(customer.id),
         owingSince: sales[0]?.createdAt ?? customer.createdAt,
       };
     })
-    .filter((customer) => customer.owedKobo > 0);
+    .filter((customer) => customer.owedAmount > 0);
 }

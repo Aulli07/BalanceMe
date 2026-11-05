@@ -79,7 +79,7 @@ export function OwingCustomerCard({
           </p>
         </div>
         <p className="max-w-[42%] shrink-0 truncate text-right text-base font-extrabold text-[#a34e3d]">
-          {formatNaira(customer.owedKobo)}
+          {formatNaira(customer.owedAmount)}
         </p>
       </div>
 

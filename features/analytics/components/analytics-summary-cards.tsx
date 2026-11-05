@@ -11,8 +11,8 @@ const cards = [
 
 export function AnalyticsSummaryCards({ summary }: { summary: AnalyticsSummary }) {
   const values = {
-    received: formatNaira(summary.totalReceivedKobo),
-    owed: formatNaira(summary.totalOwedKobo),
+    received: formatNaira(summary.totalReceivedAmount),
+    owed: formatNaira(summary.totalOwedAmount),
     rate: `${summary.collectionRate}%`,
     count: String(summary.transactionCount),
   };

@@ -58,7 +58,7 @@ function TransactionItem({
       </div>
       <div className="shrink-0 text-right">
         <p className="text-sm font-extrabold text-[var(--forest)]">
-          {formatNaira(transaction.amountKobo)}
+          {formatNaira(transaction.amount)}
         </p>
         <span
           className={`mt-1 inline-block rounded-md px-1.5 py-0.5 text-[10px] font-bold ${isPayment ? "bg-[#e9f3df] text-[var(--forest-soft)]" : "bg-[#fff3dd] text-[#9b651b]"}`}

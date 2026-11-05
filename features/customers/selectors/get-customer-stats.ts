@@ -26,16 +26,16 @@ export function getCustomerStats(customerId: string): CustomerStats {
     (acc, txn) => acc + txn.amountReceived,
     0,
   );
-  const paidTotalKobo = initialPaid + subsequentPaid;
+  const paidTotalAmount = initialPaid + subsequentPaid;
 
-  const totalSalesKobo = sales.reduce(
+  const totalSalesAmount = sales.reduce(
     (acc, txn) => acc + txn.productPrice,
     0,
   );
-  const owesNowKobo = Math.max(0, totalSalesKobo - paidTotalKobo);
+  const owesNowAmount = Math.max(0, totalSalesAmount - paidTotalAmount);
 
   const transactionCount = sales.length + payments.length;
 
-  return { paidTotalKobo, transactionCount, owesNowKobo };
+  return { paidTotalAmount, transactionCount, owesNowAmount };
 }
 

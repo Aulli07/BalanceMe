@@ -17,7 +17,7 @@ import type {
   PulsePriority,
   PulseValues,
 } from "@/features/dashboard/types/pulse-entry";
-import { formatNaira, parseNairaToKobo } from "@/shared/utils/format-naira";
+import { formatNaira, parseNaira } from "@/shared/utils/format-naira";
 import { pulseStyles } from "../data/pulse-icon-style";
 
 
@@ -53,15 +53,15 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
 
   if (entry.condition === "customers-have-outstanding-debt") {
     const { count } = getTotalCustomersOwing(businessId);
-    const totalOwedKobo = getTotalAmountOwed(businessId);
-    if (count === 0 || totalOwedKobo <= 0) return null;
+    const totalOwedAmount = getTotalAmountOwed(businessId);
+    if (count === 0 || totalOwedAmount <= 0) return null;
 
     return createPulse(
       entry,
-      formatNaira(totalOwedKobo),
+      formatNaira(totalOwedAmount),
       {
         customerCount: count,
-        amount: formatNaira(totalOwedKobo),
+        amount: formatNaira(totalOwedAmount),
       },
       undefined,
       { href: "/customers", label: "View owing" },
@@ -75,8 +75,8 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
     entry.condition === "sales-are-below-previous-period"
   ) {
     const trend = getSalesTrend(businessId);
-    const isGrowing = trend.differenceKobo > 0;
-    const isDeclining = trend.differenceKobo < 0;
+    const isGrowing = trend.differenceAmount > 0;
+    const isDeclining = trend.differenceAmount < 0;
 
     if (
       (entry.condition === "sales-exceed-previous-period" && !isGrowing) ||
@@ -87,9 +87,9 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
 
     return createPulse(
       entry,
-      formatNaira(trend.currentTotalKobo),
-      { amount: formatNaira(Math.abs(trend.differenceKobo)) },
-      `${isGrowing ? "+" : "-"}${formatNaira(Math.abs(trend.differenceKobo))} vs previous 7 days`,
+      formatNaira(trend.currentTotal),
+      { amount: formatNaira(Math.abs(trend.differenceAmount)) },
+      `${isGrowing ? "+" : "-"}${formatNaira(Math.abs(trend.differenceAmount))} vs previous 7 days`,
       { href: "/transactions/analytics", label: "View sales trend" },
       isGrowing ? "Sales Surge" : "Sales Dip",
       "MADE",
@@ -102,10 +102,10 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
   ) {
     const todayAmount = getCashRecordedAmount(businessId, "today");
     const yesterdayAmount = getCashRecordedAmount(businessId, "yesterday");
-    const differenceKobo =
-      parseNairaToKobo(todayAmount) - parseNairaToKobo(yesterdayAmount);
-    const isGrowing = differenceKobo > 0;
-    const isDeclining = differenceKobo < 0;
+    const differenceAmount =
+      parseNaira(todayAmount) - parseNaira(yesterdayAmount);
+    const isGrowing = differenceAmount > 0;
+    const isDeclining = differenceAmount < 0;
 
     if (
       (entry.condition === "cash-recorded-exceeds-previous-period" && !isGrowing) ||
@@ -117,8 +117,8 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
     return createPulse(
       entry,
       todayAmount,
-      { amount: formatNaira(Math.abs(differenceKobo)) },
-      `${isGrowing ? "+" : "-"}${formatNaira(Math.abs(differenceKobo))} vs yesterday`,
+      { amount: formatNaira(Math.abs(differenceAmount)) },
+      `${isGrowing ? "+" : "-"}${formatNaira(Math.abs(differenceAmount))} vs yesterday`,
       { href: "/transactions/analytics", label: "View cash flow" },
       isGrowing ? "Cash Inflow" : "Cash Watch",
       "MADE",
@@ -177,10 +177,10 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
 
     return createPulse(
       entry,
-      formatNaira(result.amountKobo),
+      formatNaira(result.amount),
       {
         customerName: result.customer.name,
-        amount: formatNaira(result.amountKobo),
+        amount: formatNaira(result.amount),
       },
       undefined,
       { href: `/customers/${result.customer.id}`, label: "View customer" },

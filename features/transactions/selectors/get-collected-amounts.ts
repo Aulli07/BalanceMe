@@ -3,15 +3,15 @@ import {
   mockPaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { Customer, NairaKobo } from "@/shared/types/domain";
+import type { Customer, NairaAmount } from "@/shared/types/domain";
 import { isInMonth } from "../utils/check-month-aligns";
 
 export type CustomerCollectedAmount = {
   customer: Customer | undefined;
-  amountKobo: NairaKobo;
+  amount: NairaAmount;
 };
 
-export function getTotalCollectedKobo(businessId: string): NairaKobo {
+export function getTotalCollectedAmount(businessId: string): NairaAmount {
   const initialPayments = mockSaleTransactions
     .filter((sale) => sale.businessId === businessId)
     .reduce((total, sale) => total + sale.amountPaid, 0);
@@ -21,10 +21,10 @@ export function getTotalCollectedKobo(businessId: string): NairaKobo {
   return initialPayments + repayments;
 }
 
-export function getCollectedKoboForCustomer(
+export function getCollectedAmountForCustomer(
   businessId: string,
   customerId: string,
-): NairaKobo {
+): NairaAmount {
   const initialPayments = mockSaleTransactions
     .filter(
       (sale) =>
@@ -47,10 +47,10 @@ export function getLargestCollectedCustomer(
     .filter((customer) => customer.businessId === businessId)
     .map((customer) => ({
       customer,
-      amountKobo: getCollectedKoboForCustomer(businessId, customer.id),
+      amount: getCollectedAmountForCustomer(businessId, customer.id),
     }))
-    .filter((item) => item.amountKobo > 0)
-    .sort((first, second) => second.amountKobo - first.amountKobo)[0];
+    .filter((item) => item.amount > 0)
+    .sort((first, second) => second.amount - first.amount)[0];
 }
 
 export function getLowestCollectedCustomer(
@@ -60,16 +60,16 @@ export function getLowestCollectedCustomer(
     .filter((customer) => customer.businessId === businessId)
     .map((customer) => ({
       customer,
-      amountKobo: getCollectedKoboForCustomer(businessId, customer.id),
+      amount: getCollectedAmountForCustomer(businessId, customer.id),
     }))
-    .filter((item) => item.amountKobo > 0)
-    .sort((first, second) => first.amountKobo - second.amountKobo)[0];
+    .filter((item) => item.amount > 0)
+    .sort((first, second) => first.amount - second.amount)[0];
 }
 
-export function getCollectedKoboForMonth(
+export function getCollectedAmountForMonth(
   businessId: string,
   month: string,
-): NairaKobo {
+): NairaAmount {
   const initialPayments = mockSaleTransactions
     .filter(
       (sale) =>

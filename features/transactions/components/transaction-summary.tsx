@@ -15,8 +15,8 @@ export function TransactionSummary({
   monthIndex,
   monthCount,
   onMonthChange,
-  productPriceKobo,
-  collectedKobo,
+  productPrice,
+  collectedAmount,
 }: TransactionSummaryProps) {
   return (
     <section className="mt-4 px-5" aria-labelledby="monthly-summary-heading">
@@ -55,13 +55,13 @@ export function TransactionSummary({
         <article className="rounded-xl border border-[#cce2d2] bg-[var(--forest)] px-4 py-3">
           <p className="text-sm font-semibold text-white leading-tight">Total product price</p>
           <p className="mt-2 text-xl font-bold tracking-tight leading-tight text-white">
-            {formatNaira(productPriceKobo)}
+            {formatNaira(productPrice)}
           </p>
         </article>
         <article className="rounded-xl border border-[#f1dfbd] bg-white px-4 py-3">
           <p className="text-sm font-semibold text-[var(--forest)] leading-tight">Collected</p>
           <p className="mt-2 text-xl font-bold tracking-tight text-[var(--forest)]">
-            {formatNaira(collectedKobo)}
+            {formatNaira(collectedAmount)}
           </p>
         </article>
       </div>

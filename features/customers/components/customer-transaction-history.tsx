@@ -77,7 +77,7 @@ function TransactionRow({
 
       <div className="shrink-0 text-right">
         <p className="text-sm font-bold text-[var(--ink)]">
-          {formatNaira(transaction.amountKobo)}
+          {formatNaira(transaction.amount)}
         </p>
         <p className="text-[10px] text-[var(--muted)]">
           {transaction.paymentStatus}

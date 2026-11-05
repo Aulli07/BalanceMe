@@ -2,7 +2,7 @@ import { formatNaira } from "@/shared/utils/format-naira";
 import type { CustomerStats } from "../types/customer-detail";
 
 export function CustomerFinancialSummary({ stats }: { stats: CustomerStats }) {
-  const hasDebt = stats.owesNowKobo > 0;
+  const hasDebt = stats.owesNowAmount > 0;
 
   return (
     <div className="mt-6 grid grid-cols-3 gap-3">
@@ -12,7 +12,7 @@ export function CustomerFinancialSummary({ stats }: { stats: CustomerStats }) {
           Paid total
         </p>
         <p className="mt-1 text-lg font-extrabold text-[var(--ink)]">
-          {formatNaira(stats.paidTotalKobo)}
+          {formatNaira(stats.paidTotalAmount)}
         </p>
         <p className="mt-0.5 text-[10px] text-[var(--muted)]">
           Paid to your shop
@@ -50,7 +50,7 @@ export function CustomerFinancialSummary({ stats }: { stats: CustomerStats }) {
             hasDebt ? "text-red-600" : "text-[var(--ink)]"
           }`}
         >
-          {formatNaira(stats.owesNowKobo)}
+          {formatNaira(stats.owesNowAmount)}
         </p>
         <p
           className={`mt-0.5 text-[10px] ${

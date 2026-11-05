@@ -10,7 +10,7 @@ export const DEBT_OVERDUE_AFTER_DAYS = 7;
 const DAY_IN_MS = 86_400_000;
 
 
-function getAllocatedPaymentsKobo(saleTransactionId: string) {
+function getAllocatedPaymentsAmount(saleTransactionId: string) {
   return mockPaymentTransactions
     .flatMap((payment) => payment.allocations)
     .filter((allocation) => allocation.saleTransactionId === saleTransactionId)
@@ -32,15 +32,15 @@ export function getOpenDebtsForCustomer(
   return mockSaleTransactions
     .filter((sale) => sale.customerId === customerId)
     .map((sale) => {
-      const outstandingKobo = Math.max(0, sale.productPrice - sale.amountPaid - getAllocatedPaymentsKobo(sale.id));
+      const outstandingAmount = Math.max(0, sale.productPrice - sale.amountPaid - getAllocatedPaymentsAmount(sale.id));
 
       return {
         sale,
-        outstandingKobo,
-        overdue: outstandingKobo > 0 && isDebtOverdue(sale, now),
+        outstandingAmount,
+        overdue: outstandingAmount > 0 && isDebtOverdue(sale, now),
       };
     })
-    .filter((debt) => debt.outstandingKobo > 0);
+    .filter((debt) => debt.outstandingAmount > 0);
 }
 
 
@@ -55,24 +55,24 @@ export function getCustomerDebtSummaries(
         (first, second) =>
           new Date(first.sale.createdAt).getTime() - new Date(second.sale.createdAt).getTime(),
       );
-      const owedKobo = openDebts.reduce(
-        (total, debt) => total + debt.outstandingKobo,
+      const owedAmount = openDebts.reduce(
+        (total, debt) => total + debt.outstandingAmount,
         0,
       );
-      const overdueKobo = openDebts
+      const overdueAmount = openDebts
         .filter((debt) => debt.overdue)
-        .reduce((total, debt) => total + debt.outstandingKobo, 0);
+        .reduce((total, debt) => total + debt.outstandingAmount, 0);
 
       return {
         customer,
-        owedKobo,
-        overdueKobo,
+        owedAmount,
+        overdueAmount,
         oldestOutstandingAt: openDebts[0]?.sale.createdAt ?? customer.createdAt,
-        hasOverdueDebt: overdueKobo > 0,
+        hasOverdueDebt: overdueAmount > 0,
         openDebts,
       };
     })
-    .filter((summary) => summary.owedKobo > 0);
+    .filter((summary) => summary.owedAmount > 0);
 }
 
 export function getDebtDashboardSummary(businessId: string, now = new Date()) {
@@ -80,9 +80,9 @@ export function getDebtDashboardSummary(businessId: string, now = new Date()) {
 
   return {
     customers,
-    totalOwedKobo: customers.reduce((total, customer) => total + customer.owedKobo, 0),
-    totalOverdueKobo: customers.reduce(
-      (total, customer) => total + customer.overdueKobo,
+    totalOwedAmount: customers.reduce((total, customer) => total + customer.owedAmount, 0),
+    totalOverdueAmount: customers.reduce(
+      (total, customer) => total + customer.overdueAmount,
       0,
     ),
   };
@@ -102,19 +102,19 @@ export function getTotalAmountOwedForCustomer(
   return (
     getCustomerDebtSummaries(businessId).find(
       (summary) => summary.customer.id === customerId,
-    )?.owedKobo ?? 0
+    )?.owedAmount ?? 0
   );
 }
 
 export function getTotalAmountOwed(businessId: string) {
-  return getDebtDashboardSummary(businessId).totalOwedKobo;
+  return getDebtDashboardSummary(businessId).totalOwedAmount;
 }
 
 export function getLargestCustomerOwe(businessId: string) {
   const customers = getCustomerDebtSummaries(businessId);
   const largest = customers.reduce<CustomerDebtSummary | undefined>(
     (currentLargest, customer) =>
-      !currentLargest || customer.owedKobo > currentLargest.owedKobo
+      !currentLargest || customer.owedAmount > currentLargest.owedAmount
         ? customer
         : currentLargest,
     undefined,
@@ -122,6 +122,6 @@ export function getLargestCustomerOwe(businessId: string) {
 
   return {
     customerOwed: largest?.customer,
-    maxAmount: largest?.owedKobo ?? 0,
+    maxAmount: largest?.owedAmount ?? 0,
   };
 }

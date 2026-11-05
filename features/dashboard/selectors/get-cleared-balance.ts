@@ -13,5 +13,5 @@ export function getCustomerWithClearedBalance(businessId: string) {
     .sort((first, second) => new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime())[0];
   if (!sale) return null;
   const customer = mockCustomers.find((item) => item.id === sale.customerId);
-  return customer ? { customer, amountKobo: sale.productPrice } : null;
+  return customer ? { customer, amount: sale.productPrice } : null;
 }

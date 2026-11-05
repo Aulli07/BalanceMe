@@ -14,19 +14,11 @@ import { formatNaira } from "@/shared/utils/format-naira";
 const defaultChannel = (customer: OwingCustomer): ReminderChannel =>
   customer.phone ? "whatsapp" : customer.email ? "email" : "sms";
 
-// export function formatNaira(kobo: number) {
-//   return new Intl.NumberFormat("en-NG", {
-//     style: "currency",
-//     currency: "NGN",
-//     maximumFractionDigits: 0,
-//   }).format(kobo / 100);
-// }
-
 export function getReminderTemplate(
   customer: OwingCustomer,
   businessName: string,
 ) {
-  return `Hi ${customer.name}, a friendly reminder that you have an outstanding balance of ${formatNaira(customer.owedKobo)} with ${businessName}. Kindly settle when you can. Thank you!`;
+  return `Hi ${customer.name}, a friendly reminder that you have an outstanding balance of ${formatNaira(customer.owedAmount)} with ${businessName}. Kindly settle when you can. Thank you!`;
 }
 
 
@@ -47,8 +39,8 @@ export function useOwingCustomers() {
     ),
   );
 
-  const totalOwedKobo = customers.reduce(
-    (total, customer) => total + customer.owedKobo,
+  const totalOwedAmount = customers.reduce(
+    (total, customer) => total + customer.owedAmount,
     0,
   );
 
@@ -99,7 +91,7 @@ export function useOwingCustomers() {
         if (sort === "name") return a.name.localeCompare(b.name);
         if (sort === "oldest")
           return +new Date(a.owingSince) - +new Date(b.owingSince);
-        return b.owedKobo - a.owedKobo;
+        return b.owedAmount - a.owedAmount;
       });
   };
 
@@ -107,7 +99,7 @@ export function useOwingCustomers() {
     businessName,
     customers,
     messages,
-    totalOwedKobo,
+    totalOwedAmount,
     getSortedCustomers,
     updateMessage,
     setChannel,

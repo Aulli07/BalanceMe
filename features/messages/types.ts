@@ -4,7 +4,7 @@ export type ReminderChannel = CustomerLastReminded["channel"];
 export type OwingSort = "amount" | "oldest" | "name";
 
 export type OwingCustomer = Customer & {
-  owedKobo: number;
+  owedAmount: number;
   owingSince: string;
   reminder?: CustomerReminder;
   lastReminded?: CustomerLastReminded;

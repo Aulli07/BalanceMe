@@ -4,10 +4,10 @@ import { getDebtDashboardSummary } from "../selectors/get-customers-owing";
 import { formatNaira } from "@/shared/utils/format-naira";
 
 export function TotalOwed({ businessId }: { businessId: string }) {
-  const { totalOwedKobo, totalOverdueKobo, customers } =
+  const { totalOwedAmount, totalOverdueAmount, customers } =
     getDebtDashboardSummary(businessId);
   const customerCount = customers.length;
-  const nobodyOwes = totalOwedKobo === 0;
+  const nobodyOwes = totalOwedAmount === 0;
 
   return (
     <article className="relative overflow-hidden rounded-3xl bg-[var(--forest)] p-5 text-[var(--surface)] shadow-lg shadow-[var(--forest)]/10">
@@ -20,7 +20,7 @@ export function TotalOwed({ businessId }: { businessId: string }) {
         Total owed to you
       </h2>
       <p className="mt-5 text-4xl font-bold tracking-tight text-[var(--lime)]">
-        {formatNaira(totalOwedKobo)}
+        {formatNaira(totalOwedAmount)}
       </p>
 
       {nobodyOwes ? (
@@ -34,16 +34,16 @@ export function TotalOwed({ businessId }: { businessId: string }) {
           </p>
           <p
             className={
-              totalOverdueKobo > 0
+              totalOverdueAmount > 0
                 ? "mt-2 relative flex items-center justify-end gap-1.5 text-sm font-bold text-[#ffd4b5]"
                 : "mt-2 text-sm font-semibold text-[#dce8d5]"
             }
           >
-            {totalOverdueKobo > 0 && (
+            {totalOverdueAmount > 0 && (
               <LuCircleAlert className="size-4 shrink-0" aria-hidden="true" />
             )}
-            {totalOverdueKobo > 0
-              ? `${formatNaira(totalOverdueKobo)} overdue`
+            {totalOverdueAmount > 0
+              ? `${formatNaira(totalOverdueAmount)} overdue`
               : "Nothing overdue"}
           </p>
         </>

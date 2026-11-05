@@ -9,7 +9,7 @@ function RankingList({ customers, tone }: { customers: AnalyticsCustomer[]; tone
         <li key={customer.customerId} className="flex items-center gap-2.5">
           <span className={`grid size-6 shrink-0 place-items-center rounded-full text-[10px] font-extrabold ${tone === "forest" ? "bg-[#e9f1df] text-[var(--forest)]" : "bg-[#fff1d8] text-[#855126]"}`}>{index + 1}</span>
           <span className="min-w-0 flex-1 truncate text-xs font-bold text-[var(--ink)]">{customer.name}</span>
-          <span className="text-xs font-extrabold text-[var(--forest)]">{formatNaira(customer.valueKobo)}</span>
+          <span className="text-xs font-extrabold text-[var(--forest)]">{formatNaira(customer.value)}</span>
         </li>
       ))}
     </ol>

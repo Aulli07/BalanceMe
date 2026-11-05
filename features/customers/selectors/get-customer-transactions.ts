@@ -21,7 +21,7 @@ export function getCustomerRecentTransactions(
         type: "sale" as const,
         title: "Sale",
         description: txn.description,
-        amountKobo: txn.productPrice,
+        amount: txn.productPrice,
         createdAt: txn.createdAt,
         paymentStatus: isPaidInFull ? "Paid in full" : "Partially paid",
       };
@@ -34,7 +34,7 @@ export function getCustomerRecentTransactions(
       type: "payment" as const,
       title: "Payment received",
       description: txn.note ?? "Cash payment",
-      amountKobo: txn.amountReceived,
+      amount: txn.amountReceived,
       createdAt: txn.createdAt,
       paymentStatus: "Received",
     }));
