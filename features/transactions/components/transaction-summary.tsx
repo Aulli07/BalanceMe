@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { formatNaira } from "@/shared/utils/format-naira";
 import { TransactionSummaryProps } from "../types/transaction-props";
@@ -16,8 +15,8 @@ export function TransactionSummary({
   monthIndex,
   monthCount,
   onMonthChange,
-  paidKobo,
-  owedKobo,
+  productPriceKobo,
+  collectedKobo,
 }: TransactionSummaryProps) {
   return (
     <section className="mt-4 px-5" aria-labelledby="monthly-summary-heading">
@@ -54,15 +53,15 @@ export function TransactionSummary({
 
       <div className="mt-3 grid grid-cols-2 gap-3">
         <article className="rounded-xl border border-[#cce2d2] bg-[var(--forest)] px-4 py-3">
-          <p className="text-xs font-semibold text-white leading-tight">Paid</p>
-          <p className="mt-2 text-lg font-bold tracking-tight leading-tight text-white">
-            {formatNaira(paidKobo)}
+          <p className="text-sm font-semibold text-white leading-tight">Total product price</p>
+          <p className="mt-2 text-xl font-bold tracking-tight leading-tight text-white">
+            {formatNaira(productPriceKobo)}
           </p>
         </article>
         <article className="rounded-xl border border-[#f1dfbd] bg-white px-4 py-3">
-          <p className="text-sm font-semibold text-[var(--forest)] leading-tight">Owed</p>
+          <p className="text-sm font-semibold text-[var(--forest)] leading-tight">Collected</p>
           <p className="mt-2 text-xl font-bold tracking-tight text-[var(--forest)]">
-            {formatNaira(owedKobo)}
+            {formatNaira(collectedKobo)}
           </p>
         </article>
       </div>

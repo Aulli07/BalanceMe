@@ -26,8 +26,8 @@ export type TransactionSummaryProps = {
   monthIndex: number;
   monthCount: number;
   onMonthChange: React.Dispatch<React.SetStateAction<number>>;
-  paidKobo: NairaKobo;
-  owedKobo: NairaKobo;
+  productPriceKobo: NairaKobo;
+  collectedKobo: NairaKobo;
 };
 
 

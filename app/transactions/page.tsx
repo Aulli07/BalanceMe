@@ -6,11 +6,13 @@ import { TransactionSummary } from "@/features/transactions/components/transacti
 import { TransactionActivity } from "@/features/transactions/components/transaction-activity";
 import { getTransactionsForDay, getTransactionsForMonth } from "@/features/transactions/selectors/get-transactions-for-month";
 import { getTransactionActivity } from "@/features/transactions/selectors/get-transactions";
-import { getTransactionSummary } from "@/features/transactions/selectors/get-transaction-summary";
+// import { getTransactionSummary } from "@/features/transactions/selectors/get-transaction-summary";
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { filters, months } from "@/features/transactions/data/txn-stuff";
 import { getFilteredTransactions } from "@/features/transactions/selectors/get-filtered-transactions";
 import { handleTransactionExport } from "@/features/transactions/selectors/handle-export";
+import { getProductPriceKoboForMonth } from "@/features/transactions/selectors/get-product-price-amounts";
+import { getCollectedKoboForMonth } from "@/features/transactions/selectors/get-collected-amounts";
 
 
 
@@ -26,7 +28,9 @@ export default function TransactionsPage() {
     getTransactionsForMonth(getTransactionsForDay(filteredTxns), months[monthIndex]), 
     [filteredTxns, monthIndex]);
 
-  const summary = useMemo(() => getTransactionSummary(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
+  const totalPrice = useMemo(() => getProductPriceKoboForMonth(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
+  const totalCollected = useMemo(() => getCollectedKoboForMonth(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
+  // const summary = useMemo(() => getTransactionSummary(ACTIVE_BUSINESS_ID, months[monthIndex]), [monthIndex]);
 
   return (
     <main className="min-h-screen pb-18 bg-[var(--paper)] text-[var(--ink)]">
@@ -38,8 +42,8 @@ export default function TransactionsPage() {
         monthIndex={monthIndex}
         monthCount={months.length}
         onMonthChange={setMonthIndex}
-        paidKobo={summary.paidKobo}
-        owedKobo={summary.owedKobo}
+        productPriceKobo={totalPrice}
+        collectedKobo={totalCollected}
       />
       <TransactionActivity transactions={transactions} />
     </main>
