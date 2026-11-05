@@ -21,9 +21,9 @@ export function AddEntryOne({
   amount,
   setEntryType,
   entryType,
+  selectedPurchase,
+  setSelectedPurchase,
 }: EntryProps) {
-  const [selectedPurchase, setSelectedPurchase] = useState<SaleTransaction>();
-
   if (entryType === undefined || amount === undefined) return null;
   const currentPurchase =
     selectedPurchase?.customerId === customer?.id
@@ -44,7 +44,7 @@ export function AddEntryOne({
         amount={amount}
         customer={customer}
         selectedPurchase={currentPurchase}
-        setSelectedPurchase={setSelectedPurchase}
+        setSelectedPurchase={(purchase) => setSelectedPurchase?.(purchase)}
       />
 
       <button
@@ -309,14 +309,14 @@ function RepaymentFields({
   return (
     <div className="mt-6">
       <div className="overflow-hidden rounded-[1.25rem] border border-[#e5e9df] bg-[var(--surface)] shadow-sm shadow-[var(--forest)]/5">
-        <div className="border-b border-[#e9ede5] bg-[#f3f7ed] px-4 py-3">
+        {/* <div className="border-b border-[#e9ede5] bg-[#f3f7ed] px-4 py-3">
           <p className="text-sm font-extrabold text-[var(--forest)]">
             Debt repayment
           </p>
           <p className="mt-0.5 text-xs font-medium text-[#607568]">
             Enter the amount received from this customer.
           </p>
-        </div>
+        </div> */}
         <div className="px-4 py-4">
           <label
             className="flex items-center justify-between gap-4"
@@ -352,7 +352,7 @@ function RepaymentFields({
           className="flex w-full items-center justify-between gap-4 rounded-xl border border-[#e4e9df] bg-[var(--surface)] px-5 py-4 text-left shadow-sm shadow-[var(--forest)]/5 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {selectedPurchase ? (
-            <PurchasePreview purchase={selectedPurchase} />
+            <PurchasePreview purchase={selectedPurchase} isShowInfo={false} />
           ) : (
             <span className="font-bold text-[#758477]">
               {customerId ? "Select a purchase" : "Select a customer first"}
@@ -406,7 +406,7 @@ function RepaymentFields({
                       }}
                       className="rounded-2xl border border-[#e1e7dc] bg-[#fffef9] p-4 text-left active:bg-[#e8eddd]"
                     >
-                      <PurchasePreview purchase={purchase} />
+                      <PurchasePreview purchase={purchase} isShowInfo={true} />
                     </button>
                   ))
                 ) : (
@@ -423,7 +423,7 @@ function RepaymentFields({
   );
 }
 
-function PurchasePreview({ purchase }: { purchase: SaleTransaction }) {
+function PurchasePreview({ purchase, isShowInfo }: { purchase: SaleTransaction; isShowInfo: boolean }) {
   const price = purchase.totalKobo / 100;
   const paid = purchase.initialPaidKobo / 100;
   const owed = Math.max(price - paid, 0);
@@ -432,21 +432,21 @@ function PurchasePreview({ purchase }: { purchase: SaleTransaction }) {
     month: "short",
   }).format(new Date(purchase.createdAt));
   return (
-    <span className="flex min-w-0 flex-1 items-center justify-between gap-3">
-      <span className="min-w-0">
-        <span className="block truncate font-extrabold text-[var(--ink)]">
-          {purchase.description} · {date}
-        </span>
+    <div className="flex flex-col gap-1">
+      <span className="block truncate font-extrabold text-[var(--ink)]">
+        {purchase.description}
+      </span>
+      {isShowInfo && (
         <span className="block text-sm font-semibold text-[#607568]">
           Price {"\u20A6"}
           {price.toLocaleString("en-NG")} · Paid {"\u20A6"}
           {paid.toLocaleString("en-NG")}
         </span>
-      </span>
-      <span className="shrink-0 rounded-full bg-[#f7e4d3] px-2.5 py-1 text-xs font-extrabold text-[#81502f]">
+      )}
+      <span className="shrink-0 w-fit rounded-full bg-[#f7e4d3] px-2.5 py-1 text-xs font-extrabold text-[#81502f]">
         Owes {"\u20A6"}
         {owed.toLocaleString("en-NG")}
       </span>
-    </span>
+    </div>
   );
 }

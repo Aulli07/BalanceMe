@@ -44,6 +44,8 @@ function AddEntryPageContent() {
           amount={form.amount}
           setEntryType={form.setEntryType}
           entryType={form.entryType}
+          selectedPurchase={form.selectedPurchase}
+          setSelectedPurchase={form.setSelectedPurchase}
         />
       )}
 
@@ -52,6 +54,7 @@ function AddEntryPageContent() {
           customer={form.customer}
           amount={form.amount}
           entryType={form.entryType}
+          selectedPurchase={form.selectedPurchase}
           entryDescription={form.entryDescription}
           setEntryDescription={form.setEntryDescription}
           setStep={form.setStep}

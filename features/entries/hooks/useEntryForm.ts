@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Customer } from "@/shared/types/domain";
+import type { Customer, SaleTransaction } from "@/shared/types/domain";
 import { entryDetailType } from "../types/entry-type";
 
 type EntryFormOptions = {
@@ -17,6 +17,7 @@ export function useEntryForm({
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [customer, setCustomer] = useState<Customer | undefined>(initialCustomer);
   const [entryType, setEntryType] = useState<0 | 1>(initialEntryType);
+  const [selectedPurchase, setSelectedPurchase] = useState<SaleTransaction | undefined>();
   const [entryDescription, setEntryDescription] = useState<entryDetailType>({ description: "" });
   
   const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
@@ -38,6 +39,8 @@ export function useEntryForm({
     setCustomer,
     entryType,
     setEntryType,
+    selectedPurchase,
+    setSelectedPurchase,
     entryDescription,
     setEntryDescription,
     updateDescription,
