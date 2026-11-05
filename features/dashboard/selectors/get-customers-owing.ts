@@ -3,7 +3,7 @@ import {
   mockPaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { Customer, SaleTransaction } from "@/shared/types/domain";
+import type { SaleTransaction } from "@/shared/types/domain";
 import { CustomerDebtSummary, OpenDebt } from "../types/owe-type";
 
 export const DEBT_OVERDUE_AFTER_DAYS = 7;
