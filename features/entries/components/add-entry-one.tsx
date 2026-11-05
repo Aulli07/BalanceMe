@@ -1,16 +1,12 @@
 "use client";
 
-import { LuChevronDown, LuWalletCards, LuHandCoins, LuDelete, LuArrowRight } from "react-icons/lu";
+import { LuArrowRight, LuChevronDown } from "react-icons/lu";
 import Image from "next/image";
-
-import { pressKey } from "../utils/pressKey";
-import { numbers } from "../data/entry-data";
 import { createPortal } from "react-dom";
+
 import { useEntryForm } from "../hooks/useEntryForm";
 import { EntryProps } from "../types/entry-type";
 import { mockCustomers } from "@/shared/data/domain-mock-data";
-
-
 
 export function AddEntryOne({
   setCustomer,
@@ -24,36 +20,41 @@ export function AddEntryOne({
   if (entryType === undefined || amount === undefined) return null;
 
   return (
-    <main className="px-5 pt-5">
+    <main className="flex min-h-[calc(100vh-6rem)] flex-col px-5 pb-7 pt-5">
       <EntryCustomer setCustomer={setCustomer} customer={customer} />
-      <EntryAmount setAmount={setAmount} setEntryType={setEntryType} entryType={entryType} amount={amount} />
+      <EntryAmount
+        setAmount={setAmount}
+        setEntryType={setEntryType}
+        entryType={entryType}
+        amount={amount}
+        customer={customer}
+      />
 
       <button
         type="button"
         onClick={() => setStep?.(2)}
         disabled={!customer || amount[entryType] === "0"}
-        className="mt-6 flex w-full items-center justify-center gap-3 rounded-2xl bg-[var(--lime)] py-3.5 text-base font-bold text-[var(--forest)] shadow-lg shadow-[var(--forest)]/20 transition-all hover:bg-[#b9e554] active:scale-[.98] disabled:cursor-not-allowed disabled:bg-[#dce6d5] disabled:text-[#71806f] disabled:shadow-none"
+        className="mt-auto flex w-full items-center justify-center gap-1 rounded-2xl bg-[var(--forest)] px-5 py-3 text-[16px] font-bold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-all hover:bg-[var(--forest-dark)] active:scale-[.98] disabled:cursor-not-allowed disabled:bg-[var(--forest)]/80 disabled:text-[var(--surface)]/90 disabled:shadow-none"
       >
         Continue
-        <LuArrowRight className="size-6" aria-hidden="true" />
+        <LuArrowRight className="size-5" aria-hidden="true" />
       </button>
     </main>
   );
 }
 
-
 export function EntryCustomer({
   setCustomer,
   customer,
 }: EntryProps) {
-  const {selectedTrigger, isSelectedTrigger} = useEntryForm();
+  const { selectedTrigger, isSelectedTrigger } = useEntryForm();
 
   return (
     <section aria-labelledby="entry-customer-heading">
       <button
         type="button"
         onClick={() => isSelectedTrigger((prev) => !prev)}
-        className="flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl border border-[#dfe6d9] bg-[var(--surface)] px-4 text-left shadow-sm transition-colors active:border-[var(--forest)]"
+        className="flex min-h-12 w-full items-center justify-between gap-3 rounded-2xl border border-[#e4e9df] bg-[var(--surface)] px-4 text-left shadow-sm shadow-[var(--forest)]/5 transition-colors active:border-[var(--forest)]"
       >
         <span className="flex min-w-0 items-center gap-3">
           {customer ? (
@@ -67,12 +68,12 @@ export function EntryCustomer({
               />
             ) : (
               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
-                {customer.name.slice(0, 2).toUpperCase()}
+                {customer.name.slice(0, 2)}
               </span>
             )
           ) : null}
-          <span className="truncate text-lg font-extrabold text-[var(--ink)]">
-            {customer?.name ?? "Select customer"}
+          <span className="truncate text-[17px] font-extrabold text-[var(--ink)]">
+            {customer ? customer.name : "Select Customer"}
           </span>
         </span>
         <LuChevronDown className="size-6 shrink-0 text-[#758477]" aria-hidden="true" />
@@ -120,8 +121,7 @@ export function EntryCustomer({
             </div>
           </div>,
           document.body,
-        )
-      }
+        )}
     </section>
   );
 }
@@ -131,8 +131,8 @@ export function EntryAmount({
   setEntryType,
   entryType,
   amount,
+  customer,
 }: EntryProps) {
-
   const selectEntryType = (nextType: 0 | 1) => {
     setEntryType?.(nextType);
   };
@@ -141,82 +141,84 @@ export function EntryAmount({
     return null;
   }
 
-  const [whole, decimal] = amount?.[entryType].split(".");
-  const display =
-    (whole ? Number(whole).toLocaleString("en-NG") : "0") +
-    (decimal !== undefined ? `.${decimal}` : "");
+  const productPrice = Number(amount[0]) || 0;
+  const amountPaid = Number(amount[1]) || 0;
+  const amountOwed = Math.max(productPrice - amountPaid, 0);
 
   return (
-    <section className="mt-7" aria-labelledby="entry-amount-heading">
-      <div className="flex rounded-3xl bg-[#e8eee1]">
+    <section className="mt-4" aria-labelledby="entry-amount-heading">
+      <div className="flex rounded-2xl bg-[#e1e8dd] p-1">
         <button
           type="button"
           onClick={() => selectEntryType(0)}
           aria-pressed={entryType === 0}
-          className={`flex flex-1 items-center justify-center gap-3 rounded-2xl py-2 text-md font-bold ${
+          className={`flex min-h-10 flex-1 items-center justify-center rounded-xl px-2 py-2 text-[15px] font-bold ${
             entryType === 0
-            ? "bg-[var(--forest)] font-bold text-[var(--surface)] shadow-md shadow-[var(--forest)]/15"
-              : "text-[#758178]"
+              ? "bg-[var(--forest)] text-[var(--surface)] shadow-sm shadow-[var(--forest)]/20"
+              : "text-[#57705f]"
           }`}
         >
-          <LuWalletCards className="size-5" aria-hidden="true" />
-          Paid
+          Purchase
         </button>
         <button
           type="button"
           onClick={() => selectEntryType(1)}
           aria-pressed={entryType === 1}
-          className={`flex flex-1 items-center justify-center gap-3 rounded-2xl py-2 text-md font-bold ${
+          className={`flex min-h-10 flex-1 items-center justify-center rounded-xl px-2 py-2 text-[15px] font-bold ${
             entryType === 1
-              ? "bg-[var(--forest)] font-bold text-[var(--surface)] shadow-md shadow-[var(--forest)]/15"
-              : "text-[#758178]"
+              ? "bg-[var(--forest)] text-[var(--surface)] shadow-sm shadow-[var(--forest)]/20"
+              : "text-[#57705f]"
           }`}
         >
-          <LuHandCoins className="size-5" aria-hidden="true" />
-          Dues
+          Debt repayment
         </button>
       </div>
 
-      <div>
-        <div className="mt-5 text-center">
-          <p
-            id="entry-amount-heading"
-            className="flex items-baseline justify-center gap-2 text-4xl font-extrabold leading-none tracking-tight text-[var(--forest)]"
-          >
-            <span className="text-2xl text-[#719151]">₦</span>
-            {display}
-          </p>
-          <p className="mt-3 text-base text-[var(--muted)]">
-            {entryType === 0
-              ? "Money received from Tunde"
-              : "Money due from Tunde"}
-          </p>
-        </div>
+      <div className="mt-4 rounded-[1.25rem] border border-[#e5e9df] bg-[var(--surface)] px-4 py-3 shadow-sm shadow-[var(--forest)]/5">
+        <label
+          className="flex items-center justify-between gap-4 border-b border-[#e9ede5] pb-3"
+          htmlFor="entry-product-price"
+        >
+          <span className="text-[13px] font-bold text-[#53705f]">Product price</span>
+          <input
+            id="entry-product-price"
+            type="number"
+            // inputMode="decimal"
+            // min="0"
+            // step="0.01"
+            value={amount[0]}
+            onFocus={(event) => event.currentTarget.select()}
+            onChange={(event) => setAmount?.((current) => [event.target.value, current[1]])}
+            className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
+          />
+        </label>
 
-        <div className="mt-6 grid grid-cols-3 gap-3" aria-label="Amount keypad">
-          {numbers.map((number) => (
-            <button
-              key={number}
-              type="button"
-              onClick={() => pressKey(number, setAmount, entryType)}
-              aria-label={number === "back" ? "Delete last digit" : number}
-              className={`grid h-9 place-items-center rounded-lg border border-[#e1e7dc] text-2xl font-bold text-[var(--ink)] shadow-sm transition-colors active:bg-[#e8eddd] ${
-                number === "."
-                  ? "bg-[#eef2e8]"
-                  : number === "back"
-                    ? "bg-[#f4e9d9] text-[#98745b]"
-                    : "bg-[var(--surface)]"
-              }`}
-            >
-              {number === "back" ? (
-                <LuDelete className="size-6" aria-hidden="true" />
-              ) : (
-                number
-              )}
-            </button>
-          ))}
-        </div>
+        <label
+          className="flex items-center justify-between gap-4 pt-3"
+          htmlFor="entry-amount-paid"
+        >
+          <span className="text-[13px] font-bold text-[#53705f]">Amount paid</span>
+          <input
+            id="entry-amount-paid"
+            type="number"
+            // inputMode="decimal"
+            // min="0"
+            // step="0.01"
+            value={amount[1]}
+            onFocus={(event) => event.currentTarget.select()}
+            onChange={(event) => setAmount?.((current) => [current[0], event.target.value])}
+            className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
+          />
+        </label>
       </div>
+
+      <p
+        id="entry-amount-heading"
+        className="mt-3 rounded-xl bg-[#f7e4d3] px-4 py-2 text-center text-[14px] font-bold text-[#81502f]"
+      >
+        {"\u20A6"} {amountOwed.toLocaleString("en-NG")} will be added to{" "}
+        {customer?.name ?? "this customer"}&apos;s debt
+      </p>
     </section>
   );
 }
