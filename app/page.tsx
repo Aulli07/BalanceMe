@@ -1,14 +1,13 @@
 import { Header } from "@/shared/components/header";
 
-import { BusinessPulse } from "@/features/dashboard/components/business-pulse";
-
-import { CashRecorded } from "@/features/dashboard/components/cash-recorded";
-import { CustomersOwing } from "@/features/dashboard/components/customer-owe";
+// import { BusinessPulse } from "@/features/dashboard/components/business-pulse";
 import { Greeting } from "@/features/dashboard/components/greeting";
-import { PinnedCustomers } from "@/features/dashboard/components/pinned-customers";
+import { TotalOwed } from "@/features/dashboard/components/total-owed";
+import { WhoOwesYou } from "@/features/dashboard/components/who-owes-you";
 
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 
+export const dynamic = "force-dynamic";
 
 
 
@@ -25,10 +24,9 @@ export function Dashboard() {
   return (
     <section className="grid gap-3 pb-6">
       <Greeting businessId={ACTIVE_BUSINESS_ID} />
-      <CashRecorded businessId={ACTIVE_BUSINESS_ID}/>
-      <CustomersOwing businessId={ACTIVE_BUSINESS_ID}/>
-      <PinnedCustomers businessId={ACTIVE_BUSINESS_ID}/>
-      <BusinessPulse businessId={ACTIVE_BUSINESS_ID} />
+      <TotalOwed businessId={ACTIVE_BUSINESS_ID} />
+      <WhoOwesYou businessId={ACTIVE_BUSINESS_ID} />
+      {/* <BusinessPulse businessId={ACTIVE_BUSINESS_ID} /> */}
     </section>
   );
 }
