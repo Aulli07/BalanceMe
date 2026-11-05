@@ -22,16 +22,6 @@ export const pulseData: PulseEntry[] = [
     icon: "overdue",
   },
   {
-    id: "strongest-selling-category",
-    category: "sales",
-    priority: "low",
-    condition: "category-is-strongest-selling",
-    tone: "success",
-    title: "{categoryName} is your strongest category",
-    messageTemplate: "It brought in {amount} during this period.",
-    icon: "chart",
-  },
-  {
     id: "sales-growing",
     category: "sales",
     priority: "medium",

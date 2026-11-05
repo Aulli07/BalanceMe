@@ -10,7 +10,6 @@ import { getNewestCustomer } from "@/features/dashboard/selectors/get-newest-cus
 import { getNoSalesToday } from "@/features/dashboard/selectors/get-no-sales-today";
 import { getRecordingStreak } from "@/features/dashboard/selectors/get-recording-streak";
 import { getSalesTrend } from "@/features/dashboard/selectors/get-sales-trend";
-import { getStrongestSellingCategory } from "@/features/dashboard/selectors/get-selling-category";
 
 import type {
   PulseDisplayData,
@@ -68,24 +67,6 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
       { href: "/customers", label: "View owing" },
       "Pending Balance",
       "TOTAL",
-    );
-  }
-
-  if (entry.condition === "category-is-strongest-selling") {
-    const result = getStrongestSellingCategory(businessId);
-    if (!result) return null;
-
-    return createPulse(
-      entry,
-      formatNaira(result.totalKobo),
-      {
-        categoryName: result.category.name,
-        amount: formatNaira(result.totalKobo),
-      },
-      undefined,
-      { href: "/transactions/analytics", label: "View analytics" },
-      "Top Category",
-      "BROUGHT IN",
     );
   }
 
@@ -150,10 +131,10 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
 
     return createPulse(
       entry,
-      formatNaira(result.sale.totalKobo),
+      formatNaira(result.sale.productPrice),
       {
         customerName: result.customer.name,
-        amount: formatNaira(result.sale.totalKobo),
+        amount: formatNaira(result.sale.productPrice),
       },
       undefined,
       { href: `/transactions/${result.sale.id}`, label: "View receipt" },
@@ -196,10 +177,10 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
 
     return createPulse(
       entry,
-      formatNaira(result.totalKobo),
+      formatNaira(result.amountKobo),
       {
         customerName: result.customer.name,
-        amount: formatNaira(result.totalKobo),
+        amount: formatNaira(result.amountKobo),
       },
       undefined,
       { href: `/customers/${result.customer.id}`, label: "View customer" },

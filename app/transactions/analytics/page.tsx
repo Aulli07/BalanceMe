@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 import { AnalyticsHeader } from "@/features/analytics/components/analytics-header";
 import { AnalyticsPeriodSelector } from "@/features/analytics/components/analytics-period-selector";
 import { AnalyticsSummaryCards } from "@/features/analytics/components/analytics-summary-cards";
-import { CategoryBreakdown } from "@/features/analytics/components/category-breakdown";
 import { CustomerRankings } from "@/features/analytics/components/customer-rankings";
 import { MoneyTrend } from "@/features/analytics/components/money-trend";
 import { getAnalyticsData } from "@/features/analytics/selectors/get-analytics-data";
@@ -43,7 +42,6 @@ export default function TransactionAnalytics() {
         />
         <AnalyticsSummaryCards summary={analytics.summary} />
         <MoneyTrend points={analytics.trend} />
-        <CategoryBreakdown categories={analytics.categories} />
         <CustomerRankings
           topCustomers={analytics.topCustomers}
           topOwers={analytics.topOwers}

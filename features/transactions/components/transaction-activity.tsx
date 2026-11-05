@@ -56,7 +56,7 @@ export function TransactionActivity({transactions}: TransactionMonthlyActivityPr
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-bold leading-tight text-[var(--ink)]">
-                      {transaction.category}
+                      {transaction.description}
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium leading-tight text-[var(--muted)]">
                       {/* <span>{transaction.category}</span>
