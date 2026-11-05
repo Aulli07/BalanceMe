@@ -1,4 +1,4 @@
-import { mockCategories, mockCustomers, mockPaymentTransactions, mockTransactions } from "@/shared/data/domain-mock-data";
+import { mockCustomers, mockPaymentTransactions, mockTransactions } from "@/shared/data/domain-mock-data";
 import { formatNaira } from "@/shared/utils/format-naira";
 import { getDayLabel } from "../utils/get-day-label";
 
@@ -20,30 +20,25 @@ export function getTransactionActivity(businessId: string) {
       return {
         ...transaction,
         customer,
-        category: "Payment",
         description: transaction.note ?? "Payment received",
-        amount: transaction.receivedKobo,
+        amount: transaction.amountReceived,
         status: "Paid",
         statusColor: "bg-[#e9f1df] text-[#568044]",
       };
     }
 
-    const category = mockCategories.find(
-      (item) => item.id === transaction.categoryId,
-    );
     const allocatedKobo = mockPaymentTransactions
       .flatMap((payment) => payment.allocations)
       .filter((allocation) => allocation.saleTransactionId === transaction.id)
-      .reduce((total, allocation) => total + allocation.amountKobo, 0);
-    const owedKobo = transaction.totalKobo - transaction.initialPaidKobo - allocatedKobo;
+      .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
+    const owedKobo = transaction.productPrice - transaction.amountPaid - allocatedKobo;
     const isPaid = owedKobo <= 0;
 
     return {
       ...transaction,
       customer,
-      category: category?.name ?? "Uncategorised",
       description: transaction.description,
-      amount: transaction.totalKobo,
+      amount: transaction.productPrice,
       status: isPaid ? "Paid" : `Owes ${formatNaira(owedKobo)}`,
       statusColor: isPaid
         ? "bg-[#e9f1df] text-[#568044]"

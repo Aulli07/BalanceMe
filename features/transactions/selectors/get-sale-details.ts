@@ -5,15 +5,15 @@ import type {
 
 export function getSaleDetails(transaction: SaleTransaction) {
   return {
-    productPriceKobo: transaction.totalKobo,
-    amountPaidKobo: transaction.initialPaidKobo,
-    balanceKobo: Math.max(transaction.totalKobo - transaction.initialPaidKobo, 0),
+    productPriceKobo: transaction.productPrice,
+    amountPaidKobo: transaction.amountPaid,
+    balanceKobo: Math.max(transaction.productPrice - transaction.amountPaid, 0),
   };
 }
 
 export function getPaymentDetails(transaction: PaymentTransaction) {
   return {
-    amountPaidKobo: transaction.receivedKobo,
+    amountPaidKobo: transaction.amountReceived,
     allocations: transaction.allocations,
   };
 }

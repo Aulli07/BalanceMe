@@ -299,10 +299,10 @@ function RepaymentFields({
   const purchases = mockSaleTransactions.filter(
     (purchase) =>
       purchase.customerId === customerId &&
-      purchase.initialPaidKobo < purchase.totalKobo,
+      purchase.amountPaid < purchase.productPrice,
   );
   const originalOwed = selectedPurchase
-    ? (selectedPurchase.totalKobo - selectedPurchase.initialPaidKobo) / 100
+    ? (selectedPurchase.productPrice - selectedPurchase.amountPaid) / 100
     : 0;
   const amountOwed = Math.max(originalOwed - (Number(amount[1]) || 0), 0);
 
@@ -424,8 +424,8 @@ function RepaymentFields({
 }
 
 function PurchasePreview({ purchase, isShowInfo }: { purchase: SaleTransaction; isShowInfo: boolean }) {
-  const price = purchase.totalKobo / 100;
-  const paid = purchase.initialPaidKobo / 100;
+  const price = purchase.productPrice / 100;
+  const paid = purchase.amountPaid / 100;
   const owed = Math.max(price - paid, 0);
   const date = new Intl.DateTimeFormat("en-NG", {
     day: "numeric",

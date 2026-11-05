@@ -9,14 +9,8 @@ export interface AnalyticsSummary {
 
 export interface TrendPoint {
   label: string;
-  receivedKobo: NairaKobo;
+  amountReceived: NairaKobo;
   owedKobo: NairaKobo;
-}
-
-export interface AnalyticsCategory {
-  name: string;
-  valueKobo: NairaKobo;
-  percentage: number;
 }
 
 export interface AnalyticsCustomer {
@@ -28,7 +22,6 @@ export interface AnalyticsCustomer {
 export interface TransactionAnalyticsData {
   summary: AnalyticsSummary;
   trend: TrendPoint[];
-  categories: AnalyticsCategory[];
   topCustomers: AnalyticsCustomer[];
   topOwers: AnalyticsCustomer[];
 }

@@ -13,16 +13,14 @@ function getOutstandingKobo(customerId: string) {
   const sales = mockSaleTransactions.filter(
     (sale) => sale.customerId === customerId,
   );
-  const salesTotal = sales.reduce((total, sale) => total + sale.totalKobo, 0);
-  const paidAtSale = sales.reduce(
-    (total, sale) => total + sale.initialPaidKobo,
-    0,
-  );
-  const payments = mockPaymentTransactions
-    .filter((payment) => payment.customerId === customerId)
-    .reduce((total, payment) => total + payment.receivedKobo, 0);
+  return sales.reduce((total, sale) => {
+    const allocatedKobo = mockPaymentTransactions
+      .flatMap((payment) => payment.allocations)
+      .filter((allocation) => allocation.saleTransactionId === sale.id)
+      .reduce((sum, allocation) => sum + allocation.debtAmountPaid, 0);
 
-  return Math.max(0, salesTotal - paidAtSale - payments);
+    return total + Math.max(0, sale.productPrice - sale.amountPaid - allocatedKobo);
+  }, 0);
 }
 
 export function getOwingCustomers(): OwingCustomer[] {

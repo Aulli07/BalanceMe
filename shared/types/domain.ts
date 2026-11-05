@@ -2,8 +2,6 @@ export type EntityId = string;
 export type ISODateTime = string;
 export type NairaKobo = number;
 
-export type EntrySource = "written" | "voice" | "screenshot";
-
 export interface User {
   id: EntityId;
   fullName: string;
@@ -51,13 +49,6 @@ export interface CustomerLastReminded {
   at: ISODateTime;
 }
 
-export interface Category {
-  id: EntityId;
-  businessId: EntityId;
-  name: string;
-  createdAt: ISODateTime;
-}
-
 export type NotificationCategory = "Paid" | "Owed" | "Analytics";
 
 export interface Notification {
@@ -72,13 +63,15 @@ export interface Notification {
   customerId?: EntityId;
 }
 
-export interface ReceiptAttachment {
+export interface Receipt {
   id: EntityId;
+  businessId: EntityId;
+  transactionId: EntityId;
   fileName: string;
   mimeType: string;
   sizeBytes: number;
   storageKey: string;
-  uploadedAt: ISODateTime;
+  createdAt: ISODateTime;
 }
 
 interface TransactionBase {
@@ -90,56 +83,37 @@ interface TransactionBase {
 
 export interface SaleTransaction extends TransactionBase {
   type: "sale";
-  categoryId: EntityId;
   description: string;
-  totalKobo: NairaKobo;
-  initialPaidKobo: NairaKobo;
+  productPrice: NairaKobo;
+  amountPaid: NairaKobo;
   dueDate?: ISODateTime;
   receiptId?: EntityId;
 }
 
 export interface PaymentAllocation {
   saleTransactionId: EntityId;
-  amountKobo: NairaKobo;
+  debtAmountPaid: NairaKobo;
 }
 
 export interface PaymentTransaction extends TransactionBase {
   type: "payment";
-  receivedKobo: NairaKobo;
+  amountReceived: NairaKobo;
   allocations: PaymentAllocation[];
   note?: string;
+  receiptId?: EntityId;
 }
 
 export type Transaction = SaleTransaction | PaymentTransaction;
 export type SaleSettlementStatus = "paid" | "partially_paid" | "unpaid";
 
-interface EntryDraftBase {
+export interface WrittenEntryDraft {
   id: EntityId;
   businessId: EntityId;
   customerId: EntityId;
-  categoryId: EntityId;
   description: string;
-  paidKobo: NairaKobo;
-  owedKobo: NairaKobo;
-  receiptFiles: File[];
+  productPrice: NairaKobo;
+  amountPaid: NairaKobo;
+  amountOwed: NairaKobo;
+  receiptFiles?: File[];
   createdAt: ISODateTime;
 }
-
-export interface WrittenEntryDraft extends EntryDraftBase {
-  source: "written";
-}
-
-export interface VoiceEntryDraft extends EntryDraftBase {
-  source: "voice";
-  transcript: string;
-}
-
-export interface ScreenshotEntryDraft extends EntryDraftBase {
-  source: "screenshot";
-  screenshotFile: File;
-}
-
-export type EntryDraft =
-  | WrittenEntryDraft
-  | VoiceEntryDraft
-  | ScreenshotEntryDraft;

@@ -15,7 +15,7 @@ export function getSalesTrend(businessId: string, days = 7) {
         new Date(sale.createdAt) >= currentPeriodStart &&
         new Date(sale.createdAt) < now,
     )
-    .reduce((total, sale) => total + sale.totalKobo, 0);
+    .reduce((total, sale) => total + sale.productPrice, 0);
 
   const previousTotalKobo = mockSaleTransactions
     .filter(
@@ -24,7 +24,7 @@ export function getSalesTrend(businessId: string, days = 7) {
         new Date(sale.createdAt) >= previousPeriodStart &&
         new Date(sale.createdAt) < currentPeriodStart,
     )
-    .reduce((total, sale) => total + sale.totalKobo, 0);
+    .reduce((total, sale) => total + sale.productPrice, 0);
 
   return {
     currentTotalKobo,

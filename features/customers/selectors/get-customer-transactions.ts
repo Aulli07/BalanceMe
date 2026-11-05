@@ -2,7 +2,6 @@ import {
   mockPaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import { getCategory } from "@/shared/selectors/getters";
 import type { CustomerTransactionItem } from "../types/customer-detail";
 
 /**
@@ -16,17 +15,15 @@ export function getCustomerRecentTransactions(
   const sales: CustomerTransactionItem[] = mockSaleTransactions
     .filter((txn) => txn.customerId === customerId)
     .map((txn) => {
-      const category = getCategory(txn.categoryId);
-      const isPaidInFull = txn.initialPaidKobo >= txn.totalKobo;
+      const isPaidInFull = txn.amountPaid >= txn.productPrice;
       return {
         id: txn.id,
         type: "sale" as const,
-        title: category?.name ?? "Sale",
+        title: "Sale",
         description: txn.description,
-        amountKobo: txn.totalKobo,
+        amountKobo: txn.productPrice,
         createdAt: txn.createdAt,
         paymentStatus: isPaidInFull ? "Paid in full" : "Partially paid",
-        categoryName: category?.name,
       };
     });
 
@@ -37,7 +34,7 @@ export function getCustomerRecentTransactions(
       type: "payment" as const,
       title: "Payment received",
       description: txn.note ?? "Cash payment",
-      amountKobo: txn.receivedKobo,
+      amountKobo: txn.amountReceived,
       createdAt: txn.createdAt,
       paymentStatus: "Received",
     }));

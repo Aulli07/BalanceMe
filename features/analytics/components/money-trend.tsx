@@ -1,7 +1,7 @@
 import { formatNaira } from "@/shared/utils/format-naira";
 import type { TrendPoint } from "../types/transaction-analytics";
 
-function getPoints(points: TrendPoint[], key: "receivedKobo" | "owedKobo") {
+function getPoints(points: TrendPoint[], key: "amountReceived" | "owedKobo") {
   const max = Math.max(...points.map((point) => point[key]), 1);
   return points.map((point, index) => {
     const x = points.length === 1 ? 50 : (index / (points.length - 1)) * 100;
@@ -11,7 +11,7 @@ function getPoints(points: TrendPoint[], key: "receivedKobo" | "owedKobo") {
 }
 
 export function MoneyTrend({ points }: { points: TrendPoint[] }) {
-  const received = points.reduce((total, point) => total + point.receivedKobo, 0);
+  const received = points.reduce((total, point) => total + point.amountReceived, 0);
   const owed = points.reduce((total, point) => total + point.owedKobo, 0);
 
   return (
@@ -29,7 +29,7 @@ export function MoneyTrend({ points }: { points: TrendPoint[] }) {
       <div className="mt-4 h-32">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full overflow-visible" role="img" aria-label="Money received and credit given trend">
           <path d="M 0 98 H 100" stroke="var(--line)" strokeWidth="0.8" vectorEffect="non-scaling-stroke" />
-          <polyline points={getPoints(points, "receivedKobo")} fill="none" stroke="var(--forest)" strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+          <polyline points={getPoints(points, "amountReceived")} fill="none" stroke="var(--forest)" strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
           <polyline points={getPoints(points, "owedKobo")} fill="none" stroke="#e8ae53" strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>

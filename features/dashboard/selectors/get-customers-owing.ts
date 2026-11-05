@@ -14,7 +14,7 @@ function getAllocatedPaymentsKobo(saleTransactionId: string) {
   return mockPaymentTransactions
     .flatMap((payment) => payment.allocations)
     .filter((allocation) => allocation.saleTransactionId === saleTransactionId)
-    .reduce((total, allocation) => total + allocation.amountKobo, 0);
+    .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
 }
 
 function isDebtOverdue(sale: SaleTransaction, now: Date) {
@@ -32,7 +32,7 @@ export function getOpenDebtsForCustomer(
   return mockSaleTransactions
     .filter((sale) => sale.customerId === customerId)
     .map((sale) => {
-      const outstandingKobo = Math.max(0, sale.totalKobo - sale.initialPaidKobo - getAllocatedPaymentsKobo(sale.id));
+      const outstandingKobo = Math.max(0, sale.productPrice - sale.amountPaid - getAllocatedPaymentsKobo(sale.id));
 
       return {
         sale,

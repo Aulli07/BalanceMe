@@ -3,7 +3,7 @@ import { mockCustomers, mockSaleTransactions } from "@/shared/data/domain-mock-d
 export function getLargestSale(businessId: string) {
   const sale = [...mockSaleTransactions]
     .filter((transaction) => transaction.businessId === businessId)
-    .sort((first, second) => second.totalKobo - first.totalKobo)[0];
+    .sort((first, second) => second.productPrice - first.productPrice)[0];
 
   if (!sale) return null;
 

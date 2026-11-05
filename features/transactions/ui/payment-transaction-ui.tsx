@@ -56,7 +56,7 @@ export function PaymentTransactionUi({
                   <p className="mt-1 text-xs font-medium text-[var(--muted)]">Payment allocation</p>
                 </div>
                 <span className="shrink-0 rounded-full bg-[var(--paper)] px-3 py-1.5 text-sm font-extrabold text-[var(--forest)]">
-                  {formatNaira(allocation.amountKobo)}
+                  {formatNaira(allocation.debtAmountPaid)}
                 </span>
               </li>
             );

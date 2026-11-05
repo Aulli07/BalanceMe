@@ -14,10 +14,10 @@ export type CustomerCollectedAmount = {
 export function getTotalCollectedKobo(businessId: string): NairaKobo {
   const initialPayments = mockSaleTransactions
     .filter((sale) => sale.businessId === businessId)
-    .reduce((total, sale) => total + sale.initialPaidKobo, 0);
+    .reduce((total, sale) => total + sale.amountPaid, 0);
   const repayments = mockPaymentTransactions
     .filter((payment) => payment.businessId === businessId)
-    .reduce((total, payment) => total + payment.receivedKobo, 0);
+    .reduce((total, payment) => total + payment.amountReceived, 0);
   return initialPayments + repayments;
 }
 
@@ -30,13 +30,13 @@ export function getCollectedKoboForCustomer(
       (sale) =>
         sale.businessId === businessId && sale.customerId === customerId,
     )
-    .reduce((total, sale) => total + sale.initialPaidKobo, 0);
+    .reduce((total, sale) => total + sale.amountPaid, 0);
   const repayments = mockPaymentTransactions
     .filter(
       (payment) =>
         payment.businessId === businessId && payment.customerId === customerId,
     )
-    .reduce((total, payment) => total + payment.receivedKobo, 0);
+    .reduce((total, payment) => total + payment.amountReceived, 0);
   return initialPayments + repayments;
 }
 
@@ -75,13 +75,13 @@ export function getCollectedKoboForMonth(
       (sale) =>
         sale.businessId === businessId && isInMonth(sale.createdAt, month),
     )
-    .reduce((total, sale) => total + sale.initialPaidKobo, 0);
+    .reduce((total, sale) => total + sale.amountPaid, 0);
   const repayments = mockPaymentTransactions
     .filter(
       (payment) =>
         payment.businessId === businessId &&
         isInMonth(payment.createdAt, month),
     )
-    .reduce((total, payment) => total + payment.receivedKobo, 0);
+    .reduce((total, payment) => total + payment.amountReceived, 0);
   return initialPayments + repayments;
 }

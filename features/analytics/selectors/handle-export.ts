@@ -18,12 +18,6 @@ export function handleExport(
     ["Total owed", formatNaira(analytics.summary.totalOwedKobo)],
     ["Collection rate", `${analytics.summary.collectionRate}%`],
     ["Transaction count", String(analytics.summary.transactionCount)],
-    [],
-    ["Category", "Value"],
-    ...analytics.categories.map((category) => [
-      category.name,
-      formatNaira(category.valueKobo),
-    ]),
   ];
   const csv = rows
     .map((row) => row.map((cell) => `"${cell}"`).join(","))

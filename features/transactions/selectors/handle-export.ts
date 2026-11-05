@@ -3,12 +3,11 @@ import { formatNaira } from "@/shared/utils/format-naira";
 
 export function handleTransactionExport(transactions: TransactionActivityProps) {
   const rows = [
-    ["Date", "Customer", "Type", "Category", "Description", "Amount", "Status"],
+    ["Date", "Customer", "Type", "Description", "Amount", "Status"],
     ...transactions.map((transaction) => [
       new Date(transaction.createdAt).toLocaleDateString("en-NG"),
       transaction.customer?.name ?? "Unknown customer",
       transaction.type === "payment" ? "Payment" : "Sale",
-      transaction.category,
       transaction.description,
       formatNaira(transaction.amount),
       transaction.status,

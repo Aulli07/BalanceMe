@@ -3,25 +3,26 @@ import {
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
 import type { Customer, NairaKobo } from "@/shared/types/domain";
+import { isInMonth } from "../utils/check-month-aligns";
 
 export type CustomerProductPriceAmount = {
   customer: Customer | undefined;
   amountKobo: NairaKobo;
 };
 
-function isInMonth(createdAt: string, month: string) {
-  const [monthName, year] = month.split(" ");
-  const date = new Date(createdAt);
-  return (
-    date.getUTCFullYear() === Number(year) &&
-    date.getUTCMonth() === new Date(`${monthName} 1, ${year}`).getMonth()
-  );
-}
+// function isInMonth(createdAt: string, month: string) {
+//   const [monthName, year] = month.split(" ");
+//   const date = new Date(createdAt);
+//   return (
+//     date.getUTCFullYear() === Number(year) &&
+//     date.getUTCMonth() === new Date(`${monthName} 1, ${year}`).getMonth()
+//   );
+// }
 
 export function getTotalProductPriceKobo(businessId: string): NairaKobo {
   return mockSaleTransactions
     .filter((sale) => sale.businessId === businessId)
-    .reduce((total, sale) => total + sale.totalKobo, 0);
+    .reduce((total, sale) => total + sale.productPrice, 0);
 }
 
 export function getProductPriceKoboForCustomer(
@@ -33,7 +34,7 @@ export function getProductPriceKoboForCustomer(
       (sale) =>
         sale.businessId === businessId && sale.customerId === customerId,
     )
-    .reduce((total, sale) => total + sale.totalKobo, 0);
+    .reduce((total, sale) => total + sale.productPrice, 0);
 }
 
 export function getLargestProductPriceCustomer(
@@ -71,5 +72,5 @@ export function getProductPriceKoboForMonth(
       (sale) =>
         sale.businessId === businessId && isInMonth(sale.createdAt, month),
     )
-    .reduce((total, sale) => total + sale.totalKobo, 0);
+    .reduce((total, sale) => total + sale.productPrice, 0);
 }

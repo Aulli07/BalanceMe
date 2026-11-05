@@ -19,17 +19,17 @@ export function getCustomerStats(customerId: string): CustomerStats {
   );
 
   const initialPaid = sales.reduce(
-    (acc, txn) => acc + txn.initialPaidKobo,
+    (acc, txn) => acc + txn.amountPaid,
     0,
   );
   const subsequentPaid = payments.reduce(
-    (acc, txn) => acc + txn.receivedKobo,
+    (acc, txn) => acc + txn.amountReceived,
     0,
   );
   const paidTotalKobo = initialPaid + subsequentPaid;
 
   const totalSalesKobo = sales.reduce(
-    (acc, txn) => acc + txn.totalKobo,
+    (acc, txn) => acc + txn.productPrice,
     0,
   );
   const owesNowKobo = Math.max(0, totalSalesKobo - paidTotalKobo);

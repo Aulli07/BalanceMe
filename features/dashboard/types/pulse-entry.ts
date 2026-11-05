@@ -17,7 +17,6 @@ export type PulseCondition =
   | "customer-has-largest-outstanding-debt"
   | "customer-payment-received"
   | "customers-have-outstanding-debt"
-  | "category-is-strongest-selling"
   | "sales-exceed-previous-period"
   | "sales-are-below-previous-period"
   | "cash-recorded-exceeds-previous-period"

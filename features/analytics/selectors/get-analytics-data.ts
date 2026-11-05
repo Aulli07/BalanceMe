@@ -1,5 +1,4 @@
 import {
-  mockCategories,
   mockCustomers,
   mockPaymentTransactions,
   mockSaleTransactions,
@@ -7,7 +6,6 @@ import {
 import type { NairaKobo, Transaction } from "@/shared/types/domain";
 import type { AnalyticsPeriod } from "../data/analytics-periods";
 import type {
-  AnalyticsCategory,
   AnalyticsCustomer,
   TransactionAnalyticsData,
   TrendPoint,
@@ -26,8 +24,8 @@ function getDateKey(date: Date) {
 }
 
 function getReceivedKobo(transaction: Transaction) {
-  if (transaction.type === "payment") return transaction.receivedKobo;
-  return transaction.initialPaidKobo;
+  if (transaction.type === "payment") return transaction.amountReceived;
+  return transaction.amountPaid;
 }
 
 function getOwedKobo(transaction: Transaction) {
@@ -35,8 +33,8 @@ function getOwedKobo(transaction: Transaction) {
   const allocatedKobo = mockPaymentTransactions
     .flatMap((payment) => payment.allocations)
     .filter((allocation) => allocation.saleTransactionId === transaction.id)
-    .reduce((total, allocation) => total + allocation.amountKobo, 0);
-  return Math.max(0, transaction.totalKobo - transaction.initialPaidKobo - allocatedKobo);
+    .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
+  return Math.max(0, transaction.productPrice - transaction.amountPaid - allocatedKobo);
 }
 
 export function getAnalyticsData(
@@ -80,7 +78,7 @@ export function getAnalyticsData(
   );
   const totalValueKobo = selectedTransactions
     .filter((transaction) => transaction.type === "sale")
-    .reduce((total, transaction) => total + transaction.totalKobo, 0);
+    .reduce((total, transaction) => total + transaction.productPrice, 0);
   const summary = {
     totalReceivedKobo,
     totalOwedKobo,
@@ -105,7 +103,7 @@ export function getAnalyticsData(
         period === "TODAY"
           ? "Today"
           : date.toLocaleDateString("en-NG", { day: "numeric", month: "short", timeZone: "UTC" }),
-      receivedKobo: dailyTransactions.reduce(
+      amountReceived: dailyTransactions.reduce(
         (total, transaction) => total + getReceivedKobo(transaction),
         0,
       ),
@@ -116,33 +114,17 @@ export function getAnalyticsData(
     };
   });
 
-  const categoryTotals = new Map<string, NairaKobo>();
-  selectedTransactions.forEach((transaction) => {
-    if (transaction.type !== "sale") return;
-    const category = mockCategories.find((item) => item.id === transaction.categoryId)?.name
-      ?? "Uncategorised";
-    categoryTotals.set(category, (categoryTotals.get(category) ?? 0) + transaction.totalKobo);
-  });
-  const categoryTotalKobo = [...categoryTotals.values()].reduce((total, value) => total + value, 0);
-  const categories: AnalyticsCategory[] = [...categoryTotals.entries()]
-    .sort((first, second) => second[1] - first[1])
-    .map(([name, valueKobo]) => ({
-      name,
-      valueKobo,
-      percentage: categoryTotalKobo ? Math.round((valueKobo / categoryTotalKobo) * 100) : 0,
-    }));
-
-  const customerTotals = new Map<string, { receivedKobo: number; owedKobo: number }>();
+  const customerTotals = new Map<string, { amountReceived: number; owedKobo: number }>();
   selectedTransactions.forEach((transaction) => {
     const current = customerTotals.get(transaction.customerId) ?? {
-      receivedKobo: 0,
+      amountReceived: 0,
       owedKobo: 0,
     };
-    current.receivedKobo += getReceivedKobo(transaction);
+    current.amountReceived += getReceivedKobo(transaction);
     current.owedKobo += getOwedKobo(transaction);
     customerTotals.set(transaction.customerId, current);
   });
-  const toCustomer = (key: "receivedKobo" | "owedKobo"): AnalyticsCustomer[] =>
+  const toCustomer = (key: "amountReceived" | "owedKobo"): AnalyticsCustomer[] =>
     [...customerTotals.entries()]
       .sort((first, second) => second[1][key] - first[1][key])
       .slice(0, 3)
@@ -155,8 +137,7 @@ export function getAnalyticsData(
   return {
     summary,
     trend,
-    categories,
-    topCustomers: toCustomer("receivedKobo"),
+    topCustomers: toCustomer("amountReceived"),
     topOwers: toCustomer("owedKobo"),
   };
 }

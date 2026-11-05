@@ -1,18 +1,12 @@
 import type {
   Business,
-  Category,
   Customer,
-  EntryDraft,
-  EntrySource,
   Notification,
   PaymentTransaction,
-  ReceiptAttachment,
-  SaleSettlementStatus,
+  Receipt,
   SaleTransaction,
-  ScreenshotEntryDraft,
   Transaction,
   User,
-  VoiceEntryDraft,
   WrittenEntryDraft,
 } from "@/shared/types/domain";
 
@@ -77,21 +71,6 @@ export const mockCustomers: Customer[] = [
     phone: "+2348056789012",
     createdAt,
     updatedAt,
-  },
-];
-
-export const mockCategories: Category[] = [
-  {
-    id: "category-feed-001",
-    businessId: "business-farm-001",
-    name: "Animal Feed",
-    createdAt,
-  },
-  {
-    id: "category-livestock-001",
-    businessId: "business-farm-001",
-    name: "Livestock Sale",
-    createdAt,
   },
 ];
 
@@ -169,14 +148,76 @@ export const mockNotifications: Notification[] = [
   },
 ];
 
-export const mockReceiptAttachments: ReceiptAttachment[] = [
+export const mockReceipts: Receipt[] = [
   {
     id: "receipt-001",
-    fileName: "chika-feed-invoice.pdf",
+    businessId: "business-farm-001",
+    transactionId: "sale-001",
+    fileName: "chika-poultry-feed-invoice.pdf",
     mimeType: "application/pdf",
     sizeBytes: 182_400,
     storageKey: "receipts/business-farm-001/receipt-001.pdf",
-    uploadedAt: "2026-10-10T10:15:00.000Z",
+    createdAt: "2026-10-10T10:05:00.000Z",
+  },
+  {
+    id: "receipt-002",
+    businessId: "business-farm-001",
+    transactionId: "sale-002",
+    fileName: "tunde-day-old-chicks-invoice.pdf",
+    mimeType: "application/pdf",
+    sizeBytes: 146_700,
+    storageKey: "receipts/business-farm-001/receipt-002.pdf",
+    createdAt: "2026-10-11T08:35:00.000Z",
+  },
+  {
+    id: "receipt-003",
+    businessId: "business-farm-001",
+    transactionId: "sale-003",
+    fileName: "chika-supplements-invoice.jpg",
+    mimeType: "image/jpeg",
+    sizeBytes: 238_900,
+    storageKey: "receipts/business-farm-001/receipt-003.jpg",
+    createdAt: "2026-10-12T12:05:00.000Z",
+  },
+  {
+    id: "receipt-004",
+    businessId: "business-farm-001",
+    transactionId: "sale-004",
+    fileName: "tunde-layer-feed-invoice.pdf",
+    mimeType: "application/pdf",
+    sizeBytes: 175_300,
+    storageKey: "receipts/business-farm-001/receipt-004.pdf",
+    createdAt: "2026-10-14T09:20:00.000Z",
+  },
+  {
+    id: "receipt-005",
+    businessId: "business-farm-001",
+    transactionId: "sale-005",
+    fileName: "chika-starter-mash-invoice.jpg",
+    mimeType: "image/jpeg",
+    sizeBytes: 196_100,
+    storageKey: "receipts/business-farm-001/receipt-005.jpg",
+    createdAt: "2026-10-15T08:15:00.000Z",
+  },
+  {
+    id: "receipt-006",
+    businessId: "business-farm-001",
+    transactionId: "sale-006",
+    fileName: "tunde-feeders-invoice.pdf",
+    mimeType: "application/pdf",
+    sizeBytes: 162_800,
+    storageKey: "receipts/business-farm-001/receipt-006.pdf",
+    createdAt: "2026-10-15T13:35:00.000Z",
+  },
+  {
+    id: "receipt-007",
+    businessId: "business-farm-001",
+    transactionId: "payment-001",
+    fileName: "chika-bank-transfer-receipt.png",
+    mimeType: "image/png",
+    sizeBytes: 121_500,
+    storageKey: "receipts/business-farm-001/receipt-007.png",
+    createdAt: "2026-10-14T11:21:00.000Z",
   },
 ];
 
@@ -186,11 +227,11 @@ export const mockSaleTransactions: SaleTransaction[] = [
     businessId: "business-farm-001",
     customerId: "customer-chika-001",
     type: "sale",
-    categoryId: "category-feed-001",
     description: "Ten bags of poultry feed",
-    totalKobo: 825_000,
-    initialPaidKobo: 300_000,
+    productPrice: 825_000,
+    amountPaid: 300_000,
     receiptId: "receipt-001",
+    dueDate: "2026-11-10T09:00:00.000Z",
     createdAt: "2026-10-10T10:00:00.000Z",
   },
   {
@@ -198,10 +239,11 @@ export const mockSaleTransactions: SaleTransaction[] = [
     businessId: "business-farm-001",
     customerId: "customer-tunde-001",
     type: "sale",
-    categoryId: "category-livestock-001",
     description: "Two crates of day-old chicks",
-    totalKobo: 450_000,
-    initialPaidKobo: 450_000,
+    productPrice: 450_000,
+    amountPaid: 450_000,
+    receiptId: "receipt-002",
+    dueDate: "2026-10-20T09:00:00.000Z",
     createdAt: "2026-10-11T08:30:00.000Z",
   },
   {
@@ -209,11 +251,47 @@ export const mockSaleTransactions: SaleTransaction[] = [
     businessId: "business-farm-001",
     customerId: "customer-chika-001",
     type: "sale",
-    categoryId: "category-feed-001",
     description: "Poultry supplements",
-    totalKobo: 150_000,
-    initialPaidKobo: 0,
+    productPrice: 150_000,
+    amountPaid: 0,
+    receiptId: "receipt-003",
+    dueDate: "2026-10-25T09:00:00.000Z",
     createdAt: "2026-10-12T12:00:00.000Z",
+  },
+  {
+    id: "sale-004",
+    businessId: "business-farm-001",
+    customerId: "customer-tunde-001",
+    type: "sale",
+    description: "Layer feed and supplements",
+    productPrice: 620_000,
+    amountPaid: 220_000,
+    receiptId: "receipt-004",
+    dueDate: "2026-10-29T09:00:00.000Z",
+    createdAt: "2026-10-14T09:15:00.000Z",
+  },
+  {
+    id: "sale-005",
+    businessId: "business-farm-001",
+    customerId: "customer-chika-001",
+    type: "sale",
+    description: "Broiler starter mash",
+    productPrice: 280_000,
+    amountPaid: 280_000,
+    receiptId: "receipt-005",
+    createdAt: "2026-10-15T08:10:00.000Z",
+  },
+  {
+    id: "sale-006",
+    businessId: "business-farm-001",
+    customerId: "customer-tunde-001",
+    type: "sale",
+    description: "Poultry drinkers and feeders",
+    productPrice: 340_000,
+    amountPaid: 40_000,
+    receiptId: "receipt-006",
+    dueDate: "2026-11-05T09:00:00.000Z",
+    createdAt: "2026-10-15T13:30:00.000Z",
   },
 ];
 
@@ -223,11 +301,12 @@ export const mockPaymentTransactions: PaymentTransaction[] = [
     businessId: "business-farm-001",
     customerId: "customer-chika-001",
     type: "payment",
-    receivedKobo: 500_000,
+    amountReceived: 500_000,
+    receiptId: "receipt-007",
     allocations: [
       {
         saleTransactionId: "sale-001",
-        amountKobo: 500_000,
+        debtAmountPaid: 500_000,
       },
     ],
     note: "Bank transfer received from Chika.",
@@ -240,71 +319,14 @@ export const mockTransactions: Transaction[] = [
   ...mockPaymentTransactions,
 ];
 
-export const mockSaleSettlementStatuses: Record<string, SaleSettlementStatus> = {
-  "sale-001": "partially_paid",
-  "sale-002": "paid",
-  "sale-003": "unpaid",
-};
-
-export const mockEntrySources: EntrySource[] = [
-  "written",
-  "voice",
-  "screenshot",
-];
-
 export const mockWrittenEntryDraft: WrittenEntryDraft = {
   id: "draft-written-001",
   businessId: "business-farm-001",
   customerId: "customer-tunde-001",
-  categoryId: "category-feed-001",
-  source: "written",
   description: "Five bags of starter feed",
-  paidKobo: 200_000,
-  owedKobo: 175_000,
+  productPrice: 375_000,
+  amountPaid: 200_000,
+  amountOwed: 175_000,
   receiptFiles: [],
   createdAt: "2026-10-15T09:10:00.000Z",
-};
-
-export const mockVoiceEntryDraft: VoiceEntryDraft = {
-  id: "draft-voice-001",
-  businessId: "business-farm-001",
-  customerId: "customer-chika-001",
-  categoryId: "category-livestock-001",
-  source: "voice",
-  description: "Three trays of eggs",
-  paidKobo: 0,
-  owedKobo: 135_000,
-  receiptFiles: [],
-  transcript: "Chika collected three trays of eggs on credit for one thousand three hundred and fifty naira.",
-  createdAt: "2026-10-15T10:25:00.000Z",
-};
-
-export function createMockScreenshotEntryDraft(): ScreenshotEntryDraft {
-  const screenshotFile = new File(
-    ["Mock transfer receipt"],
-    "transfer-receipt.png",
-    { type: "image/png" },
-  );
-
-  return {
-    id: "draft-screenshot-001",
-    businessId: "business-farm-001",
-    customerId: "customer-chika-001",
-    categoryId: "category-feed-001",
-    source: "screenshot",
-    description: "Transfer for poultry feed",
-    paidKobo: 250_000,
-    owedKobo: 0,
-    receiptFiles: [screenshotFile],
-    screenshotFile,
-    createdAt: "2026-10-15T13:40:00.000Z",
-  };
-}
-
-export function createMockEntryDrafts(): EntryDraft[] {
-  return [
-    mockWrittenEntryDraft,
-    mockVoiceEntryDraft,
-    createMockScreenshotEntryDraft(),
-  ];
 }
