@@ -13,4 +13,4 @@ export const months = [
 export type TransactionMonth = (typeof months)[number];
 
 
-export const filters = ["All", "Paid", "Owed"] as const;
+export const filters = ["All", "Settled", "Owed"] as const;

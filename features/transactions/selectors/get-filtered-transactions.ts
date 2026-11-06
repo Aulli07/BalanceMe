@@ -9,7 +9,7 @@ export function getFilteredTransactions(
   transactions: TransactionActivityProps,
   activeFilter: (typeof filters)[number],
 ) {
-  if (activeFilter === "Paid") {
+  if (activeFilter === "Settled") {
     return transactions.filter(isTransactionFullyPaid);
   }
 

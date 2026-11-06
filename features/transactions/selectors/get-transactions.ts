@@ -22,7 +22,7 @@ export function getTransactionActivity(businessId: string) {
         customer,
         description: transaction.note ?? "Payment received",
         amount: transaction.amountReceived,
-        status: "Paid",
+        status: "Settled",
         statusColor: "bg-[#e9f1df] text-[#568044]",
       };
     }
@@ -39,7 +39,7 @@ export function getTransactionActivity(businessId: string) {
       customer,
       description: transaction.description,
       amount: transaction.productPrice,
-      status: isPaid ? "Paid" : `Owes ${formatNaira(owedAmount)}`,
+      status: isPaid ? "Settled" : `Owes ${formatNaira(owedAmount)}`,
       statusColor: isPaid
         ? "bg-[#e9f1df] text-[#568044]"
         : "bg-[#f8ead5] text-[#855126]",
