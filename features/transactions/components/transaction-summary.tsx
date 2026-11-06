@@ -53,8 +53,8 @@ export function TransactionSummary({
 
       <div className="mt-3 grid grid-cols-2 gap-3">
         <article className="rounded-xl border border-[#cce2d2] bg-[var(--forest)] px-4 py-3">
-          <p className="text-sm font-semibold text-white leading-tight">Total product price</p>
-          <p className="mt-2 text-xl font-bold tracking-tight leading-tight text-white">
+          <p className="text-sm font-semibold text-[var(--surface)] leading-tight">Total product price</p>
+          <p className="mt-2 text-xl font-bold tracking-tight leading-tight text-[var(--lime)]">
             {formatNaira(productPrice)}
           </p>
         </article>

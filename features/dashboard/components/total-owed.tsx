@@ -15,7 +15,7 @@ export function TotalOwed({ businessId }: { businessId: string }) {
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-56 -right-30 h-85 w-80 rounded-full bg-white/5"
       />
-      <h2 className="flex items-center gap-1.5 text-xs font-bold text-[#e7efe1]">
+      <h2 className="flex items-center gap-1.5 text-xs font-bold text-[var(--surface)]">
         <LuUsersRound className="size-3.5" aria-hidden="true" />
         Total owed to you
       </h2>
@@ -24,12 +24,12 @@ export function TotalOwed({ businessId }: { businessId: string }) {
       </p>
 
       {nobodyOwes ? (
-        <p className="mt-3 text-sm font-semibold text-[#e7efe1]">
+        <p className="mt-3 text-sm font-semibold text-[var(--surface)]">
           Nobody owes you right now
         </p>
       ) : (
         <>
-          <p className="mt-3 text-sm font-semibold text-[#e7efe1]">
+          <p className="mt-3 text-sm font-semibold text-[var(--surface)]">
             {customerCount} {customerCount === 1 ? "customer" : "customers"} owing
           </p>
           <p
