@@ -9,8 +9,7 @@ export function SaleTransactionUi({
   transaction,
   productPrice,
   amountPaid,
-  balance,
-  dueDate
+  balance
 }: SaleTransactionUiProps) {
   const customer = getCustomer(transaction.customerId);
 
@@ -44,7 +43,10 @@ export function SaleTransactionUi({
             value={customer?.name ?? "Unknown customer"}
           />
           <DetailRow label="Description" value={transaction.description} />
-          <DetailRow label="Due Date" value={transaction.dueDate ?? } />
+          <DetailRow
+            label="Due Date"
+            value={transaction.dueDate ? getDateString(transaction.dueDate) : "No due date"}
+          />
         </dl>
       </div>
       <time

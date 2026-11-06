@@ -279,6 +279,7 @@ export const mockSaleTransactions: SaleTransaction[] = [
     productPrice: 2_800,
     amountPaid: 2_800,
     receiptId: "receipt-005",
+    dueDate: "2026-10-30T09:00:00.000Z",
     createdAt: "2026-10-15T08:10:00.000Z",
   },
   {

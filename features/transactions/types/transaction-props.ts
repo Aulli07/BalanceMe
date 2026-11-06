@@ -40,4 +40,3 @@ export type TransactionActivityItemProps = TransactionActivityProps[number];
 export type TransactionMonthlyActivityProps = {
   transactions: Record<string, TransactionActivityProps>;
 }
-
