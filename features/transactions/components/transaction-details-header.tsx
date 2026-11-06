@@ -5,7 +5,7 @@ import { LuArrowLeft } from "react-icons/lu";
 
 export function TransactionDetailsHeader() {
   return (
-    <header className="flex items-center gap-3 px-5 pt-5">
+    <header className="flex border items-center gap-3 px-5 pt-5">
       <Link
         href="/transactions"
         className="grid place-items-center rounded-full text-[var(--forest)]"

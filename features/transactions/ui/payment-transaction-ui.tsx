@@ -14,7 +14,7 @@ export function PaymentTransactionUi({
   const customer = getCustomer(transaction.customerId);
 
   return (
-    <section className="mt-5 min-h-[calc(100vh-7rem)]  flex flex-col px-5 pb-6">
+    <section className="mt-5 flex flex-col px-5">
       <div className="rounded-[1.75rem] bg-[var(--forest)] p-6 text-white shadow-sm">
         <div className="flex items-center justify-between">
           <p className="text-xs font-bold text-[var(--lime)]">Payment received</p>
