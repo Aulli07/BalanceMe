@@ -1,6 +1,4 @@
 import { mockCustomers, mockPaymentTransactions, mockTransactions } from "@/shared/data/domain-mock-data";
-import { formatNaira } from "@/shared/utils/format-naira";
-import { getDayLabel } from "../utils/get-day-label";
 
 
 
@@ -22,8 +20,8 @@ export function getTransactionActivity(businessId: string) {
         customer,
         description: transaction.note ?? "Payment received",
         amount: transaction.amountReceived,
-        status: "Settled",
-        statusColor: "bg-[#e9f1df] text-[#568044]",
+        status: "Received",
+        statusColor: "bg-[var(--forest)]/10 text-[var(--forest)]",
       };
     }
 
@@ -38,10 +36,10 @@ export function getTransactionActivity(businessId: string) {
       ...transaction,
       customer,
       description: transaction.description,
-      amount: transaction.productPrice,
-      status: isPaid ? "Settled" : `Owes ${formatNaira(owedAmount)}`,
+      amount: transaction.amountPaid,
+      status: isPaid ? "Settled" : "Partially paid",
       statusColor: isPaid
-        ? "bg-[#e9f1df] text-[#568044]"
+        ? "bg-[var(--forest)]/10 text-[var(--forest)]"
         : "bg-[#f8ead5] text-[#855126]",
     };
   });

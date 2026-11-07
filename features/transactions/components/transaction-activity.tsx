@@ -56,7 +56,7 @@ export function TransactionActivity({transactions}: TransactionMonthlyActivityPr
 
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-bold leading-tight text-[var(--ink)]">
-                      {transaction.description}
+                      {transaction.type === "sale" ? "Sale" : "Payment received"}
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-medium leading-tight text-[var(--muted)]">
                       {/* <span>{transaction.category}</span>
@@ -73,14 +73,11 @@ export function TransactionActivity({transactions}: TransactionMonthlyActivityPr
                     <p className="text-md font-extrabold leading-tight tracking-tight text-[var(--forest)]">
                       {formatNaira(transaction.amount)}
                     </p>
-                    <span
-                      className={`mt-1 flex items-center gap-1 rounded-md px-1.5 py-1 text-[11px] font-bold leading-none ${transaction.statusColor}`}
+                    <p
+                      className={`mt-1 rounded-full px-2 py-0.5 text-[10px] font-semibold leading-tight ${transaction.statusColor}`}
                     >
-                      {transaction.status.startsWith("Owes") && (
-                        <LuClock3 className="size-2.5" aria-hidden="true" />
-                      )}
                       {transaction.status}
-                    </span>
+                    </p>
                   </div>
                 </article>
               </Link>
