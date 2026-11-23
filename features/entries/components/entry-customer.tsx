@@ -1,9 +1,10 @@
+import { useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { LuChevronDown } from "react-icons/lu";
+import { LuChevronDown, LuSearch } from "react-icons/lu";
 
-import { FormType, useEntryForm } from "../hooks/useEntryForm";
-// import { EntryProps } from "../types/entry-type";
+import type { FormType } from "../hooks/useEntryForm";
+import { filterCustomersByName } from "../selectors/filter-customers-by-name";
 
 import { mockCustomers } from "@/shared/data/domain-mock-data";
 
@@ -14,13 +15,20 @@ export function EntryCustomer({ setCustomer, customer }: {
   setCustomer?: FormType["setCustomer"];
   customer?: FormType["customer"];
 }) {
-  const { selectedTrigger, isSelectedTrigger } = useEntryForm();
+  const [selectedTrigger, setSelectedTrigger] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredCustomers = filterCustomersByName(mockCustomers, searchQuery);
+
+  const closePicker = () => {
+    setSelectedTrigger(false);
+    setSearchQuery("");
+  };
 
   return (
     <section aria-labelledby="entry-customer-heading">
       <button
         type="button"
-        onClick={() => isSelectedTrigger((prev) => !prev)}
+        onClick={() => setSelectedTrigger((prev) => !prev)}
         className="flex min-h-15 w-full items-center justify-between gap-3 rounded-2xl border border-[#e4e9df] bg-[var(--surface)] px-4 text-left shadow-sm shadow-[var(--forest)]/5 transition-colors active:border-[var(--forest)]"
       >
         <span className="flex min-w-0 items-center gap-3">
@@ -53,7 +61,7 @@ export function EntryCustomer({ setCustomer, customer }: {
         createPortal(
           <div
             className="fixed inset-0 z-50 flex items-end bg-black/30"
-            onClick={() => isSelectedTrigger(false)}
+            onClick={closePicker}
           >
             <div
               className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
@@ -64,20 +72,20 @@ export function EntryCustomer({ setCustomer, customer }: {
                 <h2 className="text-xl font-extrabold">Select customer</h2>
                 <button
                   type="button"
-                  onClick={() => isSelectedTrigger(false)}
+                  onClick={closePicker}
                   className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
                 >
                   Close
                 </button>
               </div>
               <div className="grid gap-2">
-                {mockCustomers.map((customer) => (
+                {filteredCustomers.map((customer) => (
                   <button
                     key={customer.id}
                     type="button"
                     onClick={() => {
                       setCustomer?.(customer);
-                      isSelectedTrigger(false);
+                      closePicker();
                     }}
                     className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
                   >
@@ -87,7 +95,22 @@ export function EntryCustomer({ setCustomer, customer }: {
                     <span className="font-bold">{customer.name}</span>
                   </button>
                 ))}
+                {filteredCustomers.length === 0 && (
+                  <p className="rounded-2xl bg-[#f4f7f0] px-4 py-5 text-center text-sm font-bold text-[#758477]">
+                    No customers found.
+                  </p>
+                )}
               </div>
+              <label className="mt-4 flex items-center gap-3 rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3">
+                <LuSearch className="size-5 shrink-0 text-[#758477]" />
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search customers"
+                  className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-[#758477]"
+                />
+              </label>
             </div>
           </div>,
           document.body,
