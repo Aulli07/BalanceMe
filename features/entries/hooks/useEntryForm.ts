@@ -12,7 +12,7 @@ export function useEntryForm({
   initialCustomer,
   initialEntryType = 0,
 }: EntryFormOptions = {}): FormType {
-  const [purchaseAmount, setPurchaseAmount] = useState("0");
+  const [productPrice, setProductPrice] = useState("0");
   const [amountPaid, setAmountPaid] = useState("0");
   const [amountRepaid, setAmountRepaid] = useState("0");
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -29,8 +29,8 @@ export function useEntryForm({
   const [selectedTrigger, isSelectedTrigger] = useState(false);
 
   return {
-    purchaseAmount,
-    setPurchaseAmount,
+    productPrice,
+    setProductPrice,
     amountPaid,
     setAmountPaid,
     amountRepaid,
@@ -58,8 +58,8 @@ export function useEntryForm({
 };
 
 export type FormType = {
-  purchaseAmount: string;
-  setPurchaseAmount: React.Dispatch<React.SetStateAction<string>>;
+  productPrice: string;
+  setProductPrice: React.Dispatch<React.SetStateAction<string>>;
   amountPaid: string;
   setAmountPaid: React.Dispatch<React.SetStateAction<string>>;
   amountRepaid: string;

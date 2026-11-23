@@ -2,15 +2,18 @@ import Image from "next/image";
 import { createPortal } from "react-dom";
 import { LuChevronDown } from "react-icons/lu";
 
-import { useEntryForm } from "../hooks/useEntryForm";
-import { EntryProps } from "../types/entry-type";
+import { FormType, useEntryForm } from "../hooks/useEntryForm";
+// import { EntryProps } from "../types/entry-type";
 
 import { mockCustomers } from "@/shared/data/domain-mock-data";
 
 
 
 
-export function EntryCustomer({ setCustomer, customer }: EntryProps) {
+export function EntryCustomer({ setCustomer, customer }: {
+  setCustomer?: FormType["setCustomer"];
+  customer?: FormType["customer"];
+}) {
   const { selectedTrigger, isSelectedTrigger } = useEntryForm();
 
   return (
