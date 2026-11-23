@@ -26,11 +26,11 @@ function AddEntryPageContent() {
     (customer) => customer.id === searchParams.get("customerId"),
   );
   const isRepayment = searchParams.get("mode") === "repayment";
-  const isSaleRepayment = searchParams.get("mode") === "sale-repayment";
+  const isSale = searchParams.get("mode") === "sale";
 
   const form = useEntryForm({
     initialCustomer: preselectedCustomer,
-    initialEntryType: isSaleRepayment ? 2 : isRepayment ? 1 : 0,
+    initialEntryType: isRepayment ? 1 : isSale ? 0 : 2,
   });
   
   return (

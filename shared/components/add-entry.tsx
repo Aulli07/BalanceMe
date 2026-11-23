@@ -102,7 +102,7 @@ export function AddEntry({ open, setOpen }: AddEntryProps) {
                       <EntryIcon className="size-6" aria-hidden="true" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-lg font-bold">{entry.title}</span>
+                      <span className="block text-md font-bold">{entry.title}</span>
                       <span className="mt-0.5 block text-xs leading-tight text-[var(--muted)]">
                         {entry.description}
                       </span>

@@ -19,6 +19,7 @@ export function useEntryForm({
   const [customer, setCustomer] = useState<Customer | undefined>(initialCustomer);
 
   const [entryType, setEntryType] = useState<0 | 1 | 2>(initialEntryType);
+  const [debtRepaymentMode, setDebtRepaymentMode] = useState<0 | 1>(0);
   
   const [selectedPurchase, setSelectedPurchase] = useState<SaleTransaction | undefined>();
   const [description, setDescription] = useState("");
@@ -41,6 +42,8 @@ export function useEntryForm({
     setCustomer,
     entryType,
     setEntryType,
+    debtRepaymentMode,
+    setDebtRepaymentMode,
     selectedPurchase,
     setSelectedPurchase,
     description,
@@ -70,6 +73,8 @@ export type FormType = {
   setCustomer: React.Dispatch<React.SetStateAction<Customer | undefined>>;
   entryType: 0 | 1 | 2;
   setEntryType: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
+  debtRepaymentMode: 0 | 1;
+  setDebtRepaymentMode: React.Dispatch<React.SetStateAction<0 | 1>>;
   selectedPurchase: SaleTransaction | undefined;
   setSelectedPurchase: React.Dispatch<React.SetStateAction<SaleTransaction | undefined>>;
   description: string;

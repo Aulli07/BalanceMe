@@ -23,7 +23,7 @@ export function RepaymentEntry({ form }: { form: FormType }) {
       purchase.amountPaid < purchase.productPrice,
   );
   const originalOwed = selectedPurchase
-    ? (selectedPurchase.productPrice - selectedPurchase.amountPaid) / 100
+    ? (selectedPurchase.productPrice - selectedPurchase.amountPaid)
     : 0;
   const amountOwed = Math.max(originalOwed - (Number(amountRepaid) || 0), 0);
 
@@ -70,7 +70,7 @@ export function RepaymentEntry({ form }: { form: FormType }) {
           disabled={!customer}
           className="flex w-full items-center justify-between gap-4 rounded-xl border border-[#e4e9df] bg-[var(--surface)] px-5 py-4 text-left shadow-sm shadow-[var(--forest)]/5 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {selectedPurchase ? (
+          {selectedPurchase && selectedPurchase.customerId === customer?.id ? (
             <PurchasePreview purchase={selectedPurchase} isShowInfo={false} />
           ) : (
             <span className="font-bold text-[#758477]">
@@ -149,8 +149,8 @@ function PurchasePreview({
   purchase: SaleTransaction;
   isShowInfo: boolean;
 }) {
-  const price = purchase.productPrice / 100;
-  const paid = purchase.amountPaid / 100;
+  const price = purchase.productPrice;
+  const paid = purchase.amountPaid;
   const owed = Math.max(price - paid, 0);
 
   return (

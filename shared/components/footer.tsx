@@ -1,13 +1,11 @@
 "use client";
 
 import footerLinks from "@/shared/data/footer-links";
-import { AddEntry } from "@/shared/components/add-entry";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import { normalizePath } from "../utils/normalize-path";
-
-
+import { AddEntry } from "./add-entry";
 
 export function Footer() {
   const pathname = usePathname();
@@ -32,20 +30,17 @@ export function Footer() {
 
           if (isAddButton) {
             return (
-              <div key={link.title}>
-                <AddEntry open={addEntryOpen} setOpen={setAddEntryOpen} />
-                <button
-                  type="button"
-                  aria-label={link.title}
-                  onClick={() => setAddEntryOpen(true)}
-                  className="-mt-2 grid size-12 place-items-center justify-self-center rounded-2xl border-4 border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-lg shadow-[#1d4627]/20 transition-transform active:scale-95"
-                >
+              <button
+                key={link.title}
+                type="button"
+                onClick={() => setAddEntryOpen(true)}
+                aria-label={link.title}
+                className="-mt-2 grid size-12 place-items-center justify-self-center rounded-2xl border-4 border-[#f6f6ee] bg-[#123d2b] text-[#cbf36a] shadow-lg shadow-[#1d4627]/20 transition-transform active:scale-95"
+              >
                 {link.lightIcon && <link.lightIcon className="h-8 w-8 font-bold" />}
-                </button>
-              </div>
+              </button>
             );
           }
-          
 
           return (
             <Link
@@ -64,6 +59,7 @@ export function Footer() {
           );
         })}
       </nav>
+      <AddEntry open={addEntryOpen} setOpen={setAddEntryOpen} />
     </footer>
   );
 }
