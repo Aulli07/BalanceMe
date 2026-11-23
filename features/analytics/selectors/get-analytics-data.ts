@@ -1,9 +1,10 @@
 import {
   mockCustomers,
-  mockPaymentTransactions,
-  mockSaleTransactions,
+  mockRepaymentTransactions,
+  mockSaleRepaymentTransactions,
+  mockTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { NairaAmount, Transaction } from "@/shared/types/domain";
+import type { Transaction } from "@/shared/types/domain";
 import type { AnalyticsPeriod } from "../data/analytics-periods";
 import type {
   AnalyticsCustomer,
@@ -24,17 +25,28 @@ function getDateKey(date: Date) {
 }
 
 function getReceivedAmount(transaction: Transaction) {
-  if (transaction.type === "payment") return transaction.amountReceived;
-  return transaction.amountPaid;
+  return transaction.type === "sale"
+    ? transaction.sale.amountPaid
+    : transaction.amountReceived;
 }
 
 function getOwedAmount(transaction: Transaction) {
-  if (transaction.type === "payment") return 0;
-  const allocatedAmount = mockPaymentTransactions
-    .flatMap((payment) => payment.allocations)
+  if (transaction.type === "repayment") return 0;
+
+  const allocatedAmount = [
+    ...mockRepaymentTransactions,
+    ...mockSaleRepaymentTransactions,
+  ]
+    .flatMap((repayment) => repayment.allocations)
     .filter((allocation) => allocation.saleTransactionId === transaction.id)
     .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
-  return Math.max(0, transaction.productPrice - transaction.amountPaid - allocatedAmount);
+    
+  return Math.max(
+    0,
+    transaction.sale.productPrice -
+      transaction.sale.amountPaid -
+      allocatedAmount,
+  );
 }
 
 export function getAnalyticsData(
@@ -42,13 +54,16 @@ export function getAnalyticsData(
   period: AnalyticsPeriod,
   month?: string | null,
 ): TransactionAnalyticsData {
-  const transactions = [...mockSaleTransactions, ...mockPaymentTransactions]
+  const transactions = mockTransactions
     .filter((transaction) => transaction.businessId === businessId)
     .sort((first, second) => first.createdAt.localeCompare(second.createdAt));
-  const latestMonth = new Date(transactions.at(-1)?.createdAt ?? new Date()).toLocaleDateString(
-    "en-NG",
-    { month: "long", year: "numeric", timeZone: "UTC" },
-  );
+  const latestMonth = new Date(
+    transactions.at(-1)?.createdAt ?? new Date(),
+  ).toLocaleDateString("en-NG", {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
   const selectedMonth = month ?? latestMonth;
   const [monthName, year] = selectedMonth.split(" ");
   const monthIndex = new Date(`${monthName} 1, ${year}`).getUTCMonth();
@@ -77,8 +92,8 @@ export function getAnalyticsData(
     0,
   );
   const totalValue = selectedTransactions
-    .filter((transaction) => transaction.type === "sale")
-    .reduce((total, transaction) => total + transaction.productPrice, 0);
+    .filter((transaction) => transaction.type !== "repayment")
+    .reduce((total, transaction) => total + transaction.sale.productPrice, 0);
   const summary = {
     totalReceivedAmount,
     totalOwedAmount,
@@ -88,11 +103,14 @@ export function getAnalyticsData(
     transactionCount: selectedTransactions.length,
   };
 
-  const dateKeys = Array.from({ length: getStartOffset(period) + 1 }, (_, index) => {
-    const date = new Date(startDate);
-    date.setUTCDate(startDate.getUTCDate() + index);
-    return date;
-  });
+  const dateKeys = Array.from(
+    { length: getStartOffset(period) + 1 },
+    (_, index) => {
+      const date = new Date(startDate);
+      date.setUTCDate(startDate.getUTCDate() + index);
+      return date;
+    },
+  );
   const trend: TrendPoint[] = dateKeys.map((date) => {
     const dateKey = getDateKey(date);
     const dailyTransactions = selectedTransactions.filter(
@@ -102,7 +120,11 @@ export function getAnalyticsData(
       label:
         period === "TODAY"
           ? "Today"
-          : date.toLocaleDateString("en-NG", { day: "numeric", month: "short", timeZone: "UTC" }),
+          : date.toLocaleDateString("en-NG", {
+              day: "numeric",
+              month: "short",
+              timeZone: "UTC",
+            }),
       amountReceived: dailyTransactions.reduce(
         (total, transaction) => total + getReceivedAmount(transaction),
         0,
@@ -114,7 +136,10 @@ export function getAnalyticsData(
     };
   });
 
-  const customerTotals = new Map<string, { amountReceived: number; owedAmount: number }>();
+  const customerTotals = new Map<
+    string,
+    { amountReceived: number; owedAmount: number }
+  >();
   selectedTransactions.forEach((transaction) => {
     const current = customerTotals.get(transaction.customerId) ?? {
       amountReceived: 0,
@@ -124,13 +149,17 @@ export function getAnalyticsData(
     current.owedAmount += getOwedAmount(transaction);
     customerTotals.set(transaction.customerId, current);
   });
-  const toCustomer = (key: "amountReceived" | "owedAmount"): AnalyticsCustomer[] =>
+  const toCustomer = (
+    key: "amountReceived" | "owedAmount",
+  ): AnalyticsCustomer[] =>
     [...customerTotals.entries()]
       .sort((first, second) => second[1][key] - first[1][key])
       .slice(0, 3)
       .map(([customerId, values]) => ({
         customerId,
-        name: mockCustomers.find((customer) => customer.id === customerId)?.name ?? "Unknown customer",
+        name:
+          mockCustomers.find((customer) => customer.id === customerId)?.name ??
+          "Unknown customer",
         value: values[key],
       }));
 

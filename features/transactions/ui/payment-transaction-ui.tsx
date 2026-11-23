@@ -1,4 +1,4 @@
-import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
+import { mockSaleRepaymentTransactions, mockSaleTransactions } from "@/shared/data/domain-mock-data";
 import { getCustomer } from "@/shared/selectors/getters";
 import { formatNaira } from "@/shared/utils/format-naira";
 import type { PaymentTransactionUiProps } from "../types/transaction-props";
@@ -43,7 +43,7 @@ export function PaymentTransactionUi({
         </div>
         <ul className="mt-3 divide-y divide-[var(--line)] overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-4">
           {allocations.map((allocation) => {
-            const sale = mockSaleTransactions.find(
+            const sale = [...mockSaleTransactions, ...mockSaleRepaymentTransactions].find(
               (item) => item.id === allocation.saleTransactionId,
             );
 
@@ -51,7 +51,7 @@ export function PaymentTransactionUi({
               <li key={allocation.saleTransactionId} className="flex items-center justify-between gap-4 py-4">
                 <div className="min-w-0">
                   <p className="truncate text-sm font-bold text-[var(--ink)]">
-                    {sale?.description ?? "Sale transaction"}
+                    {sale?.sale.description ?? "Sale transaction"}
                   </p>
                   <p className="mt-1 text-xs font-medium text-[var(--muted)]">Payment allocation</p>
                 </div>

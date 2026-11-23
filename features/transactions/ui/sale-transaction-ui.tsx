@@ -4,6 +4,7 @@ import type { SaleTransactionUiProps } from "../types/transaction-props";
 import { getDateString } from "../utils/get-date-string";
 import { DetailRow } from "./detail-row";
 import { TransactionActions } from "./transaction-actions";
+import { getDueDate } from "@/shared/utils/get-due-date";
 
 export function SaleTransactionUi({
   transaction,
@@ -33,19 +34,19 @@ export function SaleTransactionUi({
         <AmountCard label="Balance" value={formatNaira(balance)} highlighted />
       </div>
 
-      <div className="mt-6">
-        <p className="text-sm font-bold text-[var(--forest-soft)]">
+      <div className="mt-5">
+        {/* <p className="text-sm font-bold text-[var(--forest-soft)]">
           Sale information
-        </p>
+        </p> */}
         <dl className="mt-3 divide-y divide-[var(--line)] rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-4">
           <DetailRow
             label="Customer"
             value={customer?.name ?? "Unknown customer"}
           />
-          <DetailRow label="Description" value={transaction.description} />
+          <DetailRow label="Description" value={transaction.sale.description} />
           <DetailRow
             label="Due Date"
-            value={transaction.dueDate ? getDateString(transaction.dueDate) : "No due date"}
+            value={getDateString(getDueDate(transaction.createdAt))}
           />
         </dl>
       </div>

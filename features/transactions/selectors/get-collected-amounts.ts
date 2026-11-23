@@ -1,7 +1,6 @@
 import {
   mockCustomers,
-  mockPaymentTransactions,
-  mockSaleTransactions,
+  mockTransactions,
 } from "@/shared/data/domain-mock-data";
 import type { Customer, NairaAmount } from "@/shared/types/domain";
 import { isInMonth } from "../utils/check-month-aligns";
@@ -12,32 +11,18 @@ export type CustomerCollectedAmount = {
 };
 
 export function getTotalCollectedAmount(businessId: string): NairaAmount {
-  const initialPayments = mockSaleTransactions
-    .filter((sale) => sale.businessId === businessId)
-    .reduce((total, sale) => total + sale.amountPaid, 0);
-  const repayments = mockPaymentTransactions
-    .filter((payment) => payment.businessId === businessId)
-    .reduce((total, payment) => total + payment.amountReceived, 0);
-  return initialPayments + repayments;
+  return mockTransactions
+    .filter((transaction) => transaction.businessId === businessId)
+    .reduce((total, transaction) => total + (transaction.type === "sale" ? transaction.sale.amountPaid : transaction.amountReceived), 0);
 }
 
 export function getCollectedAmountForCustomer(
   businessId: string,
   customerId: string,
 ): NairaAmount {
-  const initialPayments = mockSaleTransactions
-    .filter(
-      (sale) =>
-        sale.businessId === businessId && sale.customerId === customerId,
-    )
-    .reduce((total, sale) => total + sale.amountPaid, 0);
-  const repayments = mockPaymentTransactions
-    .filter(
-      (payment) =>
-        payment.businessId === businessId && payment.customerId === customerId,
-    )
-    .reduce((total, payment) => total + payment.amountReceived, 0);
-  return initialPayments + repayments;
+  return mockTransactions
+    .filter((transaction) => transaction.businessId === businessId && transaction.customerId === customerId)
+    .reduce((total, transaction) => total + (transaction.type === "sale" ? transaction.sale.amountPaid : transaction.amountReceived), 0);
 }
 
 export function getLargestCollectedCustomer(
@@ -70,18 +55,7 @@ export function getCollectedAmountForMonth(
   businessId: string,
   month: string,
 ): NairaAmount {
-  const initialPayments = mockSaleTransactions
-    .filter(
-      (sale) =>
-        sale.businessId === businessId && isInMonth(sale.createdAt, month),
-    )
-    .reduce((total, sale) => total + sale.amountPaid, 0);
-  const repayments = mockPaymentTransactions
-    .filter(
-      (payment) =>
-        payment.businessId === businessId &&
-        isInMonth(payment.createdAt, month),
-    )
-    .reduce((total, payment) => total + payment.amountReceived, 0);
-  return initialPayments + repayments;
+  return mockTransactions
+    .filter((transaction) => transaction.businessId === businessId && isInMonth(transaction.createdAt, month))
+    .reduce((total, transaction) => total + (transaction.type === "sale" ? transaction.sale.amountPaid : transaction.amountReceived), 0);
 }

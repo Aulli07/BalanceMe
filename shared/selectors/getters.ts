@@ -1,4 +1,4 @@
-import { mockBusinesses, mockCustomers, mockNotifications, mockPaymentTransactions, mockReceipts, mockSaleTransactions, mockTransactions, mockUsers } from "../data/domain-mock-data"
+import { mockBusinesses, mockCustomers, mockNotifications, mockRepaymentTransactions, mockReceipts, mockSaleTransactions, mockTransactions, mockUsers } from "../data/domain-mock-data"
 
 
 
@@ -14,7 +14,7 @@ export function getSaleTransactions(businessId: string) {
 
 
 export function getPaymentTransactions(businessId: string) {
-  return mockPaymentTransactions.filter(txn => txn.businessId === businessId);
+  return mockRepaymentTransactions.filter(txn => txn.businessId === businessId);
 }
 
 

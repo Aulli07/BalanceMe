@@ -1,4 +1,4 @@
-import { mockPaymentTransactions, mockSaleTransactions } from "@/shared/data/domain-mock-data";
+import { mockTransactions } from "@/shared/data/domain-mock-data";
 import { formatNaira } from "@/shared/utils/format-naira";
 
 export type CashRecordedPeriod = "today" | "yesterday" | "last-7-days" | "last-30-days";
@@ -9,9 +9,14 @@ export function getCashRecordedAmount(businessId: string, period: CashRecordedPe
     const date = new Date(createdAt);
     return date >= start && date < end;
   };
-  const saleAmount = mockSaleTransactions.filter((item) => item.businessId === businessId && isInRange(item.createdAt)).reduce((total, item) => total + item.amountPaid, 0);
-  const paymentAmount = mockPaymentTransactions.filter((item) => item.businessId === businessId && isInRange(item.createdAt)).reduce((total, item) => total + item.amountReceived, 0);
-  return formatNaira(saleAmount + paymentAmount);
+  const amount = mockTransactions
+    .filter((transaction) => transaction.businessId === businessId && isInRange(transaction.createdAt))
+    .reduce((total, transaction) => {
+      if (transaction.type === "sale") return total + transaction.sale.amountPaid;
+      return total + transaction.amountReceived;
+    }, 0);
+
+  return formatNaira(amount);
 }
 
 function getRange(period: CashRecordedPeriod) {

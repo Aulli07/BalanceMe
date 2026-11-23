@@ -20,10 +20,10 @@ export function RepaymentEntry({ form }: { form: FormType }) {
   const purchases = mockSaleTransactions.filter(
     (purchase) =>
       purchase.customerId === customer?.id &&
-      purchase.amountPaid < purchase.productPrice,
+      purchase.sale.amountPaid < purchase.sale.productPrice,
   );
   const originalOwed = selectedPurchase
-    ? (selectedPurchase.productPrice - selectedPurchase.amountPaid)
+    ? (selectedPurchase.sale.productPrice - selectedPurchase.sale.amountPaid)
     : 0;
   const amountOwed = Math.max(originalOwed - (Number(amountRepaid) || 0), 0);
 
@@ -149,14 +149,14 @@ function PurchasePreview({
   purchase: SaleTransaction;
   isShowInfo: boolean;
 }) {
-  const price = purchase.productPrice;
-  const paid = purchase.amountPaid;
+  const price = purchase.sale.productPrice;
+  const paid = purchase.sale.amountPaid;
   const owed = Math.max(price - paid, 0);
 
   return (
     <div className="flex flex-col gap-1">
       <span className="block truncate font-extrabold text-[var(--ink)]">
-        {purchase.description}
+        {purchase.sale.description}
       </span>
       {isShowInfo && (
         <span className="block text-sm font-semibold text-[#607568]">

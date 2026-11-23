@@ -1,7 +1,9 @@
-import { Customer, SaleTransaction } from "@/shared/types/domain";
+import { Customer, SaleRepaymentTransaction, SaleTransaction } from "@/shared/types/domain";
+
+export type DebtSaleTransaction = SaleTransaction | SaleRepaymentTransaction;
 
 export type OpenDebt = {
-  sale: SaleTransaction;
+  saleTxn: DebtSaleTransaction;
   outstandingAmount: number;
   overdue: boolean;
 };

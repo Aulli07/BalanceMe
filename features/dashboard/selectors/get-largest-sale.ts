@@ -1,9 +1,9 @@
-import { mockCustomers, mockSaleTransactions } from "@/shared/data/domain-mock-data";
+import { mockCustomers, mockSaleRepaymentTransactions, mockSaleTransactions } from "@/shared/data/domain-mock-data";
 
 export function getLargestSale(businessId: string) {
-  const sale = [...mockSaleTransactions]
+  const sale = [...mockSaleTransactions, ...mockSaleRepaymentTransactions]
     .filter((transaction) => transaction.businessId === businessId)
-    .sort((first, second) => second.productPrice - first.productPrice)[0];
+    .sort((first, second) => second.sale.productPrice - first.sale.productPrice)[0];
 
   if (!sale) return null;
 

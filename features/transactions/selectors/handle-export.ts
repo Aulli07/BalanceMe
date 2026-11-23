@@ -7,7 +7,7 @@ export function handleTransactionExport(transactions: TransactionActivityProps) 
     ...transactions.map((transaction) => [
       new Date(transaction.createdAt).toLocaleDateString("en-NG"),
       transaction.customer?.name ?? "Unknown customer",
-      transaction.type === "payment" ? "Payment" : "Sale",
+      transaction.type === "repayment" ? "Repayment" : transaction.type === "sale_repayment" ? "Sale and repayment" : "Sale",
       transaction.description,
       formatNaira(transaction.amount),
       transaction.status,

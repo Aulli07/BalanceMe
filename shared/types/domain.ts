@@ -74,36 +74,55 @@ export interface Receipt {
   createdAt: ISODateTime;
 }
 
-interface TransactionBase {
+export type TransactionType = "sale" | "repayment" | "sale_repayment";
+
+export interface BaseTransaction {
   id: EntityId;
   businessId: EntityId;
   customerId: EntityId;
+  receiptId: EntityId;
+  note?: string;
   createdAt: ISODateTime;
 }
 
-export interface SaleTransaction extends TransactionBase {
-  type: "sale";
+export interface SaleDetails {
   description: string;
   productPrice: NairaAmount;
+  /** A sale is recorded on credit, so this must be less than productPrice. */
   amountPaid: NairaAmount;
-  dueDate?: ISODateTime;
-  receiptId?: EntityId;
 }
 
-export interface PaymentAllocation {
+export interface RepaymentAllocation {
+  /** The earlier sale whose outstanding debt is being paid. */
   saleTransactionId: EntityId;
   debtAmountPaid: NairaAmount;
 }
 
-export interface PaymentTransaction extends TransactionBase {
-  type: "payment";
-  amountReceived: NairaAmount;
-  allocations: PaymentAllocation[];
-  note?: string;
-  receiptId?: EntityId;
+export interface SaleTransaction extends BaseTransaction {
+  type: "sale";
+  sale: SaleDetails;
 }
 
-export type Transaction = SaleTransaction | PaymentTransaction;
+export interface RepaymentTransaction extends BaseTransaction {
+  type: "repayment";
+  amountReceived: NairaAmount;
+  allocations: RepaymentAllocation[];
+}
+
+export interface SaleRepaymentTransaction extends BaseTransaction {
+  type: "sale_repayment";
+  /** Total cash handed over for the new sale and old debt repayments. */
+  amountReceived: NairaAmount;
+  sale: SaleDetails;
+  allocations: RepaymentAllocation[];
+}
+
+export type Transaction =
+  | SaleTransaction
+  | RepaymentTransaction
+  | SaleRepaymentTransaction;
+
+
 export type SaleSettlementStatus = "paid" | "partially_paid" | "unpaid";
 
 export interface WrittenEntryDraft {

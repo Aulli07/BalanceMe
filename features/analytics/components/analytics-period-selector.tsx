@@ -21,8 +21,7 @@ export function AnalyticsPeriodSelector({
 }: AnalyticsPeriodSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const selectedLabel =
-    periods.find((item) => item.id === selectedPeriod)?.label ??
-    selectedPeriod;
+    periods.find((item) => item.id === selectedPeriod)?.label ?? selectedPeriod;
 
   function selectPeriod(period: AnalyticsSelection) {
     onPeriodChange(period);
@@ -75,7 +74,10 @@ export function AnalyticsPeriodSelector({
                   {item.label}
                 </button>
               ))}
-              <div className="col-span-4 my-1 h-px bg-[var(--line)]" aria-hidden="true" />
+              <div
+                className="col-span-4 my-1 h-px bg-[var(--line)]"
+                aria-hidden="true"
+              />
               <p className="col-span-4 px-1 pb-1 text-[10px] font-bold uppercase tracking-wide text-[var(--muted)]">
                 Month
               </p>

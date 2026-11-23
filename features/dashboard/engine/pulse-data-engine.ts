@@ -131,10 +131,10 @@ function getPulseData(entry: PulseEntry, businessId: string): PulseDisplayData |
 
     return createPulse(
       entry,
-      formatNaira(result.sale.productPrice),
+      formatNaira(result.sale.sale.productPrice),
       {
         customerName: result.customer.name,
-        amount: formatNaira(result.sale.productPrice),
+        amount: formatNaira(result.sale.sale.productPrice),
       },
       undefined,
       { href: `/transactions/${result.sale.id}`, label: "View receipt" },

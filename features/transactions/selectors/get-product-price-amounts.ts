@@ -1,5 +1,6 @@
 import {
   mockCustomers,
+  mockSaleRepaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
 import type { Customer, NairaAmount } from "@/shared/types/domain";
@@ -20,21 +21,21 @@ export type CustomerProductPriceAmount = {
 // }
 
 export function getTotalProductPrice(businessId: string): NairaAmount {
-  return mockSaleTransactions
+  return [...mockSaleTransactions, ...mockSaleRepaymentTransactions]
     .filter((sale) => sale.businessId === businessId)
-    .reduce((total, sale) => total + sale.productPrice, 0);
+    .reduce((total, sale) => total + sale.sale.productPrice, 0);
 }
 
 export function getProductPriceForCustomer(
   businessId: string,
   customerId: string,
 ): NairaAmount {
-  return mockSaleTransactions
+  return [...mockSaleTransactions, ...mockSaleRepaymentTransactions]
     .filter(
       (sale) =>
         sale.businessId === businessId && sale.customerId === customerId,
     )
-    .reduce((total, sale) => total + sale.productPrice, 0);
+    .reduce((total, sale) => total + sale.sale.productPrice, 0);
 }
 
 export function getLargestProductPriceCustomer(
@@ -67,10 +68,10 @@ export function getProductPriceForMonth(
   businessId: string,
   month: string,
 ): NairaAmount {
-  return mockSaleTransactions
+  return [...mockSaleTransactions, ...mockSaleRepaymentTransactions]
     .filter(
       (sale) =>
         sale.businessId === businessId && isInMonth(sale.createdAt, month),
     )
-    .reduce((total, sale) => total + sale.productPrice, 0);
+    .reduce((total, sale) => total + sale.sale.productPrice, 0);
 }

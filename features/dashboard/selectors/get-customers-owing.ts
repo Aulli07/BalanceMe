@@ -1,43 +1,44 @@
 import {
   mockCustomers,
-  mockPaymentTransactions,
+  mockRepaymentTransactions,
+  mockSaleRepaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { SaleTransaction } from "@/shared/types/domain";
-import { CustomerDebtSummary, OpenDebt } from "../types/owe-type";
+import { getDueDate } from "@/shared/utils/get-due-date";
+import type { CustomerDebtSummary, DebtSaleTransaction, OpenDebt } from "../types/owe-type";
 
 export const DEBT_OVERDUE_AFTER_DAYS = 7;
-const DAY_IN_MS = 86_400_000;
 
 
 function getAllocatedPaymentsAmount(saleTransactionId: string) {
-  return mockPaymentTransactions
+  return [...mockRepaymentTransactions, ...mockSaleRepaymentTransactions]
     .flatMap((payment) => payment.allocations)
     .filter((allocation) => allocation.saleTransactionId === saleTransactionId)
     .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
 }
 
-function isDebtOverdue(sale: SaleTransaction, now: Date) {
-  const dueAt = sale.dueDate
-    ? new Date(sale.dueDate).getTime()
-    : new Date(sale.createdAt).getTime() + DEBT_OVERDUE_AFTER_DAYS * DAY_IN_MS;
-
-  return dueAt < now.getTime();
+function isDebtOverdue(sale: DebtSaleTransaction, now: Date) {
+  return new Date(getDueDate(sale.createdAt)).getTime() < now.getTime();
 }
 
 export function getOpenDebtsForCustomer(
   customerId: string,
   now = new Date(),
 ): OpenDebt[] {
-  return mockSaleTransactions
-    .filter((sale) => sale.customerId === customerId)
-    .map((sale) => {
-      const outstandingAmount = Math.max(0, sale.productPrice - sale.amountPaid - getAllocatedPaymentsAmount(sale.id));
+  const saleTransactions: DebtSaleTransaction[] = [
+    ...mockSaleTransactions,
+    ...mockSaleRepaymentTransactions,
+  ];
+
+  return saleTransactions
+    .filter((saleTxn) => saleTxn.customerId === customerId)
+    .map((saleTxn) => {
+      const outstandingAmount = Math.max(0, saleTxn.sale.productPrice - saleTxn.sale.amountPaid - getAllocatedPaymentsAmount(saleTxn.id));
 
       return {
-        sale,
+        saleTxn,
         outstandingAmount,
-        overdue: outstandingAmount > 0 && isDebtOverdue(sale, now),
+        overdue: outstandingAmount > 0 && isDebtOverdue(saleTxn, now),
       };
     })
     .filter((debt) => debt.outstandingAmount > 0);
@@ -53,7 +54,7 @@ export function getCustomerDebtSummaries(
     .map((customer) => {
       const openDebts = getOpenDebtsForCustomer(customer.id, now).sort(
         (first, second) =>
-          new Date(first.sale.createdAt).getTime() - new Date(second.sale.createdAt).getTime(),
+          new Date(first.saleTxn.createdAt).getTime() - new Date(second.saleTxn.createdAt).getTime(),
       );
       const owedAmount = openDebts.reduce(
         (total, debt) => total + debt.outstandingAmount,
@@ -67,7 +68,7 @@ export function getCustomerDebtSummaries(
         customer,
         owedAmount,
         overdueAmount,
-        oldestOutstandingAt: openDebts[0]?.sale.createdAt ?? customer.createdAt,
+        oldestOutstandingAt: openDebts[0]?.saleTxn.createdAt ?? customer.createdAt,
         hasOverdueDebt: overdueAmount > 0,
         openDebts,
       };

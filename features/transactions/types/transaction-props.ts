@@ -1,19 +1,19 @@
 import type { getTransactionActivity } from "../selectors/get-transactions";
 
-import { NairaAmount, PaymentAllocation, PaymentTransaction, SaleTransaction } from "@/shared/types/domain";
+import { NairaAmount, RepaymentAllocation, RepaymentTransaction, SaleRepaymentTransaction, SaleTransaction } from "@/shared/types/domain";
 import { Dispatch, SetStateAction } from "react";
 import { filters } from "../data/txn-stuff";
 
 
 export type PaymentTransactionUiProps = {
-  transaction: PaymentTransaction;
+  transaction: RepaymentTransaction;
   amountPaid: number;
-  allocations: PaymentAllocation[]
+  allocations: RepaymentAllocation[]
 };
 
 
 export type SaleTransactionUiProps = {
-  transaction: SaleTransaction;
+  transaction: SaleTransaction | SaleRepaymentTransaction;
   productPrice: number;
   amountPaid: number;
   balance: number;

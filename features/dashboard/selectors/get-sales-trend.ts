@@ -1,4 +1,4 @@
-import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
+import { mockSaleRepaymentTransactions, mockSaleTransactions } from "@/shared/data/domain-mock-data";
 
 export function getSalesTrend(businessId: string, days = 7) {
   const now = new Date();
@@ -8,23 +8,25 @@ export function getSalesTrend(businessId: string, days = 7) {
   const previousPeriodStart = new Date(currentPeriodStart);
   previousPeriodStart.setDate(previousPeriodStart.getDate() - days);
 
-  const currentTotal = mockSaleTransactions
+  const sales = [...mockSaleTransactions, ...mockSaleRepaymentTransactions];
+
+  const currentTotal = sales
     .filter(
       (sale) =>
         sale.businessId === businessId &&
         new Date(sale.createdAt) >= currentPeriodStart &&
         new Date(sale.createdAt) < now,
     )
-    .reduce((total, sale) => total + sale.productPrice, 0);
+    .reduce((total, sale) => total + sale.sale.productPrice, 0);
 
-  const previousTotal = mockSaleTransactions
+  const previousTotal = sales
     .filter(
       (sale) =>
         sale.businessId === businessId &&
         new Date(sale.createdAt) >= previousPeriodStart &&
         new Date(sale.createdAt) < currentPeriodStart,
     )
-    .reduce((total, sale) => total + sale.productPrice, 0);
+    .reduce((total, sale) => total + sale.sale.productPrice, 0);
 
   return {
     currentTotal,

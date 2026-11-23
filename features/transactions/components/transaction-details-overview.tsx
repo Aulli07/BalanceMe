@@ -10,7 +10,7 @@ export function TransactionDetailsOverview({
   transaction,
 }: {transaction: Transaction}) {
   
-  if (transaction.type === "payment") {
+  if (transaction.type === "repayment") {
     const { amountPaid, allocations } = getPaymentDetails(transaction);
 
     return (
