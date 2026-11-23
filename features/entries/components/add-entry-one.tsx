@@ -1,16 +1,16 @@
 "use client";
 
-import { LuArrowRight, LuChevronDown } from "react-icons/lu";
-import Image from "next/image";
-import { createPortal } from "react-dom";
-import { useState } from "react";
-
 import type { FormType } from "../hooks/useEntryForm";
-import { EntryProps } from "../types/entry-type";
-import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
-import type { SaleTransaction } from "@/shared/types/domain";
+
 import { EntryCustomer } from "./entry-customer";
 import { EntryContinue } from "./entry-continue";
+
+import { getCurrentPurchase } from "../selectors/get-current-purchase";
+import { canContinueEntry } from "../selectors/can-continue-entry";
+
+import { DebtEntry } from "./debt-entry";
+import { RepaymentEntry } from "./repayment-entry";
+import { DebtRepaymentEntry } from "./debt-repayment-entry";
 
 
 
@@ -19,70 +19,34 @@ export function AddEntryOne({ form }: { form: FormType }) {
   const {
     customer,
     setCustomer,
-    purchaseAmount,
-    setPurchaseAmount,
-    amountPaid,
-    setAmountPaid,
+    productPrice,
     amountRepaid,
-    setAmountRepaid,
     setStep,
     entryType,
-    setEntryType,
     selectedPurchase,
-    setSelectedPurchase,
   } = form;
-
-  if (entryType === undefined) return null;
   
-  const currentPurchase =
-    selectedPurchase?.customerId === customer?.id
-      ? selectedPurchase
-      : undefined;
-  const canContinue =
-    entryType === 1
-      ? Boolean(customer && currentPurchase && Number(amountRepaid) > 0)
-      : Boolean(customer && Number(purchaseAmount) > 0);
+  const currentPurchase = getCurrentPurchase(customer, selectedPurchase);
+  const canContinue = canContinueEntry({
+    customer,
+    entryType,
+    productPrice,
+    amountRepaid,
+    currentPurchase,
+  });
 
   return (
     <main className="flex min-h-[calc(100vh-5rem)] flex-col px-5 pb-7 pt-5">
       <EntryCustomer setCustomer={setCustomer} customer={customer} />
-      {entryType === 2 && <DebtRepaymentEntry />}
-      {entryType === 1 && <RepaymentEntry />}
-      {entryType === 0 && <DebtEntry />}
-
-      {/* <EntryModeMover entryType={entryType} />
-      <EntryAmount
-        setEntryType={setEntryType}
-        entryType={entryType}
-        purchaseAmount={purchaseAmount}
-        setPurchaseAmount={setPurchaseAmount}
-        amountPaid={amountPaid}
-        setAmountPaid={setAmountPaid}
-        amountRepaid={amountRepaid}
-        setAmountRepaid={setAmountRepaid}
-        customer={customer}
-        selectedPurchase={currentPurchase}
-        setSelectedPurchase={(purchase) => setSelectedPurchase?.(purchase)}
-      /> */}
+      {entryType === 2 && <DebtRepaymentEntry form={form}/>}
+      {entryType === 1 && <RepaymentEntry form={form} />}
+      {entryType === 0 && <DebtEntry form={form} />}
       <EntryContinue setStep={setStep} canContinue={canContinue} />
     </main>
   );
 }
 
 
-function EntryModeMover({entryType}: {entryType: 0|1|2}) {
-  // switch (entryType) {
-  //   case 2: 
-  //     return <DebtRepaymentEntry />;
-  //   case 1:
-  //     return <RepaymentEntry />;
-  //   default: 
-  //     return <DebtEntry />
-
-    
-    
-  // }
-}
 // export function EntryCustomer({ setCustomer, customer }: EntryProps) {
 //   const { selectedTrigger, isSelectedTrigger } = useEntryForm();
 
@@ -171,303 +135,303 @@ function EntryModeMover({entryType}: {entryType: 0|1|2}) {
 //   setSelectedPurchase: (purchase: SaleTransaction | undefined) => void;
 // };
 
-export function EntryAmount({
-  setPurchaseAmount,
-  setAmountPaid,
-  setAmountRepaid,
-  setEntryType,
-  entryType,
-  purchaseAmount,
-  amountPaid,
-  amountRepaid,
-  customer,
-  selectedPurchase,
-  setSelectedPurchase,
-}: EntryAmountProps) {
-  const [purchasePickerOpen, setPurchasePickerOpen] = useState(false);
-  const selectEntryType = (nextType: 0 | 1) => {
-    setEntryType?.(nextType);
-  };
+// export function EntryAmount({
+//   setProductPrice,
+//   setAmountPaid,
+//   setAmountRepaid,
+//   setEntryType,
+//   entryType,
+//   productPrice,
+//   amountPaid,
+//   amountRepaid,
+//   customer,
+//   selectedPurchase,
+//   setSelectedPurchase,
+// }: EntryAmountProps) {
+//   const [purchasePickerOpen, setPurchasePickerOpen] = useState(false);
+//   const selectEntryType = (nextType: 0 | 1) => {
+//     setEntryType?.(nextType);
+//   };
 
-  if (entryType === undefined) {
-    return null;
-  }
+//   if (entryType === undefined) {
+//     return null;
+//   }
 
-  const purchasePrice = Number(purchaseAmount || 0);
-  const paid = Number(amountPaid || 0);
-  const amountOwed = Math.max(purchasePrice - paid, 0);
+//   const purchasePrice = Number(productPrice || 0);
+//   const paid = Number(amountPaid || 0);
+//   const amountOwed = Math.max(purchasePrice - paid, 0);
 
-  return (
-    <section className="mt-4" aria-labelledby="entry-amount-heading">
-      <div className="flex rounded-2xl bg-[#e1e8dd] p-1">
-        <button
-          type="button"
-          onClick={() => selectEntryType(0)}
-          aria-pressed={entryType === 0}
-          className={`flex min-h-10 flex-1 items-center justify-center rounded-xl px-2 py-2 text-[15px] font-bold ${
-            entryType === 0
-              ? "bg-[var(--forest)] text-[var(--surface)] shadow-sm shadow-[var(--forest)]/20"
-              : "text-[#57705f]"
-          }`}
-        >
-          Purchase
-        </button>
-        <button
-          type="button"
-          onClick={() => selectEntryType(1)}
-          aria-pressed={entryType === 1}
-          className={`flex min-h-10 flex-1 items-center justify-center rounded-xl px-2 py-2 text-[15px] font-bold ${
-            entryType === 1
-              ? "bg-[var(--forest)] text-[var(--surface)] shadow-sm shadow-[var(--forest)]/20"
-              : "text-[#57705f]"
-          }`}
-        >
-          Debt repayment
-        </button>
-      </div>
+//   return (
+//     <section className="mt-4" aria-labelledby="entry-amount-heading">
+//       <div className="flex rounded-2xl bg-[#e1e8dd] p-1">
+//         <button
+//           type="button"
+//           onClick={() => selectEntryType(0)}
+//           aria-pressed={entryType === 0}
+//           className={`flex min-h-10 flex-1 items-center justify-center rounded-xl px-2 py-2 text-[15px] font-bold ${
+//             entryType === 0
+//               ? "bg-[var(--forest)] text-[var(--surface)] shadow-sm shadow-[var(--forest)]/20"
+//               : "text-[#57705f]"
+//           }`}
+//         >
+//           Purchase
+//         </button>
+//         <button
+//           type="button"
+//           onClick={() => selectEntryType(1)}
+//           aria-pressed={entryType === 1}
+//           className={`flex min-h-10 flex-1 items-center justify-center rounded-xl px-2 py-2 text-[15px] font-bold ${
+//             entryType === 1
+//               ? "bg-[var(--forest)] text-[var(--surface)] shadow-sm shadow-[var(--forest)]/20"
+//               : "text-[#57705f]"
+//           }`}
+//         >
+//           Debt repayment
+//         </button>
+//       </div>
 
-      {entryType === 0 ? (
-        <>
-          <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-[#e5e9df] bg-[var(--surface)] shadow-sm shadow-[var(--forest)]/5">
-            <div className="border-b border-[#e9ede5] bg-[#f3f7ed] px-4 py-3">
-              <p className="text-sm font-extrabold text-[var(--forest)]">
-                New purchase
-              </p>
-              <p className="mt-0.5 text-xs font-medium text-[#607568]">
-                Record what was sold and what was paid today.
-              </p>
-            </div>
-            <div className="px-4 py-3">
-              <label
-                className="flex items-center justify-between gap-4 border-b border-[#e9ede5] pb-3"
-                htmlFor="entry-product-price"
-              >
-                <span className="text-base font-bold text-[#53705f]">
-                  Product price
-                </span>
-                <input
-                  id="entry-product-price"
-                  type="number"
-                  value={purchaseAmount ?? "0"}
-                  onFocus={(event) => event.currentTarget.select()}
-                  onChange={(event) => setPurchaseAmount?.(event.target.value)}
-                  className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
-                />
-              </label>
+//       {entryType === 0 ? (
+//         <>
+//           <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-[#e5e9df] bg-[var(--surface)] shadow-sm shadow-[var(--forest)]/5">
+//             <div className="border-b border-[#e9ede5] bg-[#f3f7ed] px-4 py-3">
+//               <p className="text-sm font-extrabold text-[var(--forest)]">
+//                 New purchase
+//               </p>
+//               <p className="mt-0.5 text-xs font-medium text-[#607568]">
+//                 Record what was sold and what was paid today.
+//               </p>
+//             </div>
+//             <div className="px-4 py-3">
+//               <label
+//                 className="flex items-center justify-between gap-4 border-b border-[#e9ede5] pb-3"
+//                 htmlFor="entry-product-price"
+//               >
+//                 <span className="text-base font-bold text-[#53705f]">
+//                   Product price
+//                 </span>
+//                 <input
+//                   id="entry-product-price"
+//                   type="number"
+//                   value={productPrice ?? "0"}
+//                   onFocus={(event) => event.currentTarget.select()}
+//                   onChange={(event) => setProductPrice?.(event.target.value)}
+//                   className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
+//                 />
+//               </label>
 
-              <label
-                className="flex items-center justify-between gap-4 pt-3"
-                htmlFor="entry-amount-paid"
-              >
-                <span className="text-base font-bold text-[#53705f]">
-                  Amount paid
-                </span>
-                <input
-                  id="entry-amount-paid"
-                  type="number"
-                  value={amountPaid ?? "0"}
-                  onFocus={(event) => event.currentTarget.select()}
-                  onChange={(event) => setAmountPaid?.(event.target.value)}
-                  className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
-                />
-              </label>
-            </div>
-          </div>
+//               <label
+//                 className="flex items-center justify-between gap-4 pt-3"
+//                 htmlFor="entry-amount-paid"
+//               >
+//                 <span className="text-base font-bold text-[#53705f]">
+//                   Amount paid
+//                 </span>
+//                 <input
+//                   id="entry-amount-paid"
+//                   type="number"
+//                   value={amountPaid ?? "0"}
+//                   onFocus={(event) => event.currentTarget.select()}
+//                   onChange={(event) => setAmountPaid?.(event.target.value)}
+//                   className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
+//                 />
+//               </label>
+//             </div>
+//           </div>
 
-          <p
-            id="entry-amount-heading"
-            className="mt-3 rounded-xl bg-[#f7e4d3] px-4 py-2 text-center text-[14px] font-bold text-[#81502f]"
-          >
-            {"\u20A6"} {amountOwed.toLocaleString("en-NG")} will be added to{" "}
-            {customer?.name ?? "this customer"}&apos;s debt
-          </p>
-        </>
-      ) : (
-        <RepaymentFields
-          amountRepaid={amountRepaid ?? "0"}
-          setAmountRepaid={setAmountRepaid}
-          customerId={customer?.id}
-          customerName={customer?.name}
-          selectedPurchase={selectedPurchase}
-          onSelectPurchase={(purchase) => setSelectedPurchase(purchase)}
-          open={purchasePickerOpen}
-          setOpen={setPurchasePickerOpen}
-        />
-      )}
-    </section>
-  );
-}
+//           <p
+//             id="entry-amount-heading"
+//             className="mt-3 rounded-xl bg-[#f7e4d3] px-4 py-2 text-center text-[14px] font-bold text-[#81502f]"
+//           >
+//             {"\u20A6"} {amountOwed.toLocaleString("en-NG")} will be added to{" "}
+//             {customer?.name ?? "this customer"}&apos;s debt
+//           </p>
+//         </>
+//       ) : (
+//         <RepaymentFields
+//           amountRepaid={amountRepaid ?? "0"}
+//           setAmountRepaid={setAmountRepaid}
+//           customerId={customer?.id}
+//           customerName={customer?.name}
+//           selectedPurchase={selectedPurchase}
+//           onSelectPurchase={(purchase) => setSelectedPurchase(purchase)}
+//           open={purchasePickerOpen}
+//           setOpen={setPurchasePickerOpen}
+//         />
+//       )}
+//     </section>
+//   );
+// }
 
-type RepaymentFieldsProps = {
-  amountRepaid: string;
-  setAmountRepaid?: EntryProps["setAmountRepaid"];
-  customerId?: string;
-  customerName?: string;
-  selectedPurchase?: SaleTransaction;
-  onSelectPurchase: (purchase: SaleTransaction) => void;
-  open: boolean;
-  setOpen: (open: boolean) => void;
-};
+// type RepaymentFieldsProps = {
+//   amountRepaid: string;
+//   setAmountRepaid?: EntryProps["setAmountRepaid"];
+//   customerId?: string;
+//   customerName?: string;
+//   selectedPurchase?: SaleTransaction;
+//   onSelectPurchase: (purchase: SaleTransaction) => void;
+//   open: boolean;
+//   setOpen: (open: boolean) => void;
+// };
 
-function RepaymentFields({
-  amountRepaid,
-  setAmountRepaid,
-  customerId,
-  customerName,
-  selectedPurchase,
-  onSelectPurchase,
-  open,
-  setOpen,
-}: RepaymentFieldsProps) {
-  const purchases = mockSaleTransactions.filter(
-    (purchase) =>
-      purchase.customerId === customerId &&
-      purchase.amountPaid < purchase.productPrice,
-  );
-  const originalOwed = selectedPurchase
-    ? (selectedPurchase.productPrice - selectedPurchase.amountPaid) / 100
-    : 0;
-  const amountOwed = Math.max(originalOwed - (Number(amountRepaid) || 0), 0);
+// function RepaymentFields({
+//   amountRepaid,
+//   setAmountRepaid,
+//   customerId,
+//   customerName,
+//   selectedPurchase,
+//   onSelectPurchase,
+//   open,
+//   setOpen,
+// }: RepaymentFieldsProps) {
+//   const purchases = mockSaleTransactions.filter(
+//     (purchase) =>
+//       purchase.customerId === customerId &&
+//       purchase.amountPaid < purchase.productPrice,
+//   );
+//   const originalOwed = selectedPurchase
+//     ? (selectedPurchase.productPrice - selectedPurchase.amountPaid) / 100
+//     : 0;
+//   const amountOwed = Math.max(originalOwed - (Number(amountRepaid) || 0), 0);
 
-  return (
-    <div className="mt-6">
-      <div className="overflow-hidden rounded-[1.25rem] border border-[#e5e9df] bg-[var(--surface)] shadow-sm shadow-[var(--forest)]/5">
-        {/* <div className="border-b border-[#e9ede5] bg-[#f3f7ed] px-4 py-3">
-          <p className="text-sm font-extrabold text-[var(--forest)]">
-            Debt repayment
-          </p>
-          <p className="mt-0.5 text-xs font-medium text-[#607568]">
-            Enter the amount received from this customer.
-          </p>
-        </div> */}
-        <div className="px-4 py-4">
-          <label
-            className="flex items-center justify-between gap-4"
-            htmlFor="entry-amount-received"
-          >
-            <span className="text-base font-bold text-[#53705f]">
-              Amount received
-            </span>
-            <input
-              id="entry-amount-received"
-              type="number"
-              min="0"
-              value={amountRepaid}
-              onFocus={(event) => event.currentTarget.select()}
-              onChange={(event) => setAmountRepaid?.(event.target.value)}
-              className="w-40 appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            />
-          </label>
-        </div>
-      </div>
+//   return (
+//     <div className="mt-6">
+//       <div className="overflow-hidden rounded-[1.25rem] border border-[#e5e9df] bg-[var(--surface)] shadow-sm shadow-[var(--forest)]/5">
+//         {/* <div className="border-b border-[#e9ede5] bg-[#f3f7ed] px-4 py-3">
+//           <p className="text-sm font-extrabold text-[var(--forest)]">
+//             Debt repayment
+//           </p>
+//           <p className="mt-0.5 text-xs font-medium text-[#607568]">
+//             Enter the amount received from this customer.
+//           </p>
+//         </div> */}
+//         <div className="px-4 py-4">
+//           <label
+//             className="flex items-center justify-between gap-4"
+//             htmlFor="entry-amount-received"
+//           >
+//             <span className="text-base font-bold text-[#53705f]">
+//               Amount received
+//             </span>
+//             <input
+//               id="entry-amount-received"
+//               type="number"
+//               min="0"
+//               value={amountRepaid}
+//               onFocus={(event) => event.currentTarget.select()}
+//               onChange={(event) => setAmountRepaid?.(event.target.value)}
+//               className="w-40 appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+//             />
+//           </label>
+//         </div>
+//       </div>
 
-      <div className="grid gap-3 mt-6">
-        <p className="px-1 text-sm font-extrabold text-[var(--ink)]">
-          Which purchase is being repaid?
-        </p>
+//       <div className="grid gap-3 mt-6">
+//         <p className="px-1 text-sm font-extrabold text-[var(--ink)]">
+//           Which purchase is being repaid?
+//         </p>
 
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          disabled={!customerId}
-          className="flex w-full items-center justify-between gap-4 rounded-xl border border-[#e4e9df] bg-[var(--surface)] px-5 py-4 text-left shadow-sm shadow-[var(--forest)]/5 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {selectedPurchase ? (
-            <PurchasePreview purchase={selectedPurchase} isShowInfo={false} />
-          ) : (
-            <span className="font-bold text-[#758477]">
-              {customerId ? "Select a purchase" : "Select a customer first"}
-            </span>
-          )}
-          <LuChevronDown
-            className="size-5 shrink-0 text-[#758477]"
-            aria-hidden="true"
-          />
-        </button>
-      </div>
+//         <button
+//           type="button"
+//           onClick={() => setOpen(true)}
+//           disabled={!customerId}
+//           className="flex w-full items-center justify-between gap-4 rounded-xl border border-[#e4e9df] bg-[var(--surface)] px-5 py-4 text-left shadow-sm shadow-[var(--forest)]/5 disabled:cursor-not-allowed disabled:opacity-60"
+//         >
+//           {selectedPurchase ? (
+//             <PurchasePreview purchase={selectedPurchase} isShowInfo={false} />
+//           ) : (
+//             <span className="font-bold text-[#758477]">
+//               {customerId ? "Select a purchase" : "Select a customer first"}
+//             </span>
+//           )}
+//           <LuChevronDown
+//             className="size-5 shrink-0 text-[#758477]"
+//             aria-hidden="true"
+//           />
+//         </button>
+//       </div>
 
-      <p
-        id="entry-amount-heading"
-        className="mt-3 rounded-xl bg-[#f7e4d3] px-4 py-2 text-center text-[14px] font-bold text-[#81502f]"
-      >
-        {customerName ?? "This customer"} will still owe {"\u20A6"}
-        {amountOwed.toLocaleString("en-NG")} after this.
-      </p>
+//       <p
+//         id="entry-amount-heading"
+//         className="mt-3 rounded-xl bg-[#f7e4d3] px-4 py-2 text-center text-[14px] font-bold text-[#81502f]"
+//       >
+//         {customerName ?? "This customer"} will still owe {"\u20A6"}
+//         {amountOwed.toLocaleString("en-NG")} after this.
+//       </p>
 
-      {open &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-50 flex items-end bg-black/30"
-            onClick={() => setOpen(false)}
-          >
-            <div
-              className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-extrabold">Select purchase</h2>
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
-                >
-                  Close
-                </button>
-              </div>
-              <div className="grid gap-3">
-                {purchases.length ? (
-                  purchases.map((purchase) => (
-                    <button
-                      key={purchase.id}
-                      type="button"
-                      onClick={() => {
-                        onSelectPurchase(purchase);
-                        setOpen(false);
-                      }}
-                      className="rounded-2xl border border-[#e1e7dc] bg-[#fffef9] p-4 text-left active:bg-[#e8eddd]"
-                    >
-                      <PurchasePreview purchase={purchase} isShowInfo={true} />
-                    </button>
-                  ))
-                ) : (
-                  <p className="rounded-2xl bg-[#f4f7f0] px-4 py-5 text-center text-sm text-[var(--muted)]">
-                    No outstanding purchases for this customer.
-                  </p>
-                )}
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
-    </div>
-  );
-}
+//       {open &&
+//         createPortal(
+//           <div
+//             className="fixed inset-0 z-50 flex items-end bg-black/30"
+//             onClick={() => setOpen(false)}
+//           >
+//             <div
+//               className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
+//               onClick={(event) => event.stopPropagation()}
+//             >
+//               <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
+//               <div className="mb-4 flex items-center justify-between">
+//                 <h2 className="text-xl font-extrabold">Select purchase</h2>
+//                 <button
+//                   type="button"
+//                   onClick={() => setOpen(false)}
+//                   className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
+//                 >
+//                   Close
+//                 </button>
+//               </div>
+//               <div className="grid gap-3">
+//                 {purchases.length ? (
+//                   purchases.map((purchase) => (
+//                     <button
+//                       key={purchase.id}
+//                       type="button"
+//                       onClick={() => {
+//                         onSelectPurchase(purchase);
+//                         setOpen(false);
+//                       }}
+//                       className="rounded-2xl border border-[#e1e7dc] bg-[#fffef9] p-4 text-left active:bg-[#e8eddd]"
+//                     >
+//                       <PurchasePreview purchase={purchase} isShowInfo={true} />
+//                     </button>
+//                   ))
+//                 ) : (
+//                   <p className="rounded-2xl bg-[#f4f7f0] px-4 py-5 text-center text-sm text-[var(--muted)]">
+//                     No outstanding purchases for this customer.
+//                   </p>
+//                 )}
+//               </div>
+//             </div>
+//           </div>,
+//           document.body,
+//         )}
+//     </div>
+//   );
+// }
 
-function PurchasePreview({ purchase, isShowInfo }: { purchase: SaleTransaction; isShowInfo: boolean }) {
-  const price = purchase.productPrice / 100;
-  const paid = purchase.amountPaid / 100;
-  const owed = Math.max(price - paid, 0);
-  const date = new Intl.DateTimeFormat("en-NG", {
-    day: "numeric",
-    month: "short",
-  }).format(new Date(purchase.createdAt));
-  return (
-    <div className="flex flex-col gap-1">
-      <span className="block truncate font-extrabold text-[var(--ink)]">
-        {purchase.description}
-      </span>
-      {isShowInfo && (
-        <span className="block text-sm font-semibold text-[#607568]">
-          Price {"\u20A6"}
-          {price.toLocaleString("en-NG")} · Paid {"\u20A6"}
-          {paid.toLocaleString("en-NG")}
-        </span>
-      )}
-      <span className="shrink-0 w-fit rounded-full bg-[#f7e4d3] px-2.5 py-1 text-xs font-extrabold text-[#81502f]">
-        Owes {"\u20A6"}
-        {owed.toLocaleString("en-NG")}
-      </span>
-    </div>
-  );
-}
+// function PurchasePreview({ purchase, isShowInfo }: { purchase: SaleTransaction; isShowInfo: boolean }) {
+//   const price = purchase.productPrice / 100;
+//   const paid = purchase.amountPaid / 100;
+//   const owed = Math.max(price - paid, 0);
+//   const date = new Intl.DateTimeFormat("en-NG", {
+//     day: "numeric",
+//     month: "short",
+//   }).format(new Date(purchase.createdAt));
+//   return (
+//     <div className="flex flex-col gap-1">
+//       <span className="block truncate font-extrabold text-[var(--ink)]">
+//         {purchase.description}
+//       </span>
+//       {isShowInfo && (
+//         <span className="block text-sm font-semibold text-[#607568]">
+//           Price {"\u20A6"}
+//           {price.toLocaleString("en-NG")} · Paid {"\u20A6"}
+//           {paid.toLocaleString("en-NG")}
+//         </span>
+//       )}
+//       <span className="shrink-0 w-fit rounded-full bg-[#f7e4d3] px-2.5 py-1 text-xs font-extrabold text-[#81502f]">
+//         Owes {"\u20A6"}
+//         {owed.toLocaleString("en-NG")}
+//       </span>
+//     </div>
+//   );
+// }

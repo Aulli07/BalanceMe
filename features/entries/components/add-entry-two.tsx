@@ -1,42 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { LuArrowRight, LuCalendarDays } from "react-icons/lu";
+import { LuArrowRight } from "react-icons/lu";
 import type { FormType } from "../hooks/useEntryForm";
-import type { EntryProps } from "../types/entry-type";
+import { formatPurchaseDate } from "@/shared/utils/get-time-period";
+
+
+
 
 export function AddEntryTwo({ form }: { form: FormType }) {
-  const {
-    customer,
-    purchaseAmount,
-    amountPaid,
-    amountRepaid,
-    entryType,
-    selectedPurchase,
-    description,
-    setDescription,
-    dueDate,
-    setDueDate,
-    setReceipt,
-    setStep,
-  } = form;
+  const { setStep } = form;
 
   return (
     <main className="flex min-h-[calc(100vh-5rem)] flex-col px-5 pb-7 pt-5">
       <EntryConfirmedDetails
-        customer={customer}
-        purchaseAmount={purchaseAmount}
-        amountPaid={amountPaid}
-        amountRepaid={amountRepaid}
-        entryType={entryType}
-        selectedPurchase={selectedPurchase}
+        form={form}
       />
       <EntryDescription
-        description={description}
-        setDescription={setDescription}
-        dueDate={dueDate}
-        setDueDate={setDueDate}
-        setReceipt={setReceipt}
+        form={form}
       />
       <button
         type="button"
@@ -49,15 +30,17 @@ export function AddEntryTwo({ form }: { form: FormType }) {
   );
 }
 
-function EntryConfirmedDetails({
-  customer,
-  purchaseAmount,
-  amountPaid,
-  amountRepaid,
-  entryType,
-  selectedPurchase,
-}: EntryProps) {
-  const purchasePrice = Number(purchaseAmount || 0);
+function EntryConfirmedDetails({form} : {form: FormType}) {
+  const {
+    customer,
+    productPrice,
+    amountPaid,
+    amountRepaid,
+    entryType,
+    selectedPurchase,
+  } = form;
+
+  const purchasePrice = Number(productPrice || 0);
   const paid = Number(amountPaid || 0);
   const repaid = Number(amountRepaid || 0);
   const amountOwed = Math.max(purchasePrice - paid, 0);
@@ -100,14 +83,9 @@ function EntryConfirmedDetails({
           </p>
         </div>
       </div>
-      {isRepayment && selectedPurchase ? (
-        <div className="mt-6 rounded-2xl bg-white/10 px-4 py-3">
-          <p className="truncate text-base font-extrabold">
-            For: {selectedPurchase.description}
-          </p>
-          <p className="mt-2 text-xs font-extrabold text-[#d9e8c5]">
-            Still owes ₦{repaymentOwed.toLocaleString("en-NG")}
-          </p>
+      {isRepayment ? (
+        <div className="mt-7 flex justify-end gap-2 text-right">
+          <AmountLabel label="Amount owed" value={repaymentOwed} />
         </div>
       ) : (
         <div className="mt-7 flex justify-end gap-2 text-right">
@@ -132,45 +110,61 @@ function AmountLabel({ label, value }: { label: string; value: number }) {
   );
 }
 
-function EntryDescription({
-  description,
-  setDescription,
-  dueDate,
-  setDueDate,
-  setReceipt,
-}: EntryProps) {
+function EntryDescription({form} : {form: FormType}) {
+  const {
+    entryType,
+    selectedPurchase,
+    description,
+    setDescription,
+    receipt,
+    setReceipt,
+  } = form;
+
+  const isRepayment = entryType === 1;
+  const purchasePrice = selectedPurchase
+    ? selectedPurchase.productPrice / 100
+    : 0;
+  const purchaseDate = selectedPurchase
+    ? formatPurchaseDate(selectedPurchase.createdAt)
+    : "";
+  
   return (
     <section className="mt-5" aria-labelledby="entry-description-heading">
-      <label className="grid gap-2 text-sm font-bold text-[var(--ink)]">
-        Description
-        <textarea
-          rows={3}
-          value={description ?? ""}
-          onChange={(event) => setDescription?.(event.target.value)}
-          placeholder="What was this entry for?"
-          className="resize-none rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3"
-        />
-      </label>
-      <label className="mt-4 grid gap-2 text-sm font-bold text-[var(--ink)]">
-        Due date
-        <div className="relative">
-          <input
-            type="date"
-            value={dueDate ?? ""}
-            onChange={(event) => setDueDate?.(event.target.value)}
-            className="w-full rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3"
-          />
-          <LuCalendarDays className="pointer-events-none absolute right-3 top-3 size-5 text-[#758477]" />
+      {isRepayment ? (
+        <div className="grid gap-2 text-md font-bold text-[var(--ink)]">
+          <p>Note</p>
+          <p className="rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 leading-relaxed">
+            {selectedPurchase
+              ? `For ${selectedPurchase.description}, priced at ₦${purchasePrice.toLocaleString("en-NG")} and bought on ${purchaseDate}`
+              : "Select a purchase to add this repayment note."}
+          </p>
         </div>
-      </label>
-      <label className="mt-4 grid gap-2 text-sm font-bold text-[var(--ink)]">
-        Receipt
+      ) : (
+        <label className="grid gap-2 text-sm font-bold text-[var(--ink)]">
+          Description
+          <textarea
+            rows={3}
+            value={description ?? ""}
+            onChange={(event) => setDescription?.(event.target.value)}
+            placeholder="What was this entry for?"
+            className="resize-none rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3"
+          />
+        </label>
+      )}
+      <label className="mt-4 flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-dashed border-[#cfd9c8] bg-[var(--surface)] px-4 py-3 text-sm font-bold text-[var(--ink)]">
+        <span className="truncate">{receipt?.name ?? "Add receipt"}</span>
+        <span className="shrink-0 rounded-full bg-[#eef3e8] px-2.5 py-1 text-xs font-bold text-[#607568]">
+          Optional
+        </span>
         <input
           type="file"
           accept="image/*,application/pdf"
           onChange={(event) => setReceipt?.(event.target.files?.[0])}
+          className="sr-only"
         />
       </label>
     </section>
   );
 }
+
+
