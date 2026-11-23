@@ -7,14 +7,22 @@ export type EntryProps = {
   onNext?: () => void;
   setCustomer?: Dispatch<SetStateAction<Customer | undefined>>;
   customer?: Customer;
-  setAmount?: Dispatch<SetStateAction<[string, string]>>;
-  amount?: [string, string];
-  setEntryType?: Dispatch<SetStateAction<1 | 0>>;
-  entryType?: 0|1;
+  purchaseAmount?: string;
+  setPurchaseAmount?: Dispatch<SetStateAction<string>>;
+  amountPaid?: string;
+  setAmountPaid?: Dispatch<SetStateAction<string>>;
+  amountRepaid?: string;
+  setAmountRepaid?: Dispatch<SetStateAction<string>>;
+  setEntryType?: Dispatch<SetStateAction<2| 1 | 0>>;
+  entryType?: 0|1|2;
   selectedPurchase?: SaleTransaction;
   setSelectedPurchase?: Dispatch<SetStateAction<SaleTransaction | undefined>>;
-  entryDescription?: entryDetailType;
-  setEntryDescription?: Dispatch<SetStateAction<entryDetailType>>;
+  description?: string;
+  setDescription?: Dispatch<SetStateAction<string>>;
+  dueDate?: string;
+  setDueDate?: Dispatch<SetStateAction<string>>;
+  receipt?: File;
+  setReceipt?: Dispatch<SetStateAction<File | undefined>>;
   setStep?: Dispatch<SetStateAction<1|2|3>>;
 }
 

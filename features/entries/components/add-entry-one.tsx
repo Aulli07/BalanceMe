@@ -5,154 +5,181 @@ import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useState } from "react";
 
-import { useEntryForm } from "../hooks/useEntryForm";
+import type { FormType } from "../hooks/useEntryForm";
 import { EntryProps } from "../types/entry-type";
-import {
-  mockCustomers,
-  mockSaleTransactions,
-} from "@/shared/data/domain-mock-data";
+import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
 import type { SaleTransaction } from "@/shared/types/domain";
+import { EntryCustomer } from "./entry-customer";
+import { EntryContinue } from "./entry-continue";
 
-export function AddEntryOne({
-  setCustomer,
-  customer,
-  setStep,
-  setAmount,
-  amount,
-  setEntryType,
-  entryType,
-  selectedPurchase,
-  setSelectedPurchase,
-}: EntryProps) {
-  if (entryType === undefined || amount === undefined) return null;
+
+
+
+export function AddEntryOne({ form }: { form: FormType }) {
+  const {
+    customer,
+    setCustomer,
+    purchaseAmount,
+    setPurchaseAmount,
+    amountPaid,
+    setAmountPaid,
+    amountRepaid,
+    setAmountRepaid,
+    setStep,
+    entryType,
+    setEntryType,
+    selectedPurchase,
+    setSelectedPurchase,
+  } = form;
+
+  if (entryType === undefined) return null;
+  
   const currentPurchase =
     selectedPurchase?.customerId === customer?.id
       ? selectedPurchase
       : undefined;
   const canContinue =
     entryType === 1
-      ? Boolean(customer && currentPurchase && Number(amount[1]) > 0)
-      : Boolean(customer && Number(amount[0]) > 0);
+      ? Boolean(customer && currentPurchase && Number(amountRepaid) > 0)
+      : Boolean(customer && Number(purchaseAmount) > 0);
 
   return (
     <main className="flex min-h-[calc(100vh-5rem)] flex-col px-5 pb-7 pt-5">
       <EntryCustomer setCustomer={setCustomer} customer={customer} />
+      {entryType === 2 && <DebtRepaymentEntry />}
+      {entryType === 1 && <RepaymentEntry />}
+      {entryType === 0 && <DebtEntry />}
+
+      {/* <EntryModeMover entryType={entryType} />
       <EntryAmount
-        setAmount={setAmount}
         setEntryType={setEntryType}
         entryType={entryType}
-        amount={amount}
+        purchaseAmount={purchaseAmount}
+        setPurchaseAmount={setPurchaseAmount}
+        amountPaid={amountPaid}
+        setAmountPaid={setAmountPaid}
+        amountRepaid={amountRepaid}
+        setAmountRepaid={setAmountRepaid}
         customer={customer}
         selectedPurchase={currentPurchase}
         setSelectedPurchase={(purchase) => setSelectedPurchase?.(purchase)}
-      />
-
-      <button
-        type="button"
-        onClick={() => setStep?.(2)}
-        disabled={!canContinue}
-        className="mt-auto flex w-full items-center justify-center gap-1 rounded-2xl bg-[var(--forest)] px-5 py-3 text-[16px] font-bold text-[var(--surface)] shadow-lg shadow-[var(--forest)]/15 transition-all hover:bg-[var(--forest-dark)] active:scale-[.98] disabled:cursor-not-allowed disabled:bg-[var(--forest)]/80 disabled:text-[var(--surface)]/90 disabled:shadow-none"
-      >
-        Continue
-        <LuArrowRight className="size-5" aria-hidden="true" />
-      </button>
+      /> */}
+      <EntryContinue setStep={setStep} canContinue={canContinue} />
     </main>
   );
 }
 
-export function EntryCustomer({ setCustomer, customer }: EntryProps) {
-  const { selectedTrigger, isSelectedTrigger } = useEntryForm();
 
-  return (
-    <section aria-labelledby="entry-customer-heading">
-      <button
-        type="button"
-        onClick={() => isSelectedTrigger((prev) => !prev)}
-        className="flex min-h-15 w-full items-center justify-between gap-3 rounded-2xl border border-[#e4e9df] bg-[var(--surface)] px-4 text-left shadow-sm shadow-[var(--forest)]/5 transition-colors active:border-[var(--forest)]"
-      >
-        <span className="flex min-w-0 items-center gap-3">
-          {customer ? (
-            customer.avatarUrl ? (
-              <Image
-                src={customer.avatarUrl}
-                alt=""
-                width={40}
-                height={40}
-                className="size-10 shrink-0 rounded-full object-cover"
-              />
-            ) : (
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
-                {customer.name.slice(0, 2)}
-              </span>
-            )
-          ) : null}
-          <span className="truncate text-[17px] font-extrabold text-[var(--ink)]">
-            {customer ? customer.name : "Select Customer"}
-          </span>
-        </span>
-        <LuChevronDown
-          className="size-6 shrink-0 text-[#758477]"
-          aria-hidden="true"
-        />
-      </button>
+function EntryModeMover({entryType}: {entryType: 0|1|2}) {
+  // switch (entryType) {
+  //   case 2: 
+  //     return <DebtRepaymentEntry />;
+  //   case 1:
+  //     return <RepaymentEntry />;
+  //   default: 
+  //     return <DebtEntry />
 
-      {selectedTrigger &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-50 flex items-end bg-black/30"
-            onClick={() => isSelectedTrigger(false)}
-          >
-            <div
-              className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-extrabold">Select customer</h2>
-                <button
-                  type="button"
-                  onClick={() => isSelectedTrigger(false)}
-                  className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
-                >
-                  Close
-                </button>
-              </div>
-              <div className="grid gap-2">
-                {mockCustomers.map((customer) => (
-                  <button
-                    key={customer.id}
-                    type="button"
-                    onClick={() => {
-                      setCustomer?.(customer);
-                      isSelectedTrigger(false);
-                    }}
-                    className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
-                  >
-                    <span className="grid size-10 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
-                      {customer.name.slice(0, 2).toUpperCase()}
-                    </span>
-                    <span className="font-bold">{customer.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>,
-          document.body,
-        )}
-    </section>
-  );
+    
+    
+  // }
 }
+// export function EntryCustomer({ setCustomer, customer }: EntryProps) {
+//   const { selectedTrigger, isSelectedTrigger } = useEntryForm();
 
-type EntryAmountProps = EntryProps & {
-  selectedPurchase?: SaleTransaction;
-  setSelectedPurchase: (purchase: SaleTransaction | undefined) => void;
-};
+//   return (
+//     <section aria-labelledby="entry-customer-heading">
+//       <button
+//         type="button"
+//         onClick={() => isSelectedTrigger((prev) => !prev)}
+//         className="flex min-h-15 w-full items-center justify-between gap-3 rounded-2xl border border-[#e4e9df] bg-[var(--surface)] px-4 text-left shadow-sm shadow-[var(--forest)]/5 transition-colors active:border-[var(--forest)]"
+//       >
+//         <span className="flex min-w-0 items-center gap-3">
+//           {customer ? (
+//             customer.avatarUrl ? (
+//               <Image
+//                 src={customer.avatarUrl}
+//                 alt=""
+//                 width={40}
+//                 height={40}
+//                 className="size-10 shrink-0 rounded-full object-cover"
+//               />
+//             ) : (
+//               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
+//                 {customer.name.slice(0, 2)}
+//               </span>
+//             )
+//           ) : null}
+//           <span className="truncate text-[17px] font-extrabold text-[var(--ink)]">
+//             {customer ? customer.name : "Select Customer"}
+//           </span>
+//         </span>
+//         <LuChevronDown
+//           className="size-6 shrink-0 text-[#758477]"
+//           aria-hidden="true"
+//         />
+//       </button>
+
+//       {selectedTrigger &&
+//         createPortal(
+//           <div
+//             className="fixed inset-0 z-50 flex items-end bg-black/30"
+//             onClick={() => isSelectedTrigger(false)}
+//           >
+//             <div
+//               className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
+//               onClick={(event) => event.stopPropagation()}
+//             >
+//               <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
+//               <div className="mb-4 flex items-center justify-between">
+//                 <h2 className="text-xl font-extrabold">Select customer</h2>
+//                 <button
+//                   type="button"
+//                   onClick={() => isSelectedTrigger(false)}
+//                   className="rounded-full bg-[#eef3e8] px-3 py-1 text-sm font-bold text-[var(--forest)]"
+//                 >
+//                   Close
+//                 </button>
+//               </div>
+//               <div className="grid gap-2">
+//                 {mockCustomers.map((customer) => (
+//                   <button
+//                     key={customer.id}
+//                     type="button"
+//                     onClick={() => {
+//                       setCustomer?.(customer);
+//                       isSelectedTrigger(false);
+//                     }}
+//                     className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
+//                   >
+//                     <span className="grid size-10 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
+//                       {customer.name.slice(0, 2).toUpperCase()}
+//                     </span>
+//                     <span className="font-bold">{customer.name}</span>
+//                   </button>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>,
+//           document.body,
+//         )}
+//     </section>
+//   );
+// }
+
+// type EntryAmountProps = EntryProps & {
+//   selectedPurchase?: SaleTransaction;
+//   setSelectedPurchase: (purchase: SaleTransaction | undefined) => void;
+// };
 
 export function EntryAmount({
-  setAmount,
+  setPurchaseAmount,
+  setAmountPaid,
+  setAmountRepaid,
   setEntryType,
   entryType,
-  amount,
+  purchaseAmount,
+  amountPaid,
+  amountRepaid,
   customer,
   selectedPurchase,
   setSelectedPurchase,
@@ -162,13 +189,13 @@ export function EntryAmount({
     setEntryType?.(nextType);
   };
 
-  if (entryType === undefined || amount === undefined) {
+  if (entryType === undefined) {
     return null;
   }
 
-  const productPrice = Number(amount[0]) || 0;
-  const amountPaid = Number(amount[1]) || 0;
-  const amountOwed = Math.max(productPrice - amountPaid, 0);
+  const purchasePrice = Number(purchaseAmount || 0);
+  const paid = Number(amountPaid || 0);
+  const amountOwed = Math.max(purchasePrice - paid, 0);
 
   return (
     <section className="mt-4" aria-labelledby="entry-amount-heading">
@@ -221,11 +248,9 @@ export function EntryAmount({
                 <input
                   id="entry-product-price"
                   type="number"
-                  value={amount[0]}
+                  value={purchaseAmount ?? "0"}
                   onFocus={(event) => event.currentTarget.select()}
-                  onChange={(event) =>
-                    setAmount?.((current) => [event.target.value, current[1]])
-                  }
+                  onChange={(event) => setPurchaseAmount?.(event.target.value)}
                   className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
                 />
               </label>
@@ -240,11 +265,9 @@ export function EntryAmount({
                 <input
                   id="entry-amount-paid"
                   type="number"
-                  value={amount[1]}
+                  value={amountPaid ?? "0"}
                   onFocus={(event) => event.currentTarget.select()}
-                  onChange={(event) =>
-                    setAmount?.((current) => [current[0], event.target.value])
-                  }
+                  onChange={(event) => setAmountPaid?.(event.target.value)}
                   className="w-40 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none placeholder:text-[#9aab9e]"
                 />
               </label>
@@ -261,11 +284,11 @@ export function EntryAmount({
         </>
       ) : (
         <RepaymentFields
-          amount={amount}
+          amountRepaid={amountRepaid ?? "0"}
+          setAmountRepaid={setAmountRepaid}
           customerId={customer?.id}
           customerName={customer?.name}
           selectedPurchase={selectedPurchase}
-          setAmount={setAmount}
           onSelectPurchase={(purchase) => setSelectedPurchase(purchase)}
           open={purchasePickerOpen}
           setOpen={setPurchasePickerOpen}
@@ -276,22 +299,22 @@ export function EntryAmount({
 }
 
 type RepaymentFieldsProps = {
-  amount: [string, string];
+  amountRepaid: string;
+  setAmountRepaid?: EntryProps["setAmountRepaid"];
   customerId?: string;
   customerName?: string;
   selectedPurchase?: SaleTransaction;
-  setAmount?: EntryProps["setAmount"];
   onSelectPurchase: (purchase: SaleTransaction) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
 function RepaymentFields({
-  amount,
+  amountRepaid,
+  setAmountRepaid,
   customerId,
   customerName,
   selectedPurchase,
-  setAmount,
   onSelectPurchase,
   open,
   setOpen,
@@ -304,7 +327,7 @@ function RepaymentFields({
   const originalOwed = selectedPurchase
     ? (selectedPurchase.productPrice - selectedPurchase.amountPaid) / 100
     : 0;
-  const amountOwed = Math.max(originalOwed - (Number(amount[1]) || 0), 0);
+  const amountOwed = Math.max(originalOwed - (Number(amountRepaid) || 0), 0);
 
   return (
     <div className="mt-6">
@@ -329,11 +352,9 @@ function RepaymentFields({
               id="entry-amount-received"
               type="number"
               min="0"
-              value={amount[1]}
+              value={amountRepaid}
               onFocus={(event) => event.currentTarget.select()}
-              onChange={(event) =>
-                setAmount?.((current) => [current[0], event.target.value])
-              }
+              onChange={(event) => setAmountRepaid?.(event.target.value)}
               className="w-40 appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
           </label>

@@ -2,37 +2,39 @@
 
 import { useState } from "react";
 import type { Customer, SaleTransaction } from "@/shared/types/domain";
-import { entryDetailType } from "../types/entry-type";
 
 type EntryFormOptions = {
   initialCustomer?: Customer;
-  initialEntryType?: 0 | 1;
+  initialEntryType?: 0 | 1 | 2;
 };
 
 export function useEntryForm({
   initialCustomer,
   initialEntryType = 0,
-}: EntryFormOptions = {}) {
-  const [amount, setAmount] = useState<[string, string]>(["0", "0"]);
+}: EntryFormOptions = {}): FormType {
+  const [purchaseAmount, setPurchaseAmount] = useState("0");
+  const [amountPaid, setAmountPaid] = useState("0");
+  const [amountRepaid, setAmountRepaid] = useState("0");
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [customer, setCustomer] = useState<Customer | undefined>(initialCustomer);
-  const [entryType, setEntryType] = useState<0 | 1>(initialEntryType);
+
+  const [entryType, setEntryType] = useState<0 | 1 | 2>(initialEntryType);
+  
   const [selectedPurchase, setSelectedPurchase] = useState<SaleTransaction | undefined>();
-  const [entryDescription, setEntryDescription] = useState<entryDetailType>({ description: "" });
+  const [description, setDescription] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [receipt, setReceipt] = useState<File | undefined>();
   
   const [categoryPickerOpen, setCategoryPickerOpen] = useState(false);
   const [selectedTrigger, isSelectedTrigger] = useState(false);
 
-  const updateDescription = <Field extends keyof entryDetailType>(field: Field, value: entryDetailType[Field]) => {
-    setEntryDescription((current: entryDetailType) => ({
-      ...current,
-      [field]: value,
-    }))
-  }
-
   return {
-    amount,
-    setAmount,
+    purchaseAmount,
+    setPurchaseAmount,
+    amountPaid,
+    setAmountPaid,
+    amountRepaid,
+    setAmountRepaid,
     step,
     setStep,
     customer,
@@ -41,9 +43,12 @@ export function useEntryForm({
     setEntryType,
     selectedPurchase,
     setSelectedPurchase,
-    entryDescription,
-    setEntryDescription,
-    updateDescription,
+    description,
+    setDescription,
+    dueDate,
+    setDueDate,
+    receipt,
+    setReceipt,
     setCategoryPickerOpen, 
     categoryPickerOpen,
     selectedTrigger,
@@ -52,6 +57,32 @@ export function useEntryForm({
   };  
 };
 
+export type FormType = {
+  purchaseAmount: string;
+  setPurchaseAmount: React.Dispatch<React.SetStateAction<string>>;
+  amountPaid: string;
+  setAmountPaid: React.Dispatch<React.SetStateAction<string>>;
+  amountRepaid: string;
+  setAmountRepaid: React.Dispatch<React.SetStateAction<string>>;
+  step: 1 | 2 | 3;
+  setStep: React.Dispatch<React.SetStateAction<1 | 2 | 3>>;
+  customer: Customer | undefined;
+  setCustomer: React.Dispatch<React.SetStateAction<Customer | undefined>>;
+  entryType: 0 | 1 | 2;
+  setEntryType: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
+  selectedPurchase: SaleTransaction | undefined;
+  setSelectedPurchase: React.Dispatch<React.SetStateAction<SaleTransaction | undefined>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  dueDate: string;
+  setDueDate: React.Dispatch<React.SetStateAction<string>>;
+  receipt: File | undefined;
+  setReceipt: React.Dispatch<React.SetStateAction<File | undefined>>;
+  categoryPickerOpen: boolean;
+  setCategoryPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedTrigger: boolean;
+  isSelectedTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 
 
