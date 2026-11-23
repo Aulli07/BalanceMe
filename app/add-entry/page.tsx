@@ -26,9 +26,11 @@ function AddEntryPageContent() {
     (customer) => customer.id === searchParams.get("customerId"),
   );
   const isRepayment = searchParams.get("mode") === "repayment";
+  const isSaleRepayment = searchParams.get("mode") === "sale-repayment";
+
   const form = useEntryForm({
     initialCustomer: preselectedCustomer,
-    initialEntryType: isRepayment ? 1 : 0,
+    initialEntryType: isSaleRepayment ? 2 : isRepayment ? 1 : 0,
   });
   
   return (
@@ -36,29 +38,11 @@ function AddEntryPageContent() {
       {form.step !== 3 && <AddEntryHeader step={form.step} setStep={form.setStep} />}
 
       {form.step === 1 && (
-        <AddEntryOne
-          setCustomer={form.setCustomer}
-          customer={form.customer}
-          setStep={form.setStep}
-          setAmount={form.setAmount}
-          amount={form.amount}
-          setEntryType={form.setEntryType}
-          entryType={form.entryType}
-          selectedPurchase={form.selectedPurchase}
-          setSelectedPurchase={form.setSelectedPurchase}
-        />
+        <AddEntryOne form={form} />
       )}
 
       {form.step === 2 && (
-        <AddEntryTwo
-          customer={form.customer}
-          amount={form.amount}
-          entryType={form.entryType}
-          selectedPurchase={form.selectedPurchase}
-          entryDescription={form.entryDescription}
-          setEntryDescription={form.setEntryDescription}
-          setStep={form.setStep}
-        />
+        <AddEntryTwo form={form} />
       )}
 
       {form.step === 3 && <AddEntryThree setStep={form.setStep} />}
