@@ -17,7 +17,7 @@ export default async function TransactionPage({
   if (!transaction) notFound();
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] bg-[var(--paper)] text-[var(--ink)] flex flex-col gap-3">
+    <main className="flex flex-col gap-3 bg-[var(--paper)] pb-16 text-[var(--ink)]">
       <TransactionDetailsHeader />
       <TransactionDetailsOverview transaction={transaction} />
     </main>

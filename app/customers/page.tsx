@@ -26,7 +26,7 @@ export default function CustomersPage() {
   }
 
   return (
-    <main className="mt-5 px-5 min-h-[calc(100vh-5rem)] bg-[var(--paper)] text-[var(--ink)]">
+    <main className="mt-5 px-5 mb-17 bg-[var(--paper)] text-[var(--ink)]">
       <CustomerHeader onAddCustomer={() => setAddOpen(true)} />
       <CustomerInput key={`input-${refreshKey}`} setVisibleCustomers={setVisibleCustomers} />
       <CustomerFilter key={`filter-${refreshKey}`} setVisibleCustomers={setVisibleCustomers} />
