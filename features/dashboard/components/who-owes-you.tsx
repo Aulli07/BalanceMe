@@ -25,14 +25,14 @@ export function WhoOwesYou({ businessId }: { businessId: string }) {
         >
           Who owes you
         </h2>
-        {customers.length > MAX_CUSTOMERS_SHOWN && (
+        {/* {customers.length > MAX_CUSTOMERS_SHOWN && (
           <Link
             href="/customers"
             className="min-h-11 inline-flex items-center text-sm font-bold text-[var(--forest)] underline-offset-2 hover:underline"
           >
             See all ({customers.length})
           </Link>
-        )}
+        )} */}
       </div>
 
       {visibleCustomers.length === 0 ? (
