@@ -35,16 +35,16 @@ function TransactionItem({
 }: {
   transaction: CustomerTransactionItem;
 }) {
-  const isPayment = transaction.type === "payment";
+  const isRepayment = transaction.type === "repayment";
   return (
     <Link
       href={`/transactions/${transaction.id}`}
       className="flex min-h-[72px] items-center gap-3 py-3"
     >
       <span
-        className={`grid size-10 shrink-0 place-items-center rounded-full ${isPayment ? "bg-[#e9f3df] text-[var(--forest)]" : "bg-[var(--forest)]/10 text-[var(--forest)]"}`}
+        className={`grid size-10 shrink-0 place-items-center rounded-full ${isRepayment ? "bg-[#e9f3df] text-[var(--forest)]" : "bg-[var(--forest)]/10 text-[var(--forest)]"}`}
       >
-        {isPayment ? (
+        {isRepayment ? (
           <LuWallet className="size-[18px]" />
         ) : (
           <LuReceiptText className="size-[18px]" />
@@ -61,7 +61,7 @@ function TransactionItem({
           {formatNaira(transaction.amount)}
         </p>
         <span
-          className={`mt-1 inline-block rounded-md px-1.5 py-0.5 text-[10px] font-bold ${isPayment ? "bg-[#e9f3df] text-[var(--forest-soft)]" : "bg-[#fff3dd] text-[#9b651b]"}`}
+          className={`mt-1 inline-block rounded-md px-1.5 py-0.5 text-[10px] font-bold ${isRepayment ? "bg-[#e9f3df] text-[var(--forest-soft)]" : "bg-[#fff3dd] text-[#9b651b]"}`}
         >
           {transaction.paymentStatus}
         </span>

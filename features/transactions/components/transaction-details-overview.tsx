@@ -3,20 +3,25 @@ import { getPaymentDetails, getSaleDetails } from "../selectors/get-sale-details
 
 import { PaymentTransactionUi } from "../ui/payment-transaction-ui";
 import { SaleTransactionUi } from "../ui/sale-transaction-ui";
+import { SaleRepaymentTransactionUi } from "../ui/sale-repayment-transaction-ui";
 
 
 
 export function TransactionDetailsOverview({
   transaction,
 }: {transaction: Transaction}) {
+
+  if (transaction.type === "sale_repayment") {
+    return <SaleRepaymentTransactionUi transaction={transaction} />;
+  }
   
   if (transaction.type === "repayment") {
-    const { amountPaid, allocations } = getPaymentDetails(transaction);
+    const { amountReceived, allocations } = getPaymentDetails(transaction);
 
     return (
       <PaymentTransactionUi
         transaction={transaction}
-        amountPaid={amountPaid}
+        amountPaid={amountReceived}
         allocations={allocations}
       />
     );

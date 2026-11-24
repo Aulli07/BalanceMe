@@ -30,7 +30,7 @@ function getReceivedAmount(transaction: Transaction) {
     : transaction.amountReceived;
 }
 
-function getOwedAmount(transaction: Transaction) {
+export function getOwedAmount(transaction: Transaction) {
   if (transaction.type === "repayment") return 0;
 
   const allocatedAmount = [

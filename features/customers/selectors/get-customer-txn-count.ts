@@ -1,7 +1,9 @@
-import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
+import { mockTransactions } from "@/shared/data/domain-mock-data";
 
 export function getCustomerSaleTransactionCount(customerId: string) {
-  return mockSaleTransactions.filter(
-    (transaction) => transaction.customerId === customerId,
+  return mockTransactions.filter(
+    (transaction) =>
+      transaction.customerId === customerId &&
+      transaction.type !== "repayment",
   ).length;
 }

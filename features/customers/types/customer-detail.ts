@@ -13,7 +13,7 @@ export interface CustomerMonthlyActivity {
 
 export interface CustomerTransactionItem {
   id: string;
-  type: "sale" | "payment";
+  type: "sale" | "repayment" | "sale_repayment";
   title: string;
   description: string;
   amount: NairaAmount;

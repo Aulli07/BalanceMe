@@ -37,7 +37,6 @@ function EntryConfirmedDetails({form} : {form: FormType}) {
     amountPaid,
     amountRepaid,
     entryType,
-    debtRepaymentMode,
     selectedPurchase,
   } = form;
 
@@ -47,13 +46,12 @@ function EntryConfirmedDetails({form} : {form: FormType}) {
   const amountOwed = Math.max(purchasePrice - paid, 0);
   const repaymentOwed = selectedPurchase
     ? Math.max(
-        (selectedPurchase.productPrice - selectedPurchase.amountPaid) -
+        (selectedPurchase.sale.productPrice - selectedPurchase.sale.amountPaid) -
           repaid,
         0,
       )
     : 0;
 
-  const isSale = entryType === 0;
   const isRepayment = entryType === 1;
   const isSaleRepayment = entryType === 2;
   // const isRepayment =
@@ -148,7 +146,6 @@ function AmountLabel({
 function EntryDescription({form} : {form: FormType}) {
   const {
     entryType,
-    debtRepaymentMode,
     selectedPurchase,
     description,
     setDescription,
@@ -164,7 +161,7 @@ function EntryDescription({form} : {form: FormType}) {
   //   entryType === 1 ||
   //   (entryType === 2 && debtRepaymentMode === 1);
   const purchasePrice = selectedPurchase
-    ? selectedPurchase.productPrice
+    ? selectedPurchase.sale.productPrice
     : 0;
   const purchaseDate = selectedPurchase
     ? formatPurchaseDate(selectedPurchase.createdAt)
@@ -177,7 +174,7 @@ function EntryDescription({form} : {form: FormType}) {
           <p>Repayment Note</p>
           <p className="rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 leading-relaxed text-md">
             {selectedPurchase
-              ? `For ${selectedPurchase.description}, priced at ₦${purchasePrice.toLocaleString("en-NG")} and bought on ${purchaseDate}`
+              ? `For ${selectedPurchase.sale.description}, priced at ₦${purchasePrice.toLocaleString("en-NG")} and bought on ${purchaseDate}`
               : "Select a purchase to add this repayment note."}
           </p>
         </div>

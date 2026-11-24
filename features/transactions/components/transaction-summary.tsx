@@ -5,9 +5,6 @@ import { formatNaira } from "@/shared/utils/format-naira";
 import { TransactionSummaryProps } from "../types/transaction-props";
 import { filters } from "../data/txn-stuff";
 
-
-
-
 export function TransactionSummary({
   setActiveFilter,
   activeFilter,
@@ -53,13 +50,17 @@ export function TransactionSummary({
 
       <div className="mt-3 grid grid-cols-2 gap-3">
         <article className="rounded-xl border border-[#cce2d2] bg-[var(--forest)] px-4 py-3">
-          <p className="text-sm font-semibold text-[var(--surface)] leading-tight">Total product price</p>
+          <p className="text-xs font-semibold text-[var(--surface)] leading-tight">
+            Total costs
+          </p>
           <p className="mt-2 text-xl font-bold tracking-tight leading-tight text-[var(--lime)]">
             {formatNaira(productPrice)}
           </p>
         </article>
         <article className="rounded-xl border border-[#f1dfbd] bg-white px-4 py-3">
-          <p className="text-sm font-semibold text-[var(--forest)] leading-tight">Collected</p>
+          <p className="text-xs font-semibold text-[var(--forest)] leading-tight">
+            Collected
+          </p>
           <p className="mt-2 text-xl font-bold tracking-tight text-[var(--forest)]">
             {formatNaira(collectedAmount)}
           </p>

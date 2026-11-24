@@ -1,45 +1,41 @@
-import {
-  mockPaymentTransactions,
-  mockSaleTransactions,
-} from "@/shared/data/domain-mock-data";
+import { mockTransactions } from "@/shared/data/domain-mock-data";
+import { getOwedAmount } from "@/features/analytics/selectors/get-analytics-data";
 import type { CustomerTransactionItem } from "../types/customer-detail";
 
 /**
  * Returns the most recent transactions for a customer, sorted newest-first.
- * Combines both sale and payment transactions into a unified list.
+ * Combines sale, repayment, and sale-repayment transactions into a unified list.
  */
 export function getCustomerRecentTransactions(
   customerId: string,
   limit?: number,
 ): CustomerTransactionItem[] {
-  const sales: CustomerTransactionItem[] = mockSaleTransactions
-    .filter((txn) => txn.customerId === customerId)
-    .map((txn) => {
-      const isPaidInFull = txn.amountPaid >= txn.productPrice;
+  return mockTransactions
+    .filter((transaction) => transaction.customerId === customerId)
+    .map((transaction): CustomerTransactionItem => {
+      if (transaction.type === "repayment") {
+        return {
+          id: transaction.id,
+          type: "repayment",
+          title: "Repayment received",
+          description: transaction.note ?? "Repayment received",
+          amount: transaction.amountReceived,
+          createdAt: transaction.createdAt,
+          paymentStatus: "Received",
+        };
+      }
+
+      const owedAmount = getOwedAmount(transaction);
       return {
-        id: txn.id,
-        type: "sale" as const,
-        title: "Sale",
-        description: txn.description,
-        amount: txn.productPrice,
-        createdAt: txn.createdAt,
-        paymentStatus: isPaidInFull ? "Paid in full" : "Partially paid",
+        id: transaction.id,
+        type: transaction.type,
+        title: transaction.type === "sale" ? "Sale" : "Sale and repayment",
+        description: transaction.sale.description,
+        amount: transaction.type === "sale" ? transaction.sale.productPrice : transaction.amountReceived,
+        createdAt: transaction.createdAt,
+        paymentStatus: owedAmount === 0 ? "Settled" : "Partially paid",
       };
-    });
-
-  const payments: CustomerTransactionItem[] = mockPaymentTransactions
-    .filter((txn) => txn.customerId === customerId)
-    .map((txn) => ({
-      id: txn.id,
-      type: "payment" as const,
-      title: "Payment received",
-      description: txn.note ?? "Cash payment",
-      amount: txn.amountReceived,
-      createdAt: txn.createdAt,
-      paymentStatus: "Received",
-    }));
-
-  return [...sales, ...payments]
+    })
     .sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),

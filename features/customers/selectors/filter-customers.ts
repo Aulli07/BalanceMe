@@ -1,4 +1,4 @@
-import { ACTIVE_BUSINESS_ID, mockCustomers } from "@/shared/data/domain-mock-data";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { getTotalAmountOwedForCustomer } from "@/features/dashboard/selectors/get-customers-owing";
 import { getCustomerSaleTransactionCount } from "./get-customer-txn-count";
 import { customerFilters } from "../data/customers";
