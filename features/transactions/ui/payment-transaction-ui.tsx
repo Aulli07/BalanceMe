@@ -1,10 +1,9 @@
-import { mockSaleRepaymentTransactions, mockSaleTransactions } from "@/shared/data/domain-mock-data";
 import { getCustomer } from "@/shared/selectors/getters";
-import { formatNaira } from "@/shared/utils/format-naira";
 import type { PaymentTransactionUiProps } from "../types/transaction-props";
-import { getDateString } from "../utils/get-date-string";
 import { DetailRow } from "./detail-row";
-import { TransactionActions } from "./transaction-actions";
+import { RepaymentAllocations } from "./repayment-allocations";
+import { TransactionDateActions } from "./transaction-date-actions";
+import { TransactionHero } from "./transaction-hero";
 
 export function PaymentTransactionUi({
   transaction,
@@ -15,62 +14,24 @@ export function PaymentTransactionUi({
 
   return (
     <section className="mt-5 flex flex-col px-5">
-      <div className="rounded-[1.75rem] bg-[var(--forest)] p-6 text-white shadow-sm">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-bold text-[var(--lime)]">Payment received</p>
-          <span className="rounded-full bg-white/10 px-2 py-1 text-[11px] font-bold text-white">Payment</span>
-        </div>
-        <p className="mt-5 text-xs font-medium text-white/70">Amount received</p>
-        <p className="mt-1 text-2xl font-extrabold leading-none tracking-tight">
-          {formatNaira(amountPaid)}
-        </p>
-      </div>
-
+      <TransactionHero
+        tag="Repayment"
+        amountLabel="Amount received"
+        amount={amountPaid}
+      />
       <div className="mt-4">
-        {/* <p className="text-sm font-bold text-[var(--forest-soft)]">Payment information</p> */}
         <dl className="mt-3 divide-y divide-[var(--line)] rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-4">
-          <DetailRow label="Customer" value={customer?.name ?? "Unknown customer"} />
-          {transaction.note && <DetailRow label="Note" value={transaction.note} />}
+          <DetailRow
+            label="Customer"
+            value={customer?.name ?? "Unknown customer"}
+          />
+          {transaction.note && (
+            <DetailRow label="Note" value={transaction.note} />
+          )}
         </dl>
       </div>
-
-      <div className="mt-6">
-        <div className="flex items-end justify-between">
-          <p className="text-sm font-bold text-[var(--forest-soft)]">Allocated to sales</p>
-          <p className="text-xs font-bold text-[var(--muted)]">
-            {allocations.length} allocation{allocations.length === 1 ? "" : "s"}
-          </p>
-        </div>
-        <ul className="mt-3 divide-y divide-[var(--line)] overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-4">
-          {allocations.map((allocation) => {
-            const sale = [...mockSaleTransactions, ...mockSaleRepaymentTransactions].find(
-              (item) => item.id === allocation.saleTransactionId,
-            );
-
-            return (
-              <li key={allocation.saleTransactionId} className="flex items-center justify-between gap-4 py-4">
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-bold text-[var(--ink)]">
-                    {sale?.sale.description ?? "Sale transaction"}
-                  </p>
-                  <p className="mt-1 text-xs font-medium text-[var(--muted)]">Payment allocation</p>
-                </div>
-                <span className="shrink-0 rounded-full bg-[var(--paper)] px-3 py-1.5 text-sm font-extrabold text-[var(--forest)]">
-                  {formatNaira(allocation.debtAmountPaid)}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-
-      <time
-        dateTime={transaction.createdAt}
-        className="mt-3 text-center text-[14px] font-medium text-[var(--muted)]"
-      >
-        {getDateString(transaction.createdAt)}
-      </time>
-      <TransactionActions />
+      <RepaymentAllocations allocations={allocations} />
+      <TransactionDateActions createdAt={transaction.createdAt} />
     </section>
   );
 }

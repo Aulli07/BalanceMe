@@ -34,7 +34,7 @@ export const footerLinks: FooterType[] = [
     height: 4,
   },
   {
-    to: "/add",
+    to: "/add-entry",
     lightIcon: LuPlus,
     darkIcon: LuPlus,
     alt: "posts-icon",

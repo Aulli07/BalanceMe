@@ -8,9 +8,9 @@ export function getSaleDetails(transaction: SaleTransaction | SaleRepaymentTrans
   };
 }
 
-export function getPaymentDetails(transaction: RepaymentTransaction) {
+export function getPaymentDetails(transaction: RepaymentTransaction | SaleRepaymentTransaction) {
   return {
-    amountPaid: transaction.amountReceived,
+    amountReceived: transaction.amountReceived,
     allocations: transaction.allocations,
   };
 }

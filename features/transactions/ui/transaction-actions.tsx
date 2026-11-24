@@ -2,7 +2,7 @@ import { LuDownload, LuShare2 } from "react-icons/lu";
 
 export function TransactionActions() {
   return (
-    <div className="z-10 border-t border-[var(--line)] bg-[var(--paper)]/95 px-5 pt-3 backdrop-blur">
+    <div className="z-10 border-t border-[var(--line)] bg-[var(--paper)]/95 px-5 pt-3 backdrop-blur mt-5">
       <div className="mx-auto grid max-w-2xl grid-cols-2 gap-3">
         <button
           type="button"
