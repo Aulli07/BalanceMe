@@ -28,7 +28,7 @@ export function CustomerSummary({
           <Link
             href={`/customers/${customer.id}`}
             key={customer.id}
-            className="flex w-full items-center gap-3 border-b border-[#cbd6c3] px-0.5 py-3 text-left transition-colors active:bg-[#e8eddd]/50"
+            className="flex w-full items-center gap-3 rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-left shadow-xs transition-colors active:bg-[#edf3e7]"
             aria-label={`View ${customer.name}`}
           >
             {/* <span className="flex min-w-0 items-center gap-3"> */}
@@ -36,18 +36,18 @@ export function CustomerSummary({
                 <Image
                   src={customer.avatarUrl}
                   alt=""
-                  width={52}
-                  height={52}
-                  className="size-13 shrink-0 rounded-full object-cover"
+                  width={44}
+                  height={44}
+                  className="shrink-0 rounded-full object-cover"
                 />
               ) : (
-                <span className="grid size-13 shrink-0 place-items-center rounded-full bg-[#e2ecd7] text-base font-extrabold text-[var(--forest)]">
+                <span className="grid size-11 shrink-0 place-items-center rounded-full bg-[#e2ecd7] text-base font-extrabold text-[var(--forest)]">
                   {getInitialsOfName(customer.name)}
                 </span>
               )}
               <span className="min-w-0 flex-1">
-                <span className="flex items-center gap-1 truncate text-base font-extrabold text-[var(--ink)]">
-                  <span className="truncate">{customer.name}</span>
+                <span className="flex items-center gap-2 truncate text-sm font-extrabold text-[var(--ink)]">
+                  <span className="truncate">{customer.name} </span>
                   {customer.pinned && (
                     <LuPin
                       className="size-4 shrink-0 text-[var(--forest)]"
@@ -56,11 +56,15 @@ export function CustomerSummary({
                   )}
                 </span>
               </span>
-              <span className="shrink-0 rounded-lg bg-[#e2ecd7] px-2.5 py-1 text-right text-xs font-medium text-[var(--forest)]">
-                {summary
-                  ? getOwingAgeLabel(summary.oldestOutstandingAt)
-                  : "Settled"}
-              </span>
+              {summary ? (
+                <span className="shrink-0 rounded-lg bg-[#f7e4d3] px-2 py-1 text-right text-xs font-bold text-[#81502f]">
+                  {getOwingAgeLabel(summary.oldestOutstandingAt)}
+                </span>
+              ) : (
+                <span className="shrink-0 rounded-lg bg-[#e2ecd7] px-2.5 py-1 text-right text-xs font-bold text-[var(--forest)]">
+                  Settled
+                </span>
+              )}
             {/* </span> */}
           </Link>
         );

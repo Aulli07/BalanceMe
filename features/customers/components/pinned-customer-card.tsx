@@ -7,7 +7,10 @@ import { formatNaira } from "@/shared/utils/format-naira";
 
 export function PinnedCustomerCard({ customer }: { customer: Customer }) {
   const txnCount = getCustomerSaleTransactionCount(customer.id);
-  const amountOwed = getTotalAmountOwedForCustomer(customer.businessId, customer.id);
+  const amountOwed = getTotalAmountOwedForCustomer(
+    customer.businessId,
+    customer.id,
+  );
   const owesMoney = amountOwed > 0;
   const initials = customer.name
     .split(" ")
@@ -49,7 +52,7 @@ export function PinnedCustomerCard({ customer }: { customer: Customer }) {
 
       <div className="mt-3.5 flex w-full items-center justify-center">
         {owesMoney ? (
-          <span className="inline-flex max-w-full items-center justify-center truncate rounded-lg bg-[#faede8] px-2.5 py-1 text-xs font-bold text-[#a7402a]">
+          <span className="inline-flex max-w-full items-center justify-center truncate rounded-lg bg-[#f7e4d3] px-2.5 py-1 text-xs font-bold text-[#81502f]">
             Owes {formatNaira(amountOwed)}
           </span>
         ) : (
