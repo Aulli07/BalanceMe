@@ -1,5 +1,6 @@
 import { mockTransactions } from "@/shared/data/domain-mock-data";
 import type { CustomerMonthlyActivity } from "../types/customer-detail";
+import { getCustomerTransactions } from "@/shared/selectors/customer-getters";
 
 const MONTH_LABELS = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -10,13 +11,11 @@ const MONTH_LABELS = [
  * Computes monthly transaction counts for a customer over the last 6 months.
  * Returns an array of { month, count } objects and the per-month average.
  */
-export function getCustomerMonthlyActivity(customerId: string): {
+export function getCustomerMonthlyActivity(businessId: string, customerId: string): {
   months: CustomerMonthlyActivity[];
   averagePerMonth: number;
 } {
-  const customerTxns = mockTransactions.filter(
-    (txn) => txn.customerId === customerId,
-  );
+  const customerTxns = getCustomerTransactions(businessId, customerId);
 
   const now = new Date();
   const months: CustomerMonthlyActivity[] = [];

@@ -1,4 +1,4 @@
-import { getCustomer } from "@/shared/selectors/getters";
+import { getCustomer } from "@/shared/selectors/customer-getters";
 import type { PaymentTransactionUiProps } from "../types/transaction-props";
 import { DetailRow } from "./detail-row";
 import { RepaymentAllocations } from "./repayment-allocations";

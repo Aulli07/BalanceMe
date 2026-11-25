@@ -11,7 +11,9 @@ import { CustomerFilter } from "@/features/customers/components/customer-filter"
 import { CustomerSummary } from "@/features/customers/components/customer-summary";
 import { AddCustomerSheet } from "@/features/customers/components/add-customer-sheet";
 
-import { getCustomers } from "@/shared/selectors/getters";
+import { getCustomers } from "@/shared/selectors/customer-getters";
+
+
 
 export default function CustomersPage() {
   const [refreshKey, setRefreshKey] = useState(0);

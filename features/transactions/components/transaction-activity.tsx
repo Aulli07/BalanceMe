@@ -32,7 +32,7 @@ export function TransactionActivity({
                 transaction.customer?.name ?? "Unknown customer";
 
               return (
-                <TransactionUi transaction={transaction} name={customerName}/>
+                <TransactionUi key={transaction.id} transaction={transaction} name={customerName}/>
                 // <Link
                 //   href={`/transactions/${transaction.id}`}
                 //   key={transaction.id}

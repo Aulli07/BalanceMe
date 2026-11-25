@@ -37,7 +37,7 @@ export function TransactionUi({
         )}
 
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-bold leading-tight text-[var(--ink)]">
+          <p className="truncate text-[15px] font-bold leading-tight text-[var(--ink)]">
             {transaction.type === "sale"
               ? "Sale"
               : transaction.type === "repayment"

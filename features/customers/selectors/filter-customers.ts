@@ -1,11 +1,11 @@
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
-import { getCustomerSaleTransactionCount } from "./get-customer-txn-count";
 import { customerFilters } from "../data/customers";
-import { getCustomers } from "@/shared/selectors/customer-getters";
+import { getCustomers, getCustomerSaleTransactionCount } from "@/shared/selectors/customer-getters";
 
 export function filterCustomers(
   activeFilter: (typeof customerFilters)[number],
+  businessId: string
 ) {
   const customers = getCustomers(ACTIVE_BUSINESS_ID);
 
@@ -31,14 +31,14 @@ export function filterCustomers(
     case "Highest":
       return [...customers].sort(
         (first, second) =>
-          getCustomerSaleTransactionCount(second.id) -
-          getCustomerSaleTransactionCount(first.id),
+          getCustomerSaleTransactionCount(second.id, businessId) -
+          getCustomerSaleTransactionCount(first.id, businessId),
       );
     case "Lowest":
       return [...customers].sort(
         (first, second) =>
-          getCustomerSaleTransactionCount(first.id) -
-          getCustomerSaleTransactionCount(second.id),
+          getCustomerSaleTransactionCount(first.id, businessId) -
+          getCustomerSaleTransactionCount(second.id, businessId),
       );
     default:
       return customers;

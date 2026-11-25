@@ -22,27 +22,27 @@ export function getTransactionActivity(businessId: string) {
     }
 
     if (transaction.type === "sale_repayment") {
-      const isPaid = getOwedDetailsOfTransaction(transaction);
+      const { owedStatus } = getOwedDetailsOfTransaction(transaction);
       return {
         ...transaction,
         customer,
         description: transaction.sale.description,
         amount: transaction.amountReceived,
-        status: isPaid ? "Settled" : "Partially paid",
-        statusColor: isPaid
+        status: owedStatus === false ? "Settled" : "Partially paid",
+        statusColor: owedStatus === false
           ? "bg-[var(--forest)]/10 text-[var(--forest)]"
           : "bg-[#f8ead5] text-[#855126]",
       };
     }
 
-    const isPaid = getOwedDetailsOfTransaction(transaction);
+    const { owedStatus } = getOwedDetailsOfTransaction(transaction);
     return {
       ...transaction,
       customer,
       description: transaction.sale.description,
       amount: transaction.sale.amountPaid,
-      status: isPaid ? "Settled" : "Partially paid",
-      statusColor: isPaid
+      status: owedStatus === false ? "Settled" : "Partially paid",
+      statusColor: owedStatus === false
         ? "bg-[var(--forest)]/10 text-[var(--forest)]"
         : "bg-[#f8ead5] text-[#855126]",
     };

@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
-import { getCustomer } from "@/shared/selectors/getters";
-import { getCustomerStats } from "@/features/customers/selectors/get-customer-stats";
-import { getCustomerRecentTransactions } from "@/features/customers/selectors/get-customer-transactions";
+import { getCustomer, getCustomerRecentTransactions } from "@/shared/selectors/customer-getters";
+// import { getCustomerStats } from "@/features/customers/selectors/get-customer-stats";
 import { getCustomerMonthlyActivity } from "@/features/customers/selectors/get-customer-monthly-activity";
 import { AiInsight } from "@/features/customers/ui/ai-insight";
 import { BalanceCard } from "@/features/customers/ui/balance-card";
@@ -10,6 +9,11 @@ import { CustomerStatsCards } from "@/features/customers/ui/customer-stats";
 import { DetailTopbar } from "@/features/customers/ui/detail-topbar";
 import { InteractionChart } from "@/features/customers/ui/interaction-chart";
 import { CustomerTransactionHistory } from "@/features/customers/ui/transaction-history";
+import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
+import { getCollectedAmountForCustomer } from "@/features/transactions/selectors/get-collected-amounts";
+import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
+
+
 
 export default async function CustomerPage({
   params,
@@ -20,20 +24,33 @@ export default async function CustomerPage({
   const customer = getCustomer(customerId);
   if (!customer) notFound();
 
-  const stats = getCustomerStats(customer.id);
-  const transactions = getCustomerRecentTransactions(customer.id);
-  const { months } = getCustomerMonthlyActivity(customer.id);
-  const totalHandled = stats.paidTotalAmount + stats.owesNowAmount;
+  const transactions = getCustomerRecentTransactions(customer.id, ACTIVE_BUSINESS_ID);
+  const { months } = getCustomerMonthlyActivity(customer.id, ACTIVE_BUSINESS_ID);
+
+  const paidTotalAmount = getCollectedAmountForCustomer(ACTIVE_BUSINESS_ID, customer.id);
+  const owesNowAmount = getTotalAmountOwedForCustomer(ACTIVE_BUSINESS_ID, customer.id);
+
+  const totalHandled = paidTotalAmount + owesNowAmount;
   const repaidPercent = totalHandled
-    ? Math.round((stats.paidTotalAmount / totalHandled) * 100)
+    ? Math.round((paidTotalAmount / totalHandled) * 100)
     : 100;
+
+  const stats = {
+    paidTotalAmount,
+    transactionCount: transactions.length,
+    owesNowAmount,
+  };
 
   return (
     <main className="min-h-screen bg-[var(--paper)] pb-28 text-[var(--ink)]">
       <section className="px-5 pt-5">
         <DetailTopbar />
         <CustomerProfile customer={customer} />
-        <BalanceCard stats={stats} />
+        <BalanceCard
+          repaidPercent={repaidPercent}
+          owesNowAmount={owesNowAmount}
+          paidTotalAmount={paidTotalAmount}
+        />
         <CustomerStatsCards stats={stats} />
         <AiInsight name={customer.name} repaidPercent={repaidPercent} />
         <InteractionChart months={months} stats={stats} />

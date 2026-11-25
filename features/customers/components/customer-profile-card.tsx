@@ -1,12 +1,17 @@
 import Image from "next/image";
 import type { Customer } from "@/shared/types/domain";
-import { getCustomerStats } from "../selectors/get-customer-stats";
-import { getLastActivityLabel } from "../selectors/get-last-activity-label";
+// import { getCustomerStats } from "../selectors/get-customer-stats";
 import { getInitialsOfName } from "@/shared/utils/get-initials";
+import { getCustomerLastActivity, getCustomerTransactions } from "@/shared/selectors/customer-getters";
 
-export function CustomerProfileCard({ customer }: { customer: Customer }) {
-  const stats = getCustomerStats(customer.id);
-  const lastActivity = getLastActivityLabel(customer.id);
+export function CustomerProfileCard({ 
+  customer, businessId 
+}: { 
+  customer: Customer; businessId: string 
+}) {
+  // const stats = getCustomerStats(customer.id);
+  const transactionCount = getCustomerTransactions(businessId, customer.id).length;
+  const lastActivity = getCustomerLastActivity(businessId, customer.id);
 
   return (
     <section className="mt-4">
@@ -45,7 +50,7 @@ export function CustomerProfileCard({ customer }: { customer: Customer }) {
       </div>
 
       <div className="mt-3 flex items-center gap-4 text-[13px] text-[var(--muted)]">
-        <span>📋 {stats.transactionCount} transactions</span>
+        <span>📋 {transactionCount} transactions</span>
         <span>⏱ {lastActivity}</span>
       </div>
     </section>

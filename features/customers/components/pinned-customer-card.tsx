@@ -1,26 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
+
 import type { Customer } from "@/shared/types/domain";
-import { getCustomerSaleTransactionCount } from "@/features/customers/selectors/get-customer-txn-count";
 import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
 import { formatNaira } from "@/shared/utils/format-naira";
 import { getInitialsOfName } from "@/shared/utils/get-initials";
+import { getCustomerSaleTransactionCount } from "@/shared/selectors/customer-getters";
 
-export function PinnedCustomerCard({ customer }: { customer: Customer }) {
-  const txnCount = getCustomerSaleTransactionCount(customer.id);
+
+
+export function PinnedCustomerCad({ customer, businessId }: { customer: Customer; businessId: string }) {
+  const txnCount = getCustomerSaleTransactionCount(customer.id, businessId);
   const amountOwed = getTotalAmountOwedForCustomer(
     customer.businessId,
     customer.id,
   );
   const owesMoney = amountOwed > 0;
   const initials = getInitialsOfName(customer.name);
-  // const initials = customer.name
-  //   .split(" ")
-  //   .filter(Boolean)
-  //   .map((part) => part[0])
-  //   .slice(0, 2)
-  //   .join("")
-  //   .toUpperCase();
 
   return (
     <Link

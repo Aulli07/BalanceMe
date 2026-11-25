@@ -57,7 +57,7 @@ export function CustomerSummary({
               </span>
             </span>
             {summary ? (
-              <span className="shrink-0 rounded-lg bg-[#f7e4d3] px-2 py-1 text-right text-xs font-bold text-[#81502f]">
+              <span className="shrink-0 rounded-lg bg-[#f7e4d3] px-2.5 py-1.5 text-right text-[11px] font-bold text-[#81502f]">
                 {getOwingAgeLabel(summary.oldestOutstandingAt)}
               </span>
             ) : (
