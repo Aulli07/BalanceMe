@@ -1,13 +1,11 @@
 import { LuCircleAlert, LuUsersRound } from "react-icons/lu";
 
-import { getDebtDashboardSummary } from "../selectors/get-customers-owing";
+import { getDebtDashboardSummary } from "../../../shared/selectors/customer-owe-getters";
 import { formatNaira } from "@/shared/utils/format-naira";
 
 export function TotalOwed({ businessId }: { businessId: string }) {
   const { totalOwedAmount, totalOverdueAmount, customers } =
     getDebtDashboardSummary(businessId);
-  const customerCount = customers.length;
-  const nobodyOwes = totalOwedAmount === 0;
 
   return (
     <article className="relative overflow-hidden rounded-3xl bg-[var(--forest)] p-5 text-[var(--surface)] shadow-lg shadow-[var(--forest)]/10">
@@ -23,14 +21,15 @@ export function TotalOwed({ businessId }: { businessId: string }) {
         {formatNaira(totalOwedAmount)}
       </p>
 
-      {nobodyOwes ? (
+      {totalOwedAmount === 0 ? (
         <p className="mt-3 text-sm font-semibold text-[var(--surface)]">
           Nobody owes you right now
         </p>
       ) : (
         <>
           <p className="mt-3 text-sm font-semibold text-[var(--surface)]">
-            {customerCount} {customerCount === 1 ? "customer" : "customers"} owing
+            {customers.length}{" "}
+            {customers.length === 1 ? "customer" : "customers"} owing
           </p>
           <p
             className={

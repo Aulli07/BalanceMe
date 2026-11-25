@@ -2,19 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { LuPin } from "react-icons/lu";
 
-import { getCustomerDebtSummaries } from "../selectors/get-customers-owing";
+import {
+  getCustomerDebtSummaries,
+  sortCustomers,
+} from "@/shared/selectors/customer-owe-getters";
 import { formatNaira } from "@/shared/utils/format-naira";
-import { sortCustomers } from "../selectors/sort-owing-customers";
+
 import { getInitials } from "@/features/transactions/utils/get-name-initials";
 import { getOwingAgeLabel, getWhatsAppHref } from "../utils/get-dash-utils";
 
-
-const MAX_CUSTOMERS_SHOWN = 5;
-
+// const MAX_CUSTOMERS_SHOWN = 5;
 
 export function WhoOwesYou({ businessId }: { businessId: string }) {
   const customers = sortCustomers(getCustomerDebtSummaries(businessId));
-  const visibleCustomers = customers.slice(0, MAX_CUSTOMERS_SHOWN);
 
   return (
     <section aria-labelledby="who-owes-you-heading" className="mt-2">
@@ -25,26 +25,21 @@ export function WhoOwesYou({ businessId }: { businessId: string }) {
         >
           Who owes you
         </h2>
-        {/* {customers.length > MAX_CUSTOMERS_SHOWN && (
-          <Link
-            href="/customers"
-            className="min-h-11 inline-flex items-center text-sm font-bold text-[var(--forest)] underline-offset-2 hover:underline"
-          >
-            See all ({customers.length})
-          </Link>
-        )} */}
       </div>
 
-      {visibleCustomers.length === 0 ? (
+      {customers.length === 0 ? (
         <div className="rounded-2xl border border-[var(--line)] bg-[var(--surface)] px-4 py-5 text-center shadow-sm">
-          <p className="font-extrabold text-[var(--ink)]">No one owes you right now</p>
+          <p className="font-extrabold text-[var(--ink)]">
+            No one owes you right now
+          </p>
           <p className="mt-1 text-sm leading-5 text-[var(--muted)]">
-            When you add a sale that isn&apos;t fully paid, it will show up here.
+            When you add a sale that isn&apos;t fully paid, it will show up
+            here.
           </p>
         </div>
       ) : (
         <div className="grid gap-3">
-          {visibleCustomers.map((summary) => {
+          {customers.map((summary) => {
             const { customer } = summary;
             const initials = getInitials(customer.name);
 

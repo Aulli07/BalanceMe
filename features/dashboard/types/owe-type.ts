@@ -3,8 +3,9 @@ import { Customer, SaleRepaymentTransaction, SaleTransaction } from "@/shared/ty
 export type DebtSaleTransaction = SaleTransaction | SaleRepaymentTransaction;
 
 export type OpenDebt = {
-  saleTxn: DebtSaleTransaction;
+  txn: DebtSaleTransaction;
   outstandingAmount: number;
+  owedStatus: boolean;
   overdue: boolean;
 };
 
