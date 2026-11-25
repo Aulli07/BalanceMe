@@ -22,3 +22,15 @@ export interface CustomerTransactionItem {
   categoryName?: string;
 }
 
+
+export interface AddCustomerSheetProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onCustomerAdded?: () => void;
+}
+
+export interface AddCustomerInput {
+  name: string;
+  phone: string;
+  email: string;
+}

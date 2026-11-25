@@ -4,6 +4,7 @@ import type { Customer } from "@/shared/types/domain";
 import { getCustomerSaleTransactionCount } from "@/features/customers/selectors/get-customer-txn-count";
 import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
 import { formatNaira } from "@/shared/utils/format-naira";
+import { getInitialsOfName } from "@/shared/utils/get-initials";
 
 export function PinnedCustomerCard({ customer }: { customer: Customer }) {
   const txnCount = getCustomerSaleTransactionCount(customer.id);
@@ -12,13 +13,14 @@ export function PinnedCustomerCard({ customer }: { customer: Customer }) {
     customer.id,
   );
   const owesMoney = amountOwed > 0;
-  const initials = customer.name
-    .split(" ")
-    .filter(Boolean)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+  const initials = getInitialsOfName(customer.name);
+  // const initials = customer.name
+  //   .split(" ")
+  //   .filter(Boolean)
+  //   .map((part) => part[0])
+  //   .slice(0, 2)
+  //   .join("")
+  //   .toUpperCase();
 
   return (
     <Link

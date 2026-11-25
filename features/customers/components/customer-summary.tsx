@@ -8,6 +8,8 @@ import { getOwingAgeLabel } from "@/features/dashboard/utils/get-dash-utils";
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { getInitialsOfName } from "@/shared/utils/get-initials";
 
+
+
 export function CustomerSummary({
   visibleCustomers,
 }: {

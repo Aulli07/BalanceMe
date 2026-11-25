@@ -2,6 +2,9 @@ import type {
   CustomerMonthlyActivity,
   CustomerStats,
 } from "../types/customer-detail";
+
+
+
 export function InteractionChart({
   months,
   stats,

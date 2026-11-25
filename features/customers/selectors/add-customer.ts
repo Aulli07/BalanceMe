@@ -1,16 +1,9 @@
 import { mockCustomers, ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import type { Customer } from "@/shared/types/domain";
+import { AddCustomerInput } from "../types/customer-detail";
 
-export interface AddCustomerInput {
-  name: string;
-  phone: string;
-  email: string;
-}
 
-/**
- * Validates the add-customer form fields.
- * Returns an error message string, or null if valid.
- */
+
 export function validateCustomerInput(input: AddCustomerInput): string | null {
   const trimmedName = input.name.trim();
 
@@ -35,10 +28,7 @@ export function validateCustomerInput(input: AddCustomerInput): string | null {
   return null;
 }
 
-/**
- * Creates a new Customer object and pushes it into the mock data array.
- * Returns the newly created customer.
- */
+
 export function addCustomer(input: AddCustomerInput): Customer {
   const now = new Date().toISOString();
   const slug = input.name.trim().toLowerCase().replace(/\s+/g, "-");

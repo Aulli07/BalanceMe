@@ -1,8 +1,8 @@
 import Image from "next/image";
 import type { Customer } from "@/shared/types/domain";
-import { getInitials } from "@/features/transactions/utils/get-name-initials";
 import { getCustomerStats } from "../selectors/get-customer-stats";
 import { getLastActivityLabel } from "../selectors/get-last-activity-label";
+import { getInitialsOfName } from "@/shared/utils/get-initials";
 
 export function CustomerProfileCard({ customer }: { customer: Customer }) {
   const stats = getCustomerStats(customer.id);
@@ -30,7 +30,7 @@ export function CustomerProfileCard({ customer }: { customer: Customer }) {
           />
         ) : (
           <div className="grid size-16 shrink-0 place-items-center rounded-full bg-[var(--forest)] text-lg font-extrabold text-white">
-            {getInitials(customer.name)}
+            {getInitialsOfName(customer.name)}
           </div>
         )}
 

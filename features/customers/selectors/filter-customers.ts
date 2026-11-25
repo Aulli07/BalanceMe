@@ -2,7 +2,7 @@ import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
 import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
 import { getCustomerSaleTransactionCount } from "./get-customer-txn-count";
 import { customerFilters } from "../data/customers";
-import { getCustomers } from "@/shared/selectors/getters";
+import { getCustomers } from "@/shared/selectors/customer-getters";
 
 export function filterCustomers(
   activeFilter: (typeof customerFilters)[number],

@@ -3,6 +3,9 @@ import Link from "next/link";
 import { LuPlus, LuReceiptText, LuWallet } from "react-icons/lu";
 import { formatNaira } from "@/shared/utils/format-naira";
 import type { CustomerTransactionItem } from "../types/customer-detail";
+
+
+
 export function CustomerTransactionHistory({
   transactions,
 }: {
@@ -30,6 +33,8 @@ export function CustomerTransactionHistory({
     </section>
   );
 }
+
+
 function TransactionItem({
   transaction,
 }: {

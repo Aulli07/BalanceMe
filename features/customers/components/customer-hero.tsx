@@ -1,12 +1,10 @@
 import Image from "next/image";
 import { LuMail, LuPhone } from "react-icons/lu";
 import type { Customer } from "@/shared/types/domain";
-import { getInitials } from "@/features/transactions/utils/get-name-initials";
+import { getInitialsOfName } from "@/shared/utils/get-initials";
+import { ContactDetail } from "../ui/contact-detail";
 
-
-
-
-export function CustomerHero({ customer }: {customer: Customer}) {
+export function CustomerHero({ customer }: { customer: Customer }) {
   const memberSince = new Intl.DateTimeFormat("en-NG", {
     month: "long",
     year: "numeric",
@@ -28,7 +26,7 @@ export function CustomerHero({ customer }: {customer: Customer}) {
             />
           ) : (
             <div className="grid size-20 shrink-0 place-items-center rounded-2xl bg-[var(--lime)] text-xl font-extrabold text-[var(--forest-dark)]">
-              {getInitials(customer.name)}
+              {getInitialsOfName(customer.name)}
             </div>
           )}
 
@@ -43,37 +41,25 @@ export function CustomerHero({ customer }: {customer: Customer}) {
                 </span>
               )}
             </div>
-            <p className="mt-1 text-sm font-medium text-white/65">Customer since {memberSince}</p>
+            <p className="mt-1 text-sm font-medium text-white/65">
+              Customer since {memberSince}
+            </p>
           </div>
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <ContactDetail icon={<LuPhone className="size-4" />} label="Phone" value={customer.phone ?? "Not provided"} />
-          <ContactDetail icon={<LuMail className="size-4" />} label="Email" value={customer.email ?? "Not provided"} />
+          <ContactDetail
+            icon={<LuPhone className="size-4" />}
+            label="Phone"
+            value={customer.phone ?? "Not provided"}
+          />
+          <ContactDetail
+            icon={<LuMail className="size-4" />}
+            label="Email"
+            value={customer.email ?? "Not provided"}
+          />
         </div>
       </div>
     </section>
-  );
-}
-
-function ContactDetail({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex min-w-0 items-center gap-3 rounded-2xl bg-white/10 px-3.5 py-3">
-      <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-white/10 text-[var(--lime)]">
-        {icon}
-      </span>
-      <div className="min-w-0">
-        <p className="text-[11px] font-bold uppercase tracking-wide text-white/55">{label}</p>
-        <p className="truncate text-sm font-bold text-white">{value}</p>
-      </div>
-    </div>
   );
 }
