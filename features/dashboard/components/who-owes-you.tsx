@@ -8,10 +8,12 @@ import {
 } from "@/shared/selectors/customer-owe-getters";
 import { formatNaira } from "@/shared/utils/format-naira";
 
-import { getInitials } from "@/features/transactions/utils/get-name-initials";
 import { getOwingAgeLabel, getWhatsAppHref } from "../utils/get-dash-utils";
+import { getInitialsOfName } from "@/shared/utils/get-initials";
 
 // const MAX_CUSTOMERS_SHOWN = 5;
+
+
 
 export function WhoOwesYou({ businessId }: { businessId: string }) {
   const customers = sortCustomers(getCustomerDebtSummaries(businessId));
@@ -41,7 +43,7 @@ export function WhoOwesYou({ businessId }: { businessId: string }) {
         <div className="grid gap-3">
           {customers.map((summary) => {
             const { customer } = summary;
-            const initials = getInitials(customer.name);
+            const initials = getInitialsOfName(customer.name);
 
             return (
               <article

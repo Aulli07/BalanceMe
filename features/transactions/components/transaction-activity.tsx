@@ -1,12 +1,8 @@
-import Image from "next/image";
-import { LuClock3 } from "react-icons/lu";
-import { formatNaira } from "@/shared/utils/format-naira";
-import { formatTransactionTime } from "../utils/format-time";
-import { getInitials } from "../utils/get-name-initials";
-import Link from "next/link";
 import { TransactionActivityItemProps, TransactionMonthlyActivityProps } from "../types/transaction-props";
 import { NoTransactionUi } from "../ui/no-transactions";
 import { TransactionUi } from "../ui/transaction";
+
+
 
 export function TransactionActivity({
   transactions,

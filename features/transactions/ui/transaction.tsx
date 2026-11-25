@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { TransactionActivityItemProps } from "../types/transaction-props";
 import Image from "next/image";
-import { getInitials } from "../utils/get-name-initials";
 import { formatTransactionTime } from "../utils/format-time";
 import { formatNaira } from "@/shared/utils/format-naira";
+import { getInitialsOfName } from "@/shared/utils/get-initials";
 
 export function TransactionUi({
   transaction, 
@@ -32,7 +32,7 @@ export function TransactionUi({
           />
         ) : (
           <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[var(--line)] text-sm font-extrabold text-[var(--forest)]">
-            {getInitials(name)}
+            {getInitialsOfName(name)}
           </span>
         )}
 
