@@ -1,32 +1,4 @@
-import { mockBusinesses, mockCustomers, mockNotifications, mockRepaymentTransactions, mockReceipts, mockSaleTransactions, mockTransactions, mockUsers } from "../data/domain-mock-data"
-
-
-
-
-export function getTransactions(businessId: string) {
-  return mockTransactions.filter(txn => txn.businessId === businessId)
-}
-
-
-export function getSaleTransactions(businessId: string) {
-  return mockSaleTransactions.filter(txn => txn.businessId === businessId);
-}
-
-
-export function getPaymentTransactions(businessId: string) {
-  return mockRepaymentTransactions.filter(txn => txn.businessId === businessId);
-}
-
-
-export function getCustomers(businessId: string) {
-  return mockCustomers.filter(customer => customer.businessId === businessId)
-}
-
-
-export function getCustomer(customerId: string) {
-  return mockCustomers.find(customer => customer.id === customerId)
-}
-
+import { mockBusinesses, mockNotifications, mockReceipts, mockUsers } from "../data/domain-mock-data"
 
 
 export function getNotifications(businessId: string) {
