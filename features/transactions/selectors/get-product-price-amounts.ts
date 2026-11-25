@@ -3,22 +3,11 @@ import {
   mockSaleRepaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { Customer, NairaAmount } from "@/shared/types/domain";
+import type { NairaAmount } from "@/shared/types/domain";
 import { isInMonth } from "../utils/check-month-aligns";
+import { CustomerProductPriceAmount } from "../types/amounts";
 
-export type CustomerProductPriceAmount = {
-  customer: Customer | undefined;
-  amount: NairaAmount;
-};
 
-// function isInMonth(createdAt: string, month: string) {
-//   const [monthName, year] = month.split(" ");
-//   const date = new Date(createdAt);
-//   return (
-//     date.getUTCFullYear() === Number(year) &&
-//     date.getUTCMonth() === new Date(`${monthName} 1, ${year}`).getMonth()
-//   );
-// }
 
 export function getTotalProductPrice(businessId: string): NairaAmount {
   return [...mockSaleTransactions, ...mockSaleRepaymentTransactions]

@@ -2,13 +2,12 @@ import {
   mockCustomers,
   mockTransactions,
 } from "@/shared/data/domain-mock-data";
-import type { Customer, NairaAmount } from "@/shared/types/domain";
+import type { NairaAmount } from "@/shared/types/domain";
 import { isInMonth } from "../utils/check-month-aligns";
+import { CustomerCollectedAmount } from "../types/amounts";
 
-export type CustomerCollectedAmount = {
-  customer: Customer | undefined;
-  amount: NairaAmount;
-};
+
+
 
 export function getTotalCollectedAmount(businessId: string): NairaAmount {
   return mockTransactions

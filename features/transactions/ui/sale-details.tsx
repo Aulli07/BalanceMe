@@ -2,7 +2,7 @@ import type {
   SaleRepaymentTransaction,
   SaleTransaction,
 } from "@/shared/types/domain";
-import { getCustomer } from "@/shared/selectors/getters";
+import { getCustomer } from "@/shared/selectors/customer-getters";
 import { getDueDate } from "@/shared/utils/get-due-date";
 import { DetailRow } from "./detail-row";
 
@@ -12,6 +12,12 @@ export function SaleDetails({
   transaction: SaleTransaction | SaleRepaymentTransaction;
 }) {
   const customer = getCustomer(transaction.customerId);
+  const dueDate = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Africa/Lagos",
+  }).format(new Date(getDueDate(transaction.createdAt)));
 
   return (
     <div className="mt-5">
@@ -21,7 +27,7 @@ export function SaleDetails({
           value={customer?.name ?? "Unknown customer"}
         />
         <DetailRow label="Description" value={transaction.sale.description} />
-        <DetailRow label="Due date" value={getDueDate(transaction.createdAt)} />
+        <DetailRow label="Due date" value={dueDate} />
       </dl>
     </div>
   );

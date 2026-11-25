@@ -1,24 +1,14 @@
-import {
-  mockCustomers,
-  mockRepaymentTransactions,
-  mockSaleRepaymentTransactions,
-  mockSaleTransactions,
-  mockTransactions,
-} from "@/shared/data/domain-mock-data";
+import { getCustomer } from "@/shared/selectors/customer-getters";
+import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
+import { getSortedTransactions } from "@/shared/selectors/txn-getters";
+
+
 
 export function getTransactionActivity(businessId: string) {
-  const Transactions = mockTransactions
-    .filter((transaction) => transaction.businessId === businessId)
-    .sort(
-      (first, second) =>
-        new Date(second.createdAt).getTime() -
-        new Date(first.createdAt).getTime(),
-    );
+  const Transactions = getSortedTransactions(businessId);
 
   const correctedTxns = Transactions.map((transaction) => {
-    const customer = mockCustomers.find(
-      (item) => item.id === transaction.customerId,
-    );
+    const customer = getCustomer(transaction.customerId);
 
     if (transaction.type === "repayment") {
       return {
@@ -32,7 +22,7 @@ export function getTransactionActivity(businessId: string) {
     }
 
     if (transaction.type === "sale_repayment") {
-      const isPaid = getOwedStatus(transaction);
+      const isPaid = getOwedDetailsOfTransaction(transaction);
       return {
         ...transaction,
         customer,
@@ -45,7 +35,7 @@ export function getTransactionActivity(businessId: string) {
       };
     }
 
-    const isPaid = getOwedStatus(transaction);
+    const isPaid = getOwedDetailsOfTransaction(transaction);
     return {
       ...transaction,
       customer,
@@ -61,22 +51,22 @@ export function getTransactionActivity(businessId: string) {
   return correctedTxns;
 }
 
-function getOwedStatus(
-  transaction:
-    | (typeof mockSaleTransactions)[number]
-    | (typeof mockSaleRepaymentTransactions)[number],
-) {
-  const allocatedAmount = [
-    ...mockRepaymentTransactions,
-    ...mockSaleRepaymentTransactions,
-  ]
-    .flatMap((repayment) => repayment.allocations)
-    .filter((allocation) => allocation.saleTransactionId === transaction.id)
-    .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
-  const owedAmount =
-    transaction.sale.productPrice -
-    transaction.sale.amountPaid -
-    allocatedAmount;
-  const isPaid = owedAmount === 0;
-  return isPaid;
-}
+// function getOwedStatus(
+//   transaction:
+//     | (typeof mockSaleTransactions)[number]
+//     | (typeof mockSaleRepaymentTransactions)[number],
+// ) {
+//   // const allocatedAmount = [
+//   //   ...mockRepaymentTransactions,
+//   //   ...mockSaleRepaymentTransactions,
+//   // ]
+//   //   .flatMap((repayment) => repayment.allocations)
+//   //   .filter((allocation) => allocation.saleTransactionId === transaction.id)
+//   //   .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
+//   const owedAmount =
+//     transaction.sale.productPrice -
+//     transaction.sale.amountPaid -
+//     allocatedAmount;
+//   const isPaid = owedAmount === 0;
+//   return isPaid;
+// }
