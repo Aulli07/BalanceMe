@@ -1,19 +1,10 @@
 import type { Customer, SaleTransaction } from "@/shared/types/domain";
+import { CanContinueEntryOptions } from "../types/entry-type";
 
-type CanContinueEntryOptions = {
-  customer: Customer | undefined;
-  entryType: 0 | 1 | 2;
-  debtRepaymentMode?: 0 | 1;
-  productPrice: string;
-  amountPaid?: string;
-  amountRepaid: string;
-  currentPurchase: SaleTransaction | undefined;
-};
 
 export function canContinueEntry({
   customer,
   entryType,
-  debtRepaymentMode = 0,
   productPrice,
   amountPaid = "0",
   amountRepaid,
@@ -27,9 +18,6 @@ export function canContinueEntry({
     return saleErrorStatus && repaymentErrorStatus
   }
 
-
-  // const isRepaymentMode =
-  //   entryType === 1 || (entryType === 2 && debtRepaymentMode === 1);
   const isRepaymentMode = entryType === 1;
   if (isRepaymentMode) {
     return checkRepaymentError(amountRepaid, customer, currentPurchase)

@@ -3,10 +3,10 @@ import Image from "next/image";
 import { createPortal } from "react-dom";
 import { LuChevronDown, LuSearch } from "react-icons/lu";
 
-import type { FormType } from "../hooks/useEntryForm";
 import { filterCustomersByName } from "../selectors/filter-customers-by-name";
 
 import { mockCustomers } from "@/shared/data/domain-mock-data";
+import { FormType } from "../types/entry-type";
 
 
 

@@ -5,7 +5,6 @@ export function filterCustomersByName(
   searchQuery: string,
 ) {
   const normalizedQuery = searchQuery.trim().toLowerCase();
-
   if (!normalizedQuery) return customers;
 
   return customers.filter((customer) =>

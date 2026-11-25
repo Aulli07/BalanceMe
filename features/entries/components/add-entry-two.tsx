@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 import { LuArrowRight } from "react-icons/lu";
-import type { FormType } from "../hooks/useEntryForm";
 import { formatPurchaseDate } from "@/shared/utils/get-time-period";
+import { AmountLabel } from "../ui/amount-label";
+import { FormType } from "../types/entry-type";
 
 
 
@@ -30,6 +31,7 @@ export function AddEntryTwo({ form }: { form: FormType }) {
   );
 }
 
+
 function EntryConfirmedDetails({form} : {form: FormType}) {
   const {
     customer,
@@ -54,8 +56,6 @@ function EntryConfirmedDetails({form} : {form: FormType}) {
 
   const isRepayment = entryType === 1;
   const isSaleRepayment = entryType === 2;
-  // const isRepayment =
-  //   entryType === 1 || (entryType === 2 && debtRepaymentMode === 1);
 
   return (
     <section className="rounded-2xl bg-[var(--forest)] px-5 py-6 text-[var(--surface)] shadow-lg shadow-[var(--forest)]/20">
@@ -108,40 +108,6 @@ function EntryConfirmedDetails({form} : {form: FormType}) {
   );
 }
 
-function AmountLabel({
-  label,
-  value,
-  tone = "light",
-}: {
-  label: string;
-  value: number;
-  tone?: "light" | "red";
-}) {
-  const isRed = tone === "red";
-
-  return (
-    <div
-      className={`rounded-xl px-3 py-2 ${
-        isRed ? "bg-[#f7e4d3]" : "bg-white/10"
-      }`}
-    >
-      <p
-        className={`text-[10px] font-bold uppercase tracking-wide ${
-          isRed ? "text-[#81502f]" : "text-[#d9e8c5]"
-        }`}
-      >
-        {label}
-      </p>
-      <p
-        className={`mt-0.5 text-sm font-extrabold ${
-          isRed ? "text-[#81502f]" : "text-[var(--surface)]"
-        }`}
-      >
-        ₦{value.toLocaleString("en-NG")}
-      </p>
-    </div>
-  );
-}
 
 function EntryDescription({form} : {form: FormType}) {
   const {
@@ -157,9 +123,7 @@ function EntryDescription({form} : {form: FormType}) {
   const isRepayment = entryType === 1;
   const isSaleRepayment = entryType === 2;
 
-  // const isRepayment =
-  //   entryType === 1 ||
-  //   (entryType === 2 && debtRepaymentMode === 1);
+
   const purchasePrice = selectedPurchase
     ? selectedPurchase.sale.productPrice
     : 0;

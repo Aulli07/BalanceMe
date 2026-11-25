@@ -1,11 +1,6 @@
-import type { FormType } from "../hooks/useEntryForm";
+import { FormType } from "../types/entry-type";
 
-export function isFullPayment(productPrice: string, amountPaid: string) {
-  const price = Number(productPrice || 0);
-  const paid = Number(amountPaid || 0);
 
-  return price > 0 && paid >= price;
-}
 
 export function DebtEntry({ form }: { form: FormType }) {
   const {

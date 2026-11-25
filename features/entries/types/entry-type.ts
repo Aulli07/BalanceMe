@@ -1,44 +1,47 @@
-import { Dispatch, SetStateAction } from "react";
 import type { Customer, SaleTransaction } from "@/shared/types/domain";
 
-
-
-// export type EntryProps = {
-//   onNext?: () => void;
-//   setCustomer?: Dispatch<SetStateAction<Customer | undefined>>;
-//   customer?: Customer;
-//   productPrice?: string;
-//   setProductPrice?: Dispatch<SetStateAction<string>>;
-//   amountPaid?: string;
-//   setAmountPaid?: Dispatch<SetStateAction<string>>;
-//   amountRepaid?: string;
-//   setAmountRepaid?: Dispatch<SetStateAction<string>>;
-//   setEntryType?: Dispatch<SetStateAction<2| 1 | 0>>;
-//   entryType?: 0|1|2;
-//   selectedPurchase?: SaleTransaction;
-//   setSelectedPurchase?: Dispatch<SetStateAction<SaleTransaction | undefined>>;
-//   description?: string;
-//   setDescription?: Dispatch<SetStateAction<string>>;
-//   dueDate?: string;
-//   setDueDate?: Dispatch<SetStateAction<string>>;
-//   receipt?: File;
-//   setReceipt?: Dispatch<SetStateAction<File | undefined>>;
-//   setStep?: Dispatch<SetStateAction<1|2|3>>;
-// }
-
-export type VoiceEntryProps = {
-  setTranscript: Dispatch<SetStateAction<string>>;
-  transcript: string;
-  listening: boolean;
-  start: () => void;
-  stop: () => void;
-  onNext: () => void;
+export type FormType = {
+  productPrice: string;
+  setProductPrice: React.Dispatch<React.SetStateAction<string>>;
+  amountPaid: string;
+  setAmountPaid: React.Dispatch<React.SetStateAction<string>>;
+  amountRepaid: string;
+  setAmountRepaid: React.Dispatch<React.SetStateAction<string>>;
+  step: 1 | 2 | 3;
+  setStep: React.Dispatch<React.SetStateAction<1 | 2 | 3>>;
+  customer: Customer | undefined;
+  setCustomer: React.Dispatch<React.SetStateAction<Customer | undefined>>;
+  entryType: 0 | 1 | 2;
+  setEntryType: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
+  debtRepaymentMode: 0 | 1;
+  setDebtRepaymentMode: React.Dispatch<React.SetStateAction<0 | 1>>;
+  selectedPurchase: SaleTransaction | undefined;
+  setSelectedPurchase: React.Dispatch<React.SetStateAction<SaleTransaction | undefined>>;
+  description: string;
+  setDescription: React.Dispatch<React.SetStateAction<string>>;
+  dueDate: string;
+  setDueDate: React.Dispatch<React.SetStateAction<string>>;
+  receipt: File | undefined;
+  setReceipt: React.Dispatch<React.SetStateAction<File | undefined>>;
+  categoryPickerOpen: boolean;
+  setCategoryPickerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedTrigger: boolean;
+  isSelectedTrigger: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export type entryDetailType = {
-  description: string;
-  dueDate?: string;
-  receipt?: File;
-}
+
+export type EntryFormOptions = {
+  initialCustomer?: Customer;
+  initialEntryType?: 0 | 1 | 2;
+};
+
+export type CanContinueEntryOptions = {
+  customer: Customer | undefined;
+  entryType: 0 | 1 | 2;
+  productPrice: string;
+  amountPaid?: string;
+  amountRepaid: string;
+  currentPurchase: SaleTransaction | undefined;
+};
 
 

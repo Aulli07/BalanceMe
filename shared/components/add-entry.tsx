@@ -4,35 +4,14 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { LuArrowRight, LuCircleDollarSign, LuHandCoins, LuX } from "react-icons/lu";
+import { LuX } from "react-icons/lu";
+import { entryOptions } from "../data/entry-data";
 
-type AddEntryProps = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-};
 
-const entryOptions = [
-  {
-    title: "Sale",
-    description: "Record a sale the customer will pay for later.",
-    href: "/add-entry?mode=sale",
-    icon: LuCircleDollarSign,
-  },
-  {
-    title: "Repayment",
-    description: "Record money received toward an existing debt.",
-    href: "/add-entry?mode=repayment",
-    icon: LuHandCoins,
-  },
-  {
-    title: "Sale plus repayment",
-    description: "Record a sale and the amount paid today together.",
-    href: "/add-entry?mode=sale-repayment",
-    icon: LuArrowRight,
-  },
-];
 
-export function AddEntry({ open, setOpen }: AddEntryProps) {
+
+export function AddEntry({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void}) {
+
   useEffect(() => {
     if (!open) return;
 

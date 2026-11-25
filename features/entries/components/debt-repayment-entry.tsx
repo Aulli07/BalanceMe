@@ -1,6 +1,8 @@
-import type { FormType } from "../hooks/useEntryForm";
+import { FormType } from "../types/entry-type";
 import { DebtEntry } from "./debt-entry";
 import { RepaymentEntry } from "./repayment-entry";
+
+
 
 export function DebtRepaymentEntry({ form }: { form: FormType }) {
   const { debtRepaymentMode, setDebtRepaymentMode } = form;
