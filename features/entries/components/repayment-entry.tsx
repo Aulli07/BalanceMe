@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { LuChevronDown } from "react-icons/lu";
-import type { FormType } from "../hooks/useEntryForm";
 import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
+import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
 import type { SaleTransaction } from "@/shared/types/domain";
+import { FormType } from "../types/entry-type";
+
+
 
 export function RepaymentEntry({ form }: { form: FormType }) {
   const [open, setOpen] = useState(false);
@@ -20,10 +23,10 @@ export function RepaymentEntry({ form }: { form: FormType }) {
   const purchases = mockSaleTransactions.filter(
     (purchase) =>
       purchase.customerId === customer?.id &&
-      purchase.sale.amountPaid < purchase.sale.productPrice,
+      getOwedDetailsOfTransaction(purchase).outstandingAmount > 0,
   );
-  const originalOwed = selectedPurchase
-    ? (selectedPurchase.sale.productPrice - selectedPurchase.sale.amountPaid)
+  const originalOwed = selectedPurchase && selectedPurchase.customerId === customer?.id
+    ? getOwedDetailsOfTransaction(selectedPurchase).outstandingAmount
     : 0;
   const amountOwed = Math.max(originalOwed - (Number(amountRepaid) || 0), 0);
 
@@ -150,8 +153,8 @@ function PurchasePreview({
   isShowInfo: boolean;
 }) {
   const price = purchase.sale.productPrice;
-  const paid = purchase.sale.amountPaid;
-  const owed = Math.max(price - paid, 0);
+  const owed = getOwedDetailsOfTransaction(purchase).outstandingAmount;
+  const paid = price - owed;
 
   return (
     <div className="flex flex-col gap-1">
