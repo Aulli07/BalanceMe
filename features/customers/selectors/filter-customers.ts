@@ -1,15 +1,14 @@
 import { ACTIVE_BUSINESS_ID } from "@/shared/data/domain-mock-data";
-import { getTotalAmountOwedForCustomer } from "@/features/dashboard/selectors/get-customers-owing";
+import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
 import { getCustomerSaleTransactionCount } from "./get-customer-txn-count";
 import { customerFilters } from "../data/customers";
 import { getCustomers } from "@/shared/selectors/getters";
 
-
-
-
-export function filterCustomers(activeFilter: (typeof customerFilters)[number]) {
+export function filterCustomers(
+  activeFilter: (typeof customerFilters)[number],
+) {
   const customers = getCustomers(ACTIVE_BUSINESS_ID);
-  
+
   switch (activeFilter) {
     case "All":
       return customers;

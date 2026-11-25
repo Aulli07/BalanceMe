@@ -1,5 +1,8 @@
-import { ACTIVE_BUSINESS_ID, mockTransactions } from "@/shared/data/domain-mock-data";
-import { getTotalAmountOwedForCustomer } from "@/features/dashboard/selectors/get-customers-owing";
+import {
+  ACTIVE_BUSINESS_ID,
+  mockTransactions,
+} from "@/shared/data/domain-mock-data";
+import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
 import type { CustomerStats } from "../types/customer-detail";
 
 /**
@@ -28,4 +31,3 @@ export function getCustomerStats(customerId: string): CustomerStats {
 
   return { paidTotalAmount, transactionCount, owesNowAmount };
 }
-

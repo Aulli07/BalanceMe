@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Customer } from "@/shared/types/domain";
 import { getCustomerSaleTransactionCount } from "@/features/customers/selectors/get-customer-txn-count";
-import { getTotalAmountOwedForCustomer } from "@/features/dashboard/selectors/get-customers-owing";
+import { getTotalAmountOwedForCustomer } from "@/shared/selectors/customer-owe-getters";
 import { formatNaira } from "@/shared/utils/format-naira";
 
 export function PinnedCustomerCard({ customer }: { customer: Customer }) {
