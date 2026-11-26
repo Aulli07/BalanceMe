@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCustomer, getCustomerRecentTransactions } from "@/shared/selectors/customer-getters";
+import { getCustomer, getCustomerFormattedRecentTransactions } from "@/shared/selectors/customer-getters";
 // import { getCustomerStats } from "@/features/customers/selectors/get-customer-stats";
 import { getCustomerMonthlyActivity } from "@/features/customers/selectors/get-customer-monthly-activity";
 import { AiInsight } from "@/features/customers/ui/ai-insight";
@@ -24,7 +24,7 @@ export default async function CustomerPage({
   const customer = getCustomer(customerId);
   if (!customer) notFound();
 
-  const transactions = getCustomerRecentTransactions(customer.id, ACTIVE_BUSINESS_ID);
+  const transactions = getCustomerFormattedRecentTransactions(customer.id, ACTIVE_BUSINESS_ID);
   const { months } = getCustomerMonthlyActivity(customer.id, ACTIVE_BUSINESS_ID);
 
   const paidTotalAmount = getCollectedAmountForCustomer(ACTIVE_BUSINESS_ID, customer.id);

@@ -1,38 +1,8 @@
-import {
-  LuArrowDownLeft,
-  LuChartNoAxesCombined,
-  LuCircleDollarSign,
-  LuReceiptText,
-} from "react-icons/lu";
 import { formatNaira } from "@/shared/utils/format-naira";
 import type { AnalyticsSummary } from "../types/transaction-analytics";
+import { ANALYTICS_CARDS } from "../data/analytics-data";
 
-const cards = [
-  {
-    key: "received",
-    label: "Total received",
-    icon: LuArrowDownLeft,
-    color: "bg-[var(--forest)] text-[var(--lime)]",
-  },
-  {
-    key: "owed",
-    label: "Total owed",
-    icon: LuCircleDollarSign,
-    color: "bg-[#fff8e9] text-[#855126]",
-  },
-  {
-    key: "rate",
-    label: "Collection rate",
-    icon: LuChartNoAxesCombined,
-    color: "bg-[#e9f1df] text-[var(--forest)]",
-  },
-  {
-    key: "count",
-    label: "Transactions",
-    icon: LuReceiptText,
-    color: "bg-[var(--surface)] text-[var(--forest)]",
-  },
-] as const;
+
 
 export function AnalyticsSummaryCards({
   summary,
@@ -42,6 +12,8 @@ export function AnalyticsSummaryCards({
   const values = {
     received: formatNaira(summary.totalReceivedAmount),
     owed: formatNaira(summary.totalOwedAmount),
+    purchaseAmountPaid: formatNaira(summary.purchaseAmountPaid),
+    totalPurchasePrice: formatNaira(summary.totalPurchasePrice),
     rate: `${summary.collectionRate}%`,
     count: String(summary.transactionCount),
   };
@@ -55,7 +27,7 @@ export function AnalyticsSummaryCards({
         At a glance
       </h2>
       <div className="grid grid-cols-2 gap-3">
-        {cards.map(({ key, label, icon: Icon, color }) => (
+        {ANALYTICS_CARDS.map(({ key, label, icon: Icon, color }) => (
           <article
             key={key}
             className={`min-h-28 rounded-2xl p-3.5 shadow-sm ${color}`}

@@ -3,7 +3,7 @@ import { LuChevronDown } from "react-icons/lu";
 import type {
   AnalyticsPeriod,
   AnalyticsSelection,
-} from "../data/analytics-periods";
+} from "../data/analytics-data";
 import type { TransactionMonth } from "@/features/transactions/data/txn-stuff";
 
 type AnalyticsPeriodSelectorProps = {
