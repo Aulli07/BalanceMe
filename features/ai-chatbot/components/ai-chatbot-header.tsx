@@ -1,17 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { LuArrowLeft, LuSparkles } from "react-icons/lu";
 
-export function AiChatbotHeader() {
-  const router = useRouter();
 
+export function AiChatbotHeader() {
   return (
     <header className="flex h-17 items-center justify-between border-b border-[var(--line)] bg-[var(--paper)] px-5">
       <div className="flex min-w-0 items-center gap-3">
         <button
           type="button"
-          onClick={() => router.push("/")}
+          onClick={() => window.history.back()}
           aria-label="Go back"
           className="grid size-8 shrink-0 place-items-center rounded-full text-[var(--forest-soft)] transition-transform active:scale-90"
         >

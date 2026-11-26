@@ -1,22 +1,24 @@
-import Link from "next/link";
+"use client";
+
 import { LuArrowLeft, LuSearch } from "react-icons/lu";
 
-type NotificationsHeaderProps = {
+
+export function NotificationsHeader({ 
+  query, 
+  onQueryChange 
+}: {
   query: string;
   onQueryChange: (query: string) => void;
-};
-
-export function NotificationsHeader({ query, onQueryChange }: NotificationsHeaderProps) {
+}) {
   return (
     <header className="sticky top-0 z-10 bg-[var(--paper)]/95 px-5 pt-6 backdrop-blur-sm">
       <div className="flex items-center gap-3">
-        <Link
-          href="/"
-          aria-label="Back to dashboard"
+        <button
+          onClick={() => window.history.back()}
           className="grid size-9 place-items-center rounded-full border border-[var(--line)] bg-[var(--surface)] text-[var(--forest)] shadow-sm"
         >
           <LuArrowLeft className="size-4" aria-hidden="true" />
-        </Link>
+        </button>
         <h1 className="text-2xl font-bold tracking-tight text-[var(--forest-dark)]">
           Notifications
         </h1>
