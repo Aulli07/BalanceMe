@@ -1,8 +1,10 @@
-import { getOwedAmount } from "@/features/analytics/selectors/get-analytics-data";
+// import { getOwedAmount } from "@/features/analytics/selectors/get-analytics-data";
 import {
   mockSaleRepaymentTransactions,
   mockSaleTransactions,
 } from "@/shared/data/domain-mock-data";
+import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
+// import { getOwedAmount } from "@/shared/selectors/amount-getters";
 import type { RepaymentAllocation } from "@/shared/types/domain";
 import { formatNaira } from "@/shared/utils/format-naira";
 
@@ -27,7 +29,7 @@ export function RepaymentAllocations({
             ...mockSaleTransactions,
             ...mockSaleRepaymentTransactions,
           ].find((item) => item.id === allocation.saleTransactionId);
-          const owedAmount = sale ? getOwedAmount(sale) : undefined;
+          const owedAmount = sale ? getOwedDetailsOfTransaction(sale).outstandingAmount : undefined;
 
           return (
             <li
