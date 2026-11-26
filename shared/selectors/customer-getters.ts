@@ -1,6 +1,6 @@
 import { CustomerTransactionItem } from "@/features/customers/types/customer-detail";
 import { ACTIVE_BUSINESS_ID, mockCustomers, mockTransactions } from "../data/domain-mock-data"
-import { getOwedAmount } from "@/features/analytics/selectors/get-analytics-data";
+import { getOwedDetailsOfTransaction } from "./txn-owe-getters";
 
 
 export function getCustomers(businessId: string) {
@@ -9,10 +9,6 @@ export function getCustomers(businessId: string) {
 
 export function getCustomer(customerId: string) {
   return mockCustomers.find(customer => customer.id === customerId)
-}
-
-export function getCustomerTransactions(businessId: string, customerId: string) {
-  return mockTransactions.filter(transaction => transaction.businessId === businessId && transaction.customerId === customerId)
 }
 
 export function getNewestCustomer(businessId: string) {
@@ -24,7 +20,20 @@ export function getNewestCustomer(businessId: string) {
     )[0] ?? null;
 }
 
-export function getCustomerRecentTransactions(
+
+export function getCustomerTransactions(businessId: string, customerId: string) {
+  return mockTransactions.filter(transaction => transaction.businessId === businessId && transaction.customerId === customerId)
+}
+
+
+export function getCustomerRecentTransactions(customerId: string, businessId: string, limit?: number) {
+  return getCustomerTransactions(businessId, customerId)
+    .sort((a, b) =>
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, limit);
+}
+
+export function getCustomerFormattedRecentTransactions(
   customerId: string,
   businessId: string,
   limit?: number,
@@ -43,7 +52,8 @@ export function getCustomerRecentTransactions(
         };
       }
 
-      const owedAmount = getOwedAmount(transaction);
+      const owedAmount =
+        getOwedDetailsOfTransaction(transaction).outstandingAmount;
       return {
         id: transaction.id,
         type: transaction.type,

@@ -14,6 +14,51 @@ export function getSortedTransactions(businessId: string) {
   );
 }
 
+export function getTransactionsForMonth(businessId: string, month: string) {
+  const allTransactions = getSortedTransactions(businessId);
+  const transactions = allTransactions.filter((transaction) =>
+    getMonthLabel(transaction.createdAt) === month,
+  );
+  const latestTransaction = allTransactions[0];
+  const latestMonth = latestTransaction
+    ? getMonthLabel(latestTransaction.createdAt)
+    : null;
+  const [monthName, year] = month.split(" ");
+  const selectedMonthDate = new Date(`${monthName} 1, ${year} UTC`);
+  const startDate = new Date(
+    Date.UTC(
+      selectedMonthDate.getUTCFullYear(),
+      selectedMonthDate.getUTCMonth(),
+      1,
+    ),
+  );
+  const monthEnd = new Date(
+    Date.UTC(
+      selectedMonthDate.getUTCFullYear(),
+      selectedMonthDate.getUTCMonth() + 1,
+      0,
+      23,
+      59,
+      59,
+      999,
+    ),
+  );
+  const endDate =
+    month === latestMonth && latestTransaction
+      ? new Date(latestTransaction.createdAt)
+      : monthEnd;
+
+  return { transactions, startDate, endDate };
+}
+
+function getMonthLabel(createdAt: string) {
+  return new Date(createdAt).toLocaleDateString("en-NG", {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+  });
+}
+
 export function getSaleTransactions(businessId: string) {
   return mockSaleTransactions.filter(txn => txn.businessId === businessId);
 }
