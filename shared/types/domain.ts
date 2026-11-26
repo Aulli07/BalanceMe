@@ -80,7 +80,7 @@ export interface BaseTransaction {
   id: EntityId;
   businessId: EntityId;
   customerId: EntityId;
-  receiptId: EntityId;
+  receiptId?: EntityId;
   note?: string;
   createdAt: ISODateTime;
 }

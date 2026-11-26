@@ -6,6 +6,8 @@ import { LuArrowRight } from "react-icons/lu";
 import { formatPurchaseDate } from "@/shared/utils/get-time-period";
 import { AmountLabel } from "../ui/amount-label";
 import { FormType } from "../types/entry-type";
+import { addEntry } from "../selectors/add-entry";
+import { resetEntryForm } from "../selectors/reset-entry-form";
 import {
   validateEntryDetails,
   type EntryDetailsValidationErrors,
@@ -22,6 +24,12 @@ export function AddEntryTwo({ form }: { form: FormType }) {
     validationErrors.description || validationErrors.receipt,
   );
 
+  function handleSubmit() {
+    addEntry(form);
+    resetEntryForm(form);
+    setStep(3);
+  }
+
   return (
     <main className="flex flex-col px-5 pb-20 pt-5">
       <EntryConfirmedDetails
@@ -36,7 +44,7 @@ export function AddEntryTwo({ form }: { form: FormType }) {
         disabled={hasAttemptedComplete && hasValidationErrors}
         onClick={() => {
           setHasAttemptedComplete(true);
-          if (!hasValidationErrors) setStep(3);
+          if (!hasValidationErrors) handleSubmit();
         }}
         className="mt-4 flex w-full items-center justify-center gap-1 rounded-2xl bg-[var(--forest)] px-5 py-3 text-[16px] font-bold text-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
       >
