@@ -64,11 +64,11 @@ export function EntryCustomer({ setCustomer, customer }: {
             onClick={closePicker}
           >
             <div
-              className="w-full rounded-t-[2rem] bg-[var(--surface)] px-5 pb-8 pt-4 text-[var(--ink)] shadow-2xl"
+              className="flex h-[60dvh] w-full flex-col overflow-hidden rounded-t-[2rem] bg-[var(--surface)] px-5 pb-5 pt-4 text-[var(--ink)] shadow-2xl"
               onClick={(event) => event.stopPropagation()}
             >
-              <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mx-auto mb-4 h-1.5 w-14 shrink-0 rounded-full bg-[#dce4d5]" />
+              <div className="mb-3 flex shrink-0 items-center justify-between">
                 <h2 className="text-xl font-extrabold">Select customer</h2>
                 <button
                   type="button"
@@ -78,30 +78,32 @@ export function EntryCustomer({ setCustomer, customer }: {
                   Close
                 </button>
               </div>
-              <div className="grid gap-2">
-                {filteredCustomers.map((customer) => (
-                  <button
-                    key={customer.id}
-                    type="button"
-                    onClick={() => {
-                      setCustomer?.(customer);
-                      closePicker();
-                    }}
-                    className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
-                  >
-                    <span className="grid size-10 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
-                      {customer.name.slice(0, 2).toUpperCase()}
-                    </span>
-                    <span className="font-bold">{customer.name}</span>
-                  </button>
-                ))}
-                {filteredCustomers.length === 0 && (
-                  <p className="rounded-2xl bg-[#f4f7f0] px-4 py-5 text-center text-sm font-bold text-[#758477]">
-                    No customers found.
-                  </p>
-                )}
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+                <div className="grid gap-2 pb-2">
+                  {filteredCustomers.map((customer) => (
+                    <button
+                      key={customer.id}
+                      type="button"
+                      onClick={() => {
+                        setCustomer?.(customer);
+                        closePicker();
+                      }}
+                      className="flex items-center gap-3 rounded-2xl border border-[#e1e7dc] bg-[#fffef9] px-4 py-3 text-left transition-colors active:bg-[#e8eddd]"
+                    >
+                      <span className="grid size-10 place-items-center rounded-xl bg-[#d9e8c5] text-sm font-extrabold text-[var(--forest)]">
+                        {customer.name.slice(0, 2).toUpperCase()}
+                      </span>
+                      <span className="font-bold">{customer.name}</span>
+                    </button>
+                  ))}
+                  {filteredCustomers.length === 0 && (
+                    <p className="rounded-2xl bg-[#f4f7f0] px-4 py-5 text-center text-sm font-bold text-[#758477]">
+                      No customers found.
+                    </p>
+                  )}
+                </div>
               </div>
-              <label className="mt-4 flex items-center gap-3 rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3">
+              <label className="mt-3 flex shrink-0 items-center gap-3 rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3">
                 <LuSearch className="size-5 shrink-0 text-[#758477]" />
                 <input
                   type="search"
