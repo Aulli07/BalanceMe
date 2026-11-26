@@ -7,6 +7,7 @@ import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
 import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
 import type { SaleTransaction } from "@/shared/types/domain";
 import { FormType } from "../types/entry-type";
+import { isWithinMaxAmountDigits } from "../utils/amount-input";
 
 
 
@@ -55,7 +56,10 @@ export function RepaymentEntry({ form }: { form: FormType }) {
               min="0"
               value={amountRepaid}
               onFocus={(event) => event.currentTarget.select()}
-              onChange={(event) => setAmountRepaid(event.target.value)}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (isWithinMaxAmountDigits(value)) setAmountRepaid(value);
+              }}
               className="w-40 appearance-none bg-transparent text-right text-[28px] font-extrabold leading-none tracking-tight text-[var(--forest)] outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
           </label>

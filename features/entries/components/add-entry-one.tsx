@@ -44,8 +44,8 @@ export function AddEntryOne({ form }: { form: FormType }) {
 
   const isPurchase =
     entryType === 0 || (entryType === 2 && debtRepaymentMode === 0);
-  const showFullPaymentError =
-    isPurchase && isFullPayment(productPrice, amountPaid);
+  // const showFullPaymentError =
+  //   isPurchase && isFullPayment(productPrice, amountPaid);
 
 
   return (
@@ -58,7 +58,6 @@ export function AddEntryOne({ form }: { form: FormType }) {
       <EntryContinue
         setStep={setStep}
         canContinue={canContinue}
-        allowBlockedContinue={showFullPaymentError}
         onBlockedContinue={() => setFullPaymentErrorOpen(true)}
       />
       <FullPaymentError

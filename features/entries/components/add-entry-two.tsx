@@ -1,16 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { LuArrowRight } from "react-icons/lu";
 import { formatPurchaseDate } from "@/shared/utils/get-time-period";
 import { AmountLabel } from "../ui/amount-label";
 import { FormType } from "../types/entry-type";
+import {
+  validateEntryDetails,
+  type EntryDetailsValidationErrors,
+} from "../selectors/can-continue-entry-two";
 
 
 
 
 export function AddEntryTwo({ form }: { form: FormType }) {
   const { setStep } = form;
+  const [hasAttemptedComplete, setHasAttemptedComplete] = useState(false);
+  const validationErrors = validateEntryDetails(form);
+  const hasValidationErrors = Boolean(
+    validationErrors.description || validationErrors.receipt,
+  );
 
   return (
     <main className="flex flex-col px-5 pb-20 pt-5">
@@ -19,11 +29,16 @@ export function AddEntryTwo({ form }: { form: FormType }) {
       />
       <EntryDescription
         form={form}
+        validationErrors={hasAttemptedComplete ? validationErrors : {}}
       />
       <button
         type="button"
-        onClick={() => setStep(3)}
-        className="mt-4 flex w-full items-center justify-center gap-1 rounded-2xl bg-[var(--forest)] px-5 py-3 text-[16px] font-bold text-[var(--surface)]"
+        disabled={hasAttemptedComplete && hasValidationErrors}
+        onClick={() => {
+          setHasAttemptedComplete(true);
+          if (!hasValidationErrors) setStep(3);
+        }}
+        className="mt-4 flex w-full items-center justify-center gap-1 rounded-2xl bg-[var(--forest)] px-5 py-3 text-[16px] font-bold text-[var(--surface)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         Complete <LuArrowRight className="size-5" aria-hidden="true" />
       </button>
@@ -57,26 +72,45 @@ function EntryConfirmedDetails({form} : {form: FormType}) {
   const isRepayment = entryType === 1;
   const isSaleRepayment = entryType === 2;
 
+  const customerNameParts = customer?.name.trim().split(/\s+/) ?? [];
+  const firstName = customerNameParts[0] ?? "";
+  const lastName = customerNameParts.slice(1).join(" ");
+
   return (
     <section className="rounded-2xl bg-[var(--forest)] px-5 py-6 text-[var(--surface)] shadow-lg shadow-[var(--forest)]/20">
       <div className="flex items-start justify-between gap-4">
-        <div className="flex min-w-0 gap-3 text-center">
+        <div className="flex min-w-0 items-center gap-3">
           {customer?.avatarUrl ? (
             <Image
               src={customer.avatarUrl}
               alt={`${customer.name}'s profile`}
               width={52}
               height={52}
-              className="size-14 rounded-full border-2 border-white/25 object-cover"
+              className="rounded-full border-2 border-white/25 object-cover"
             />
           ) : (
-            <span className="grid size-13 place-items-center rounded-full bg-[#d9e8c5] font-extrabold text-[var(--forest)]">
+            <span className="grid size-12 place-items-center rounded-full bg-[#d9e8c5] font-extrabold text-[var(--forest)]">
               {customer?.name.slice(0, 2).toUpperCase() ?? "SC"}
             </span>
           )}
-          <p className="mt-3 truncate text-lg font-extrabold">
-            {customer?.name ?? "Select customer"}
-          </p>
+          <div className="flex min-w-0 flex-col justify-center">
+            {customer ? (
+              <>
+                <span className="truncate text-lg font-extrabold leading-tight tracking-wide">
+                  {firstName}
+                </span>
+                {lastName && (
+                  <span className="truncate text-lg font-extrabold leading-tight tracking-wide">
+                    {lastName}
+                  </span>
+                )}
+              </>
+            ) : (
+              <span className="text-[17px] font-extrabold">
+                Select customer
+              </span>
+            )}
+          </div>
         </div>
         <div className="shrink-0 pt-1 text-right">
           <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#d9e8c5]">
@@ -109,7 +143,13 @@ function EntryConfirmedDetails({form} : {form: FormType}) {
 }
 
 
-function EntryDescription({form} : {form: FormType}) {
+function EntryDescription({
+  form,
+  validationErrors,
+}: {
+  form: FormType;
+  validationErrors: EntryDetailsValidationErrors;
+}) {
   const {
     entryType,
     selectedPurchase,
@@ -154,6 +194,15 @@ function EntryDescription({form} : {form: FormType}) {
             placeholder="What was this entry for?"
             className="resize-none rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3"
           />
+          {validationErrors.description && (
+            <p
+              id="entry-description-error"
+              role="alert"
+              className="text-xs font-semibold text-[#a43826]"
+            >
+              {validationErrors.description}
+            </p>
+          )}
         </label>
       )}
 
@@ -169,6 +218,11 @@ function EntryDescription({form} : {form: FormType}) {
           className="sr-only"
         />
       </label>
+      {validationErrors.receipt && (
+        <p role="alert" className="text-xs font-semibold text-[#a43826]">
+          {validationErrors.receipt}
+        </p>
+      )}
     </section>
   );
 }

@@ -31,17 +31,14 @@ function checkSaleError(productPrice: string, amountPaid: string, customer: Cust
   const price = Number(productPrice);
   const paid = Number(amountPaid);
   const isFullyPaid =
-    !isNaN(price) && !isNaN(paid) && price > 0 && paid >= price;
+    Number.isFinite(price) && Number.isFinite(paid) && price > 0 && paid >= price;
 
-  return Boolean(customer && !isNaN(price) && price > 0 && !isFullyPaid);
+  return Boolean(customer && Number.isFinite(price) && price > 0 && Number.isFinite(paid) && paid >= 0 && !isFullyPaid);
 }
 
 function checkRepaymentError(amountRepaid: string, customer: Customer | undefined, currentPurchase: SaleTransaction | undefined) {
   const repaid = Number(amountRepaid);
     return Boolean(
-      customer &&
-        currentPurchase &&
-        !isNaN(repaid) &&
-        repaid > 0,
+      customer && currentPurchase && Number.isFinite(repaid) && repaid > 0,
     )
 }
