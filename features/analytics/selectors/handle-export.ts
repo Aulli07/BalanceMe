@@ -1,11 +1,9 @@
 import {
   ANALYTICS_PERIODS,
   type AnalyticsSelection,
-} from "../data/analytics-periods";
+} from "../data/analytics-data";
 import type { TransactionAnalyticsData } from "../types/transaction-analytics";
 import { formatNaira } from "@/shared/utils/format-naira";
-
-
 
 export function handleExport(
   analytics: TransactionAnalyticsData,
@@ -13,9 +11,14 @@ export function handleExport(
 ) {
   const rows = [
     ["Metric", "Value"],
-    ["Period", ANALYTICS_PERIODS.find((item) => item.id === period)?.label ?? period],
+    [
+      "Period",
+      ANALYTICS_PERIODS.find((item) => item.id === period)?.label ?? period,
+    ],
     ["Total received", formatNaira(analytics.summary.totalReceivedAmount)],
     ["Total owed", formatNaira(analytics.summary.totalOwedAmount)],
+    ["Purchase amount paid", formatNaira(analytics.summary.purchaseAmountPaid)],
+    ["Total purchase price", formatNaira(analytics.summary.totalPurchasePrice)],
     ["Collection rate", `${analytics.summary.collectionRate}%`],
     ["Transaction count", String(analytics.summary.transactionCount)],
   ];

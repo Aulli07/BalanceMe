@@ -3,6 +3,8 @@ import type { NairaAmount } from "@/shared/types/domain";
 export interface AnalyticsSummary {
   totalReceivedAmount: NairaAmount;
   totalOwedAmount: NairaAmount;
+  purchaseAmountPaid: NairaAmount;
+  totalPurchasePrice: NairaAmount;
   collectionRate: number;
   transactionCount: number;
 }

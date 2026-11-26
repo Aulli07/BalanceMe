@@ -1,4 +1,3 @@
-import { mockTransactions } from "@/shared/data/domain-mock-data";
 import type { CustomerMonthlyActivity } from "../types/customer-detail";
 import { getCustomerTransactions } from "@/shared/selectors/customer-getters";
 

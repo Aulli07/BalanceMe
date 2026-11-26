@@ -1,116 +1,56 @@
-import {
-  mockCustomers,
-  mockRepaymentTransactions,
-  mockSaleRepaymentTransactions,
-  mockTransactions,
-} from "@/shared/data/domain-mock-data";
-import type { Transaction } from "@/shared/types/domain";
-import type { AnalyticsPeriod } from "../data/analytics-periods";
+import { mockCustomers } from "@/shared/data/domain-mock-data";
+import type { AnalyticsPeriod } from "../data/analytics-data";
 import type {
   AnalyticsCustomer,
   TransactionAnalyticsData,
   TrendPoint,
 } from "../types/transaction-analytics";
 
-function getStartOffset(period: AnalyticsPeriod) {
-  if (period === "TODAY") return 0;
-  if (period === "YESTERDAY") return 1;
-  if (period === "7D") return 6;
-  if (period === "14D") return 13;
-  return 29;
-}
+import { getSelectedTransactions } from "./get-selected-period-txns";
+import {
+  getPurchaseAmountPaid,
+  getReceivedAmount,
+  getTotalOwedAmount,
+  getTotalPurchasePrice,
+  getTotalReceivedAmount,
+} from "@/shared/selectors/amount-getters";
+import { getTrendLength } from "./get-trend-length";
+import { getDateKey } from "../utils/get-date-key";
+import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
 
-function getDateKey(date: Date) {
-  return date.toISOString().slice(0, 10);
-}
 
-function getReceivedAmount(transaction: Transaction) {
-  return transaction.type === "sale"
-    ? transaction.sale.amountPaid
-    : transaction.amountReceived;
-}
 
-export function getOwedAmount(transaction: Transaction) {
-  if (transaction.type === "repayment") return 0;
-
-  const allocatedAmount = [
-    ...mockRepaymentTransactions,
-    ...mockSaleRepaymentTransactions,
-  ]
-    .flatMap((repayment) => repayment.allocations)
-    .filter((allocation) => allocation.saleTransactionId === transaction.id)
-    .reduce((total, allocation) => total + allocation.debtAmountPaid, 0);
-    
-  return Math.max(
-    0,
-    transaction.sale.productPrice -
-      transaction.sale.amountPaid -
-      allocatedAmount,
-  );
-}
 
 export function getAnalyticsData(
   businessId: string,
   period: AnalyticsPeriod,
   month?: string | null,
 ): TransactionAnalyticsData {
-  const transactions = mockTransactions
-    .filter((transaction) => transaction.businessId === businessId)
-    .sort((first, second) => first.createdAt.localeCompare(second.createdAt));
-  const latestMonth = new Date(
-    transactions.at(-1)?.createdAt ?? new Date(),
-  ).toLocaleDateString("en-NG", {
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  });
-  const selectedMonth = month ?? latestMonth;
-  const [monthName, year] = selectedMonth.split(" ");
-  const monthIndex = new Date(`${monthName} 1, ${year}`).getUTCMonth();
-  const monthYear = Number(year);
-  const latestTransaction = transactions.at(-1);
-  const isLatestMonth =
-    latestTransaction &&
-    new Date(latestTransaction.createdAt).getUTCFullYear() === monthYear &&
-    new Date(latestTransaction.createdAt).getUTCMonth() === monthIndex;
-  const endDate = isLatestMonth
-    ? new Date(latestTransaction.createdAt)
-    : new Date(Date.UTC(monthYear, monthIndex + 1, 0, 23, 59, 59, 999));
-  const startDate = new Date(endDate);
-  startDate.setUTCDate(startDate.getUTCDate() - getStartOffset(period));
-  const selectedTransactions = transactions.filter((transaction) => {
-    const date = new Date(transaction.createdAt);
-    return date >= startDate && date <= endDate;
-  });
+  const { selectedTransactions, startDate, endDate, isMonthSelection } =
+    getSelectedTransactions(businessId, period, month);
 
-  const totalReceivedAmount = selectedTransactions.reduce(
-    (total, transaction) => total + getReceivedAmount(transaction),
-    0,
-  );
-  const totalOwedAmount = selectedTransactions.reduce(
-    (total, transaction) => total + getOwedAmount(transaction),
-    0,
-  );
-  const totalValue = selectedTransactions
-    .filter((transaction) => transaction.type !== "repayment")
-    .reduce((total, transaction) => total + transaction.sale.productPrice, 0);
+  const totalReceivedAmount = getTotalReceivedAmount(selectedTransactions);
+  const totalOwedAmount = getTotalOwedAmount(selectedTransactions);
+  const purchaseAmountPaid = getPurchaseAmountPaid(selectedTransactions);
+  const totalPurchasePrice = getTotalPurchasePrice(selectedTransactions);
+
   const summary = {
     totalReceivedAmount,
     totalOwedAmount,
-    collectionRate: totalValue
-      ? Math.round((totalReceivedAmount / totalValue) * 100)
+    purchaseAmountPaid,
+    totalPurchasePrice,
+    collectionRate: totalPurchasePrice
+      ? Math.round((purchaseAmountPaid / totalPurchasePrice) * 100)
       : 0,
     transactionCount: selectedTransactions.length,
   };
 
-  const dateKeys = Array.from(
-    { length: getStartOffset(period) + 1 },
-    (_, index) => {
-      const date = new Date(startDate);
-      date.setUTCDate(startDate.getUTCDate() + index);
-      return date;
-    },
-  );
+  const trendLength = getTrendLength(startDate, endDate);
+  const dateKeys = Array.from({ length: trendLength }, (_, index) => {
+    const date = new Date(startDate);
+    date.setUTCDate(startDate.getUTCDate() + index);
+    return date;
+  });
   const trend: TrendPoint[] = dateKeys.map((date) => {
     const dateKey = getDateKey(date);
     const dailyTransactions = selectedTransactions.filter(
@@ -118,21 +58,15 @@ export function getAnalyticsData(
     );
     return {
       label:
-        period === "TODAY"
+        !isMonthSelection && period === "TODAY"
           ? "Today"
           : date.toLocaleDateString("en-NG", {
               day: "numeric",
               month: "short",
               timeZone: "UTC",
             }),
-      amountReceived: dailyTransactions.reduce(
-        (total, transaction) => total + getReceivedAmount(transaction),
-        0,
-      ),
-      owedAmount: dailyTransactions.reduce(
-        (total, transaction) => total + getOwedAmount(transaction),
-        0,
-      ),
+      amountReceived: getTotalReceivedAmount(dailyTransactions),
+      owedAmount: getTotalOwedAmount(dailyTransactions),
     };
   });
 
@@ -146,7 +80,10 @@ export function getAnalyticsData(
       owedAmount: 0,
     };
     current.amountReceived += getReceivedAmount(transaction);
-    current.owedAmount += getOwedAmount(transaction);
+    current.owedAmount +=
+      transaction.type === "repayment"
+        ? 0
+        : getOwedDetailsOfTransaction(transaction).outstandingAmount;
     customerTotals.set(transaction.customerId, current);
   });
   const toCustomer = (
