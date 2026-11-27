@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { LuChevronDown } from "react-icons/lu";
+import { LuCheck, LuChevronDown } from "react-icons/lu";
 import { mockSaleTransactions } from "@/shared/data/domain-mock-data";
 import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
 import type { SaleTransaction } from "@/shared/types/domain";
@@ -17,18 +17,23 @@ export function RepaymentEntry({ form }: { form: FormType }) {
     customer,
     amountRepaid,
     setAmountRepaid,
-    selectedPurchase,
-    setSelectedPurchase,
+    selectedPurchases,
+    setSelectedPurchases,
   } = form;
 
+  const currentSelectedPurchases = selectedPurchases.filter(
+    (purchase) => purchase.customerId === customer?.id,
+  );
   const purchases = mockSaleTransactions.filter(
     (purchase) =>
       purchase.customerId === customer?.id &&
       getOwedDetailsOfTransaction(purchase).outstandingAmount > 0,
   );
-  const originalOwed = selectedPurchase && selectedPurchase.customerId === customer?.id
-    ? getOwedDetailsOfTransaction(selectedPurchase).outstandingAmount
-    : 0;
+  const originalOwed = currentSelectedPurchases.reduce(
+    (total, purchase) =>
+      total + getOwedDetailsOfTransaction(purchase).outstandingAmount,
+    0,
+  );
   const amountOwed = Math.max(originalOwed - (Number(amountRepaid) || 0), 0);
 
   return (
@@ -68,7 +73,7 @@ export function RepaymentEntry({ form }: { form: FormType }) {
 
       <div className="mt-6 grid gap-3">
         <p className="px-1 text-sm font-extrabold text-[var(--ink)]">
-          Which purchase is being repaid?
+          Which purchases are being repaid?
         </p>
 
         <button
@@ -77,8 +82,11 @@ export function RepaymentEntry({ form }: { form: FormType }) {
           disabled={!customer}
           className="flex w-full items-center justify-between gap-4 rounded-xl border border-[#e4e9df] bg-[var(--surface)] px-5 py-4 text-left shadow-sm shadow-[var(--forest)]/5 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {selectedPurchase && selectedPurchase.customerId === customer?.id ? (
-            <PurchasePreview purchase={selectedPurchase} isShowInfo={false} />
+          {currentSelectedPurchases.length > 0 ? (
+            <span className="font-bold text-[var(--ink)]">
+              {currentSelectedPurchases.length} purchase
+              {currentSelectedPurchases.length === 1 ? "" : "s"} selected
+            </span>
           ) : (
             <span className="font-bold text-[#758477]">
               {customer ? "Select a purchase" : "Select a customer first"}
@@ -111,7 +119,7 @@ export function RepaymentEntry({ form }: { form: FormType }) {
             >
               <div className="mx-auto mb-5 h-1.5 w-14 rounded-full bg-[#dce4d5]" />
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-xl font-extrabold">Select purchase</h2>
+                <h2 className="text-xl font-extrabold">Select purchases</h2>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
@@ -120,20 +128,30 @@ export function RepaymentEntry({ form }: { form: FormType }) {
                   Close
                 </button>
               </div>
-              <div className="grid gap-3">
+              <div className="grid max-h-[60dvh] gap-3 overflow-y-auto">
                 {purchases.length ? (
                   purchases.map((purchase) => (
-                    <button
+                    <PurchaseSelection
                       key={purchase.id}
-                      type="button"
-                      onClick={() => {
-                        setSelectedPurchase(purchase);
-                        setOpen(false);
+                      purchase={purchase}
+                      selected={currentSelectedPurchases.some(
+                        (selected) => selected.id === purchase.id,
+                      )}
+                      onToggle={() => {
+                        setSelectedPurchases((current) => {
+                          const customerPurchases = current.filter(
+                            (selected) => selected.customerId === customer?.id,
+                          );
+                          return customerPurchases.some(
+                            (selected) => selected.id === purchase.id,
+                          )
+                            ? customerPurchases.filter(
+                                (selected) => selected.id !== purchase.id,
+                              )
+                            : [...customerPurchases, purchase];
+                        });
                       }}
-                      className="rounded-2xl border border-[#e1e7dc] bg-[#fffef9] p-4 text-left active:bg-[#e8eddd]"
-                    >
-                      <PurchasePreview purchase={purchase} isShowInfo={true} />
-                    </button>
+                    />
                   ))
                 ) : (
                   <p className="rounded-2xl bg-[#f4f7f0] px-4 py-5 text-center text-sm text-[var(--muted)]">
@@ -141,11 +159,49 @@ export function RepaymentEntry({ form }: { form: FormType }) {
                   </p>
                 )}
               </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="mt-4 w-full rounded-xl bg-[var(--forest)] px-4 py-3 font-bold text-[var(--surface)]"
+              >
+                Done
+              </button>
             </div>
           </div>,
           document.body,
         )}
     </section>
+  );
+}
+
+function PurchaseSelection({
+  purchase,
+  selected,
+  onToggle,
+}: {
+  purchase: SaleTransaction;
+  selected: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      onClick={onToggle}
+      className={`flex w-full items-start justify-between gap-3 rounded-2xl border p-4 text-left transition-colors ${
+        selected
+          ? "border-[var(--forest)] bg-[#e8eddd]"
+          : "border-[#e1e7dc] bg-[#fffef9] active:bg-[#e8eddd]"
+      }`}
+    >
+      <PurchasePreview purchase={purchase} isShowInfo={true} />
+      {selected && (
+        <LuCheck
+          className="mt-1 size-5 shrink-0 text-[var(--forest)]"
+          aria-hidden="true"
+        />
+      )}
+    </button>
   );
 }
 

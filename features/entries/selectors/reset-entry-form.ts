@@ -8,7 +8,7 @@ export function resetEntryForm(form: FormType) {
   form.setCustomer(undefined);
   form.setEntryType(0);
   form.setDebtRepaymentMode(0);
-  form.setSelectedPurchase(undefined);
+  form.setSelectedPurchases([]);
   form.setDescription("");
   form.setDueDate("");
   form.setReceipt(undefined);

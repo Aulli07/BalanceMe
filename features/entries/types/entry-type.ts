@@ -15,8 +15,8 @@ export type FormType = {
   setEntryType: React.Dispatch<React.SetStateAction<0 | 1 | 2>>;
   debtRepaymentMode: 0 | 1;
   setDebtRepaymentMode: React.Dispatch<React.SetStateAction<0 | 1>>;
-  selectedPurchase: SaleTransaction | undefined;
-  setSelectedPurchase: React.Dispatch<React.SetStateAction<SaleTransaction | undefined>>;
+  selectedPurchases: SaleTransaction[];
+  setSelectedPurchases: React.Dispatch<React.SetStateAction<SaleTransaction[]>>;
   description: string;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
   dueDate: string;
@@ -41,7 +41,7 @@ export type CanContinueEntryOptions = {
   productPrice: string;
   amountPaid?: string;
   amountRepaid: string;
-  currentPurchase: SaleTransaction | undefined;
+  selectedPurchases: SaleTransaction[];
 };
 
 

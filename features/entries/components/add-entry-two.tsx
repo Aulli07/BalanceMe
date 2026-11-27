@@ -8,6 +8,7 @@ import { AmountLabel } from "../ui/amount-label";
 import { FormType } from "../types/entry-type";
 import { addEntry } from "../selectors/add-entry";
 import { resetEntryForm } from "../selectors/reset-entry-form";
+import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
 import {
   validateEntryDetails,
   type EntryDetailsValidationErrors,
@@ -62,20 +63,21 @@ function EntryConfirmedDetails({form} : {form: FormType}) {
     amountPaid,
     amountRepaid,
     entryType,
-    selectedPurchase,
+    selectedPurchases,
   } = form;
 
   const purchasePrice = Number(productPrice || 0);
   const paid = Number(amountPaid || 0);
   const repaid = Number(amountRepaid || 0);
   const amountOwed = Math.max(purchasePrice - paid, 0);
-  const repaymentOwed = selectedPurchase
-    ? Math.max(
-        (selectedPurchase.sale.productPrice - selectedPurchase.sale.amountPaid) -
-          repaid,
-        0,
-      )
-    : 0;
+  const repaymentOwed = Math.max(
+    selectedPurchases.reduce(
+      (total, purchase) =>
+        total + getOwedDetailsOfTransaction(purchase).outstandingAmount,
+      0,
+    ) - repaid,
+    0,
+  );
 
   const isRepayment = entryType === 1;
   const isSaleRepayment = entryType === 2;
@@ -160,7 +162,7 @@ function EntryDescription({
 }) {
   const {
     entryType,
-    selectedPurchase,
+    selectedPurchases,
     description,
     setDescription,
     receipt,
@@ -172,23 +174,30 @@ function EntryDescription({
   const isSaleRepayment = entryType === 2;
 
 
-  const purchasePrice = selectedPurchase
-    ? selectedPurchase.sale.productPrice
-    : 0;
-  const purchaseDate = selectedPurchase
-    ? formatPurchaseDate(selectedPurchase.createdAt)
-    : "";
-  
+
   return (
     <section className="mt-5 flex flex-col gap-4" aria-labelledby="entry-description-heading">
       {(isRepayment || isSaleRepayment) && (
         <div className="grid gap-2 text-sm font-bold text-[var(--ink)]">
           <p>Repayment Note</p>
-          <p className="rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 leading-relaxed text-md">
-            {selectedPurchase
-              ? `For ${selectedPurchase.sale.description}, priced at ₦${purchasePrice.toLocaleString("en-NG")} and bought on ${purchaseDate}`
-              : "Select a purchase to add this repayment note."}
-          </p>
+          {selectedPurchases.length > 0 ? (
+            <ul className="grid gap-2">
+              {selectedPurchases.map((purchase) => (
+                <li
+                  key={purchase.id}
+                  className="rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 leading-relaxed"
+                >
+                  For {purchase.sale.description}, priced at ₦
+                  {purchase.sale.productPrice.toLocaleString("en-NG")} and
+                  bought on {formatPurchaseDate(purchase.createdAt)}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="rounded-xl border border-[#dfe6d9] bg-[var(--surface)] px-4 py-3 leading-relaxed">
+              Select a purchase to add this repayment note.
+            </p>
+          )}
         </div>
       )} 
 

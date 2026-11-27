@@ -19,7 +19,7 @@ export function useEntryForm({
   const [entryType, setEntryType] = useState<0 | 1 | 2>(initialEntryType);
   const [debtRepaymentMode, setDebtRepaymentMode] = useState<0 | 1>(0);
   
-  const [selectedPurchase, setSelectedPurchase] = useState<SaleTransaction | undefined>();
+  const [selectedPurchases, setSelectedPurchases] = useState<SaleTransaction[]>([]);
   const [description, setDescription] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [receipt, setReceipt] = useState<File | undefined>();
@@ -42,8 +42,8 @@ export function useEntryForm({
     setEntryType,
     debtRepaymentMode,
     setDebtRepaymentMode,
-    selectedPurchase,
-    setSelectedPurchase,
+    selectedPurchases,
+    setSelectedPurchases,
     description,
     setDescription,
     dueDate,

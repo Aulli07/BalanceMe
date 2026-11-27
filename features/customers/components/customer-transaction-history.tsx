@@ -17,9 +17,6 @@ export function CustomerTransactionHistory({
         <h2 className="text-lg font-bold text-[var(--ink)]">
           Transaction history
         </h2>
-          {/* <p className="text-[11px] text-[var(--muted)]">
-            Latest first · {transactions.length} shownn
-          </p> */}
       </div>
 
       <div className="mt-4 flex flex-col gap-5">

@@ -1,10 +1,10 @@
 import type { Customer, SaleTransaction } from "@/shared/types/domain";
 
-export function getCurrentPurchase(
+export function getCurrentPurchases(
   customer: Customer | undefined,
-  selectedPurchase: SaleTransaction | undefined,
+  selectedPurchases: SaleTransaction[],
 ) {
-  return selectedPurchase?.customerId === customer?.id
-    ? selectedPurchase
-    : undefined;
+  return selectedPurchases.filter(
+    (purchase) => purchase.customerId === customer?.id,
+  );
 }

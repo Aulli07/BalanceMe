@@ -14,6 +14,7 @@ import type {
   SaleTransaction,
   Transaction,
 } from "@/shared/types/domain";
+import { getOwedDetailsOfTransaction } from "@/shared/selectors/txn-owe-getters";
 import type { FormType } from "../types/entry-type";
 
 
@@ -107,8 +108,8 @@ function createRepaymentEntry(
   form: FormType,
   baseEntry: BaseTransaction,
 ): RepaymentTransaction {
-  const selectedPurchase = form.selectedPurchase;
-  if (!selectedPurchase) {
+  const selectedPurchases = form.selectedPurchases;
+  if (selectedPurchases.length === 0) {
     throw new Error("Cannot add a repayment without a selected purchase.");
   }
 
@@ -117,12 +118,10 @@ function createRepaymentEntry(
     ...baseEntry,
     type: "repayment",
     amountReceived: amountRepaid,
-    allocations: [
-      {
-        saleTransactionId: selectedPurchase.id,
-        debtAmountPaid: amountRepaid,
-      },
-    ],
+    allocations: selectedPurchases.map((purchase) => ({
+      saleTransactionId: purchase.id,
+      debtAmountPaid: getOwedDetailsOfTransaction(purchase).outstandingAmount,
+    })),
   };
 }
 
@@ -130,8 +129,8 @@ function createSaleRepaymentEntry(
   form: FormType,
   baseEntry: BaseTransaction,
 ): SaleRepaymentTransaction {
-  const selectedPurchase = form.selectedPurchase;
-  if (!selectedPurchase) {
+  const selectedPurchases = form.selectedPurchases;
+  if (selectedPurchases.length === 0) {
     throw new Error("Cannot add a sale-repayment without a selected purchase.");
   }
 
@@ -146,12 +145,10 @@ function createSaleRepaymentEntry(
       productPrice: Number(form.productPrice),
       amountPaid,
     },
-    allocations: [
-      {
-        saleTransactionId: selectedPurchase.id,
-        debtAmountPaid: amountRepaid,
-      },
-    ],
+    allocations: selectedPurchases.map((purchase) => ({
+      saleTransactionId: purchase.id,
+      debtAmountPaid: getOwedDetailsOfTransaction(purchase).outstandingAmount,
+    })),
   };
 }
 
